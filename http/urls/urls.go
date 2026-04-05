@@ -129,6 +129,11 @@ type Router struct {
 
 var globalRouter = &Router{}
 
+// GetGlobalRouter returns the global router instance.
+func GetGlobalRouter() *Router {
+	return globalRouter
+}
+
 // Add adds a pattern to the router.
 func (r *Router) Add(pattern *URLPattern) {
 	r.mu.Lock()
