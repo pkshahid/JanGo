@@ -11,15 +11,6 @@ import (
 	"github.com/godjango/godjango/sessions"
 )
 
-// ResolverMatch contains information about the matched URL.
-type ResolverMatch struct {
-	Func     any
-	Args     []string
-	Kwargs   map[string]string
-	URLName  string
-	AppNames []string
-}
-
 // Request wraps an standard *http.Request and adds GoDjango specific fields.
 type Request struct {
 	context.Context
@@ -34,7 +25,7 @@ type Request struct {
 	META          map[string]string
 	User          auth.User
 	Session       sessions.Session
-	ResolverMatch *ResolverMatch
+	ResolverMatch any // populated by http/urls.ResolverMatch
 }
 
 // NewRequest creates a new GoDjango Request from a standard http.Request.
