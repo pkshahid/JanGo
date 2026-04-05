@@ -8,13 +8,23 @@ type AnonymousUser struct{}
 
 func (u *AnonymousUser) IsAuthenticated() bool { return false }
 func (u *AnonymousUser) GetUsername() string   { return "" }
+func (u *AnonymousUser) HasPerm(perm string) bool { return false }
 
 type AuthenticatedUser struct {
 	Username string
+	Perms    []string
 }
 
 func (u *AuthenticatedUser) IsAuthenticated() bool { return true }
 func (u *AuthenticatedUser) GetUsername() string   { return u.Username }
+func (u *AuthenticatedUser) HasPerm(perm string) bool {
+	for _, p := range u.Perms {
+		if p == perm {
+			return true
+		}
+	}
+	return false
+}
 
 // AuthenticationMiddleware attaches a User to the request.
 // It depends on SessionMiddleware being executed first.

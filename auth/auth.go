@@ -5,4 +5,5 @@ package auth
 type User interface {
 	IsAuthenticated() bool
 	GetUsername() string
+	HasPerm(perm string) bool
 }
