@@ -3,9 +3,9 @@ package main
 import (
 	"embed"
 	"fmt"
-	"html/template"
 	"os"
 	"path/filepath"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
