@@ -5,7 +5,7 @@ import (
 )
 
 func init() {
-	settings.Register("{{.ProjectName}}.settings", settings.Settings{
+	settings.Configure(settings.Settings{
 		DEBUG: true,
 		INSTALLED_APPS: []string{
 			// Add your apps here

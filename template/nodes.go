@@ -68,25 +68,71 @@ func (n *VariableNode) Render(ctx *Context) (string, error) {
 		if idx := strings.Index(filterStr, ":"); idx != -1 {
 			filterName = filterStr[:idx]
 			filterArg = filterStr[idx+1:]
-			if strings.HasPrefix(filterArg, `"`) && strings.HasSuffix(filterArg, `"`) {
-				filterArg = filterArg[1 : len(filterArg)-1]
+			// Try to resolve the argument, otherwise treat as literal string.
+			// Django allows both variable paths and strings in filter arguments.
+			argVal := resolveVariable(filterArg, ctx)
+			if argVal != nil && argVal != "" {
+				filterArg = fmt.Sprintf("%v", argVal)
+			} else {
+				if strings.HasPrefix(filterArg, `"`) && strings.HasSuffix(filterArg, `"`) || (strings.HasPrefix(filterArg, "'") && strings.HasSuffix(filterArg, "'")) {
+					filterArg = filterArg[1 : len(filterArg)-1]
+				}
 			}
 		}
 
-		if filterName == "safe" {
-			safe = true
-		} else if filterName == "default" {
-			if strVal == "" {
-				strVal = filterArg
+		engine := ctx.GetEngine()
+		var filterFunc FilterFunc
+
+		if engine != nil {
+			for _, lib := range engine.Builtins {
+				if fn, ok := lib.Filters[filterName]; ok {
+					filterFunc = fn
+					break
+				}
 			}
-		} else if filterName == "upper" {
-			strVal = strings.ToUpper(strVal)
-		} else if filterName == "lower" {
-			strVal = strings.ToLower(strVal)
+			if filterFunc == nil {
+				for _, lib := range engine.Libraries {
+					if fn, ok := lib.Filters[filterName]; ok {
+						filterFunc = fn
+						break
+					}
+				}
+			}
 		}
-		// Additional filters would be registered globally or via Libraries.
+
+		if filterFunc != nil {
+			var err error
+			val, err = filterFunc(val, filterArg)
+			if err != nil {
+				return "", err
+			}
+		} else {
+			// Fallback basic filters if engine/libraries not configured (mostly for isolated tests)
+			if filterName == "safe" {
+				safe = true
+			} else if filterName == "default" {
+				if val == nil || val == "" {
+					val = filterArg
+				}
+			} else if filterName == "upper" {
+				val = strings.ToUpper(fmt.Sprintf("%v", val))
+			} else if filterName == "lower" {
+				val = strings.ToLower(fmt.Sprintf("%v", val))
+			}
+		}
+
+		// Update safe and strVal states
+		if _, ok := val.(SafeString); ok {
+			safe = true
+			strVal = string(val.(SafeString))
+		} else if val != nil {
+			strVal = fmt.Sprintf("%v", val)
+		} else {
+			strVal = ""
+		}
 	}
 
+	// Always escape if not safe and string isn't empty
 	if !safe {
 		strVal = html.EscapeString(strVal)
 	}

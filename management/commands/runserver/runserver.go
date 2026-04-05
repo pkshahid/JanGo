@@ -18,10 +18,15 @@ import (
 	"github.com/godjango/godjango/core/settings"
 	"github.com/godjango/godjango/http/middleware"
 	"github.com/godjango/godjango/http/urls"
+	"github.com/godjango/godjango/management"
 	"github.com/spf13/cobra"
 )
 
 // Command implements the management.Command interface for runserver.
+func init() {
+	management.Register(&Command{})
+}
+
 type Command struct{}
 
 func (c *Command) Name() string {
