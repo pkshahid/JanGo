@@ -1,0 +1,15 @@
+package {{.ProjectName}}
+
+import (
+	"github.com/godjango/godjango/core/settings"
+)
+
+func init() {
+	settings.Register("{{.ProjectName}}.settings", settings.Settings{
+		DEBUG: true,
+		INSTALLED_APPS: []string{
+			// Add your apps here
+		},
+		// Configure other settings
+	})
+}

@@ -1,0 +1,13 @@
+package main
+
+import (
+	"os"
+
+	"github.com/godjango/godjango/management"
+	_ "{{.ProjectName}}/{{.ProjectName}}" // Initialize project settings and apps
+	// Import registered management commands here
+)
+
+func main() {
+	management.Execute(os.Args[1:])
+}
