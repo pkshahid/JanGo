@@ -1,0 +1,17 @@
+package {{.AppName}}
+
+import (
+	"github.com/godjango/godjango/core/apps"
+)
+
+type AppConfig struct{}
+
+func (a *AppConfig) Name() string                   { return "{{.AppName}}" }
+func (a *AppConfig) Label() string                  { return "{{.AppName}}" }
+func (a *AppConfig) Path() string                   { return "" }
+func (a *AppConfig) Models() []apps.ModelInfo       { return nil }
+func (a *AppConfig) Ready()                         {}
+
+func init() {
+	apps.Register(&AppConfig{})
+}
