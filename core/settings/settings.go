@@ -59,6 +59,18 @@ type Settings struct {
 	EMAIL_HOST         string `env:"EMAIL_HOST"`
 	EMAIL_PORT         int    `env:"EMAIL_PORT"`
 	LOGGING            map[string]any
+
+	// Middleware specific settings
+	SECURE_SSL_REDIRECT           bool   `env:"SECURE_SSL_REDIRECT"`
+	SECURE_HSTS_SECONDS           int    `env:"SECURE_HSTS_SECONDS"`
+	SECURE_HSTS_INCLUDE_SUBDOMAINS bool   `env:"SECURE_HSTS_INCLUDE_SUBDOMAINS"`
+	SECURE_HSTS_PRELOAD           bool   `env:"SECURE_HSTS_PRELOAD"`
+	SECURE_CONTENT_TYPE_NOSNIFF   bool   `env:"SECURE_CONTENT_TYPE_NOSNIFF"`
+	X_FRAME_OPTIONS               string `env:"X_FRAME_OPTIONS"`
+	SECURE_REFERRER_POLICY        string `env:"SECURE_REFERRER_POLICY"`
+	APPEND_SLASH                  bool   `env:"APPEND_SLASH"`
+	CSRF_COOKIE_NAME              string `env:"CSRF_COOKIE_NAME"`
+	SESSION_COOKIE_NAME           string `env:"SESSION_COOKIE_NAME"`
 }
 
 var (
