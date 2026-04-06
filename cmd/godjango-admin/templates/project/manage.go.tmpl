@@ -8,6 +8,7 @@ import (
 
 	// Import framework built-in management commands
 	_ "github.com/godjango/godjango/management/commands/runserver"
+	_ "github.com/godjango/godjango/management/commands" // Register migrations
 
 	// Import custom registered management commands here
 )

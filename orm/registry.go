@@ -52,3 +52,13 @@ func ClearRegistry() {
 		return true
 	})
 }
+
+// AllModels returns a slice of all registered ModelInfo structs.
+func AllModels() []*ModelInfo {
+	var models []*ModelInfo
+	globalRegistry.Range(func(key, value any) bool {
+		models = append(models, value.(*ModelInfo))
+		return true
+	})
+	return models
+}
