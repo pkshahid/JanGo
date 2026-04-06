@@ -157,8 +157,27 @@ func startWatcherProcess(addr string) error {
 			childProcess.Wait()
 		}
 
-		args := os.Args
-		childProcess = exec.Command(args[0], args[1:]...)
+		// Re-run the go program instead of executing the stale binary directly
+		// `go run manage.go runserver`
+		args := []string{"run"}
+		// we need to find manage.go in os.Args if it was run via `go run manage.go`
+		// if os.Args[0] is a compiled binary (e.g., ./myproject), we can't easily `go run` it,
+		// but typically for development people use `go run manage.go ...`.
+		// For robustness, if `manage.go` exists, we run that.
+		if _, err := os.Stat("manage.go"); err == nil {
+			args = append(args, "manage.go")
+			// append original arguments excluding the binary path (os.Args[0])
+			for _, a := range os.Args[1:] {
+				if a != "manage.go" {
+					args = append(args, a)
+				}
+			}
+			childProcess = exec.Command("go", args...)
+		} else {
+			// Fallback to executing the binary directly
+			childProcess = exec.Command(os.Args[0], os.Args[1:]...)
+		}
+
 		childProcess.Stdout = os.Stdout
 		childProcess.Stderr = os.Stderr
 		childProcess.Env = append(os.Environ(), "GODJANGO_RUNSERVER_CHILD=1")

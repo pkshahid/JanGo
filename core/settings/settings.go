@@ -11,13 +11,16 @@ import (
 )
 
 type DatabaseConfig struct {
-	Engine   string `env:"DATABASE_ENGINE"`
-	Name     string `env:"DATABASE_NAME"`
-	User     string `env:"DATABASE_USER"`
-	Password string `env:"DATABASE_PASSWORD"`
-	Host     string `env:"DATABASE_HOST"`
-	Port     int    `env:"DATABASE_PORT"`
-	DSN      string `env:"DATABASE_URL"`
+	Engine          string `env:"DATABASE_ENGINE"`
+	Name            string `env:"DATABASE_NAME"`
+	User            string `env:"DATABASE_USER"`
+	Password        string `env:"DATABASE_PASSWORD"`
+	Host            string `env:"DATABASE_HOST"`
+	Port            int    `env:"DATABASE_PORT"`
+	DSN             string `env:"DATABASE_URL"`
+	MAX_CONN        int    `env:"DATABASE_MAX_CONN"`
+	MAX_IDLE        int    `env:"DATABASE_MAX_IDLE"`
+	CONN_MAX_LIFETIME int  `env:"DATABASE_CONN_MAX_LIFETIME"` // in seconds
 }
 
 type TemplateConfig struct {
