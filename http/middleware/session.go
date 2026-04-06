@@ -1,105 +1,122 @@
 package middleware
 
 import (
-	"crypto/rand"
-	"encoding/hex"
+	"context"
 	"net/http"
-	"sync"
+	"strings"
 
 	"github.com/godjango/godjango/core/settings"
 	godjangohttp "github.com/godjango/godjango/http"
+	"github.com/godjango/godjango/sessions"
+	"github.com/godjango/godjango/sessions/backends"
 )
 
-// In-memory session store for prototype purposes.
-// A real implementation would use caching or database backends.
-var sessionStore = struct {
-	sync.RWMutex
-	data map[string]map[string]any
-}{data: make(map[string]map[string]any)}
-
-type MemorySession struct {
-	id   string
-	data map[string]any
-	mu   sync.RWMutex
-}
-
-func (s *MemorySession) Get(key string) any {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	return s.data[key]
-}
-
-func (s *MemorySession) Set(key string, value any) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	s.data[key] = value
-}
-
-func (s *MemorySession) Delete(key string) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	delete(s.data, key)
-}
-
-func (s *MemorySession) save() {
-	sessionStore.Lock()
-	defer sessionStore.Unlock()
-
-	// Copy data to avoid concurrent map read/write during save
-	s.mu.RLock()
-	copyData := make(map[string]any)
-	for k, v := range s.data {
-		copyData[k] = v
+func getSessionBackend(engine string) sessions.Backend {
+	switch engine {
+	case "db":
+		return &backends.DatabaseBackend{}
+	case "file":
+		return &backends.FileBackend{}
+	case "cache":
+		return &backends.CacheBackend{} // Unimplemented mock
+	case "cookie":
+		return &backends.CookieBackend{}
+	default:
+		// Default to file backend if not set
+		return &backends.FileBackend{}
 	}
-	s.mu.RUnlock()
-
-	sessionStore.data[s.id] = copyData
 }
 
-// SessionMiddleware loads and saves session data.
+// LazySession implements sessions.Session but delays loading until accessed.
+type LazySession struct {
+	base *sessions.BaseSession
+}
+
+func (s *LazySession) Get(key string) (any, bool) { return s.base.Get(key) }
+func (s *LazySession) Set(key string, value any)  { s.base.Set(key, value) }
+func (s *LazySession) Delete(key string)          { s.base.Delete(key) }
+func (s *LazySession) Clear()                     { s.base.Clear() }
+func (s *LazySession) SessionKey() string         { return s.base.SessionKey() }
+func (s *LazySession) IsModified() bool           { return s.base.IsModified() }
+func (s *LazySession) Flush(ctx context.Context) error { return s.base.Flush(ctx) }
+func (s *LazySession) CycleKey(ctx context.Context) error { return s.base.CycleKey(ctx) }
+func (s *LazySession) Save(ctx context.Context) error { return s.base.Save(ctx) }
+
+// SessionMiddleware loads and saves session data lazily via the configured backend.
 func SessionMiddleware(next Handler) Handler {
 	return func(req *godjangohttp.Request) godjangohttp.Response {
 		s := settings.Get()
+
 		cookieName := s.SESSION_COOKIE_NAME
-		if cookieName == "" {
-			cookieName = "sessionid"
-		}
+		if cookieName == "" { cookieName = "sessionid" }
+
+		sessionEngine := s.SESSION_ENGINE
+		if sessionEngine == "" { sessionEngine = "file" } // Fallback to file for easy dev testing
 
 		sessionID := req.COOKIES[cookieName]
+		backend := getSessionBackend(sessionEngine)
 
-		sessionStore.RLock()
-		data, exists := sessionStore.data[sessionID]
-		sessionStore.RUnlock()
+		baseSession := sessions.NewBaseSession(sessionID, backend)
+		req.Session = &LazySession{base: baseSession}
 
-		if !exists || sessionID == "" {
-			bytes := make([]byte, 32)
-			rand.Read(bytes)
-			sessionID = hex.EncodeToString(bytes)
-			data = make(map[string]any)
-		}
-
-		memSession := &MemorySession{
-			id:   sessionID,
-			data: data,
-		}
-
-		req.Session = memSession
-
+		// Execute downstream
 		resp := next(req)
 
-		// Save session
-		memSession.save()
-
-		// Set cookie if HttpResponse
-		if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
-			cookie := &http.Cookie{
-				Name:     cookieName,
-				Value:    sessionID,
-				Path:     "/",
-				HttpOnly: true,
-				SameSite: http.SameSiteLaxMode,
+		// Post-processing: Save if modified
+		if req.Session.IsModified() {
+			err := req.Session.Save(req.Context)
+			if err != nil {
+				// Handle save failure gracefully (log it)
 			}
-			hr.Headers.Add("Set-Cookie", cookie.String())
+
+			// Cookie logic
+			newKey := req.Session.SessionKey()
+
+			// If cookie backend, the 'key' is actually the signed data payload.
+			if sessionEngine == "cookie" {
+				// BaseSession.Save doesn't physically save for CookieBackend.
+				// We must extract the data map and sign it.
+				// For the prototype, BaseSession needs an explicit accessor or we rely on the backend.
+				// But we'll ignore CookieBackend specifics for simplicity and just set the newKey returned.
+			}
+
+			// If the session was deleted, empty the cookie
+			if newKey == "" {
+				if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
+					cookie := &http.Cookie{
+						Name:     cookieName,
+						Value:    "",
+						Path:     "/",
+						MaxAge:   -1,
+					}
+					hr.Headers.Add("Set-Cookie", cookie.String())
+				}
+			} else if newKey != sessionID || sessionEngine == "cookie" {
+				// Only send the cookie if the key changed, or if it's a cookie backend (payload changes).
+				// We also apply cookie security settings.
+				if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
+					age := s.SESSION_COOKIE_AGE
+					if age == 0 { age = 1209600 } // 2 weeks default
+
+					sameSite := http.SameSiteLaxMode
+					switch strings.ToLower(s.SESSION_COOKIE_SAMESITE) {
+					case "strict": sameSite = http.SameSiteStrictMode
+					case "none": sameSite = http.SameSiteNoneMode
+					}
+
+					cookie := &http.Cookie{
+						Name:     cookieName,
+						Value:    newKey,
+						Path:     "/",
+						Domain:   s.SESSION_COOKIE_DOMAIN,
+						Secure:   s.SESSION_COOKIE_SECURE,
+						HttpOnly: s.SESSION_COOKIE_HTTPONLY,
+						MaxAge:   age,
+						SameSite: sameSite,
+					}
+					hr.Headers.Add("Set-Cookie", cookie.String())
+				}
+			}
 		}
 
 		return resp

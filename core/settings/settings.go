@@ -74,6 +74,12 @@ type Settings struct {
 	APPEND_SLASH                  bool   `env:"APPEND_SLASH"`
 	CSRF_COOKIE_NAME              string `env:"CSRF_COOKIE_NAME"`
 	SESSION_COOKIE_NAME           string `env:"SESSION_COOKIE_NAME"`
+	SESSION_COOKIE_AGE            int    `env:"SESSION_COOKIE_AGE"`
+	SESSION_COOKIE_DOMAIN         string `env:"SESSION_COOKIE_DOMAIN"`
+	SESSION_COOKIE_SECURE         bool   `env:"SESSION_COOKIE_SECURE"`
+	SESSION_COOKIE_HTTPONLY       bool   `env:"SESSION_COOKIE_HTTPONLY"`
+	SESSION_COOKIE_SAMESITE       string `env:"SESSION_COOKIE_SAMESITE"`
+	SESSION_FILE_PATH             string `env:"SESSION_FILE_PATH"`
 }
 
 var (
