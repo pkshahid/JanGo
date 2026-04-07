@@ -1,9 +1,8 @@
 package forms
 
 import (
-	"reflect"
-	"testing"
 	"github.com/godjango/godjango/orm"
+	"testing"
 )
 
 type Profile struct {
@@ -31,12 +30,20 @@ func TestModelForm(t *testing.T) {
 		t.Errorf("Expected 4 fields generated, got %d", len(mf.Fields))
 	}
 
-	if _, ok := mf.Fields["Username"].(*CharField); !ok { t.Errorf("Expected CharField for Username") }
-	if _, ok := mf.Fields["Age"].(*IntegerField); !ok { t.Errorf("Expected IntegerField for Age") }
-	if _, ok := mf.Fields["IsActive"].(*BooleanField); !ok { t.Errorf("Expected BooleanField for IsActive") }
+	if _, ok := mf.Fields["Username"].(*CharField); !ok {
+		t.Errorf("Expected CharField for Username")
+	}
+	if _, ok := mf.Fields["Age"].(*IntegerField); !ok {
+		t.Errorf("Expected IntegerField for Age")
+	}
+	if _, ok := mf.Fields["IsActive"].(*BooleanField); !ok {
+		t.Errorf("Expected BooleanField for IsActive")
+	}
 
 	// Verify Initial data loaded
-	if mf.Data["Username"] != "john_doe" { t.Errorf("Initial data missing") }
+	if mf.Data["Username"] != "john_doe" {
+		t.Errorf("Initial data missing")
+	}
 
 	// Bind data to simulate POST
 	postData := map[string]any{
@@ -59,10 +66,18 @@ func TestModelForm(t *testing.T) {
 	}
 
 	savedProfile := savedInstance.(*Profile)
-	if savedProfile.Username != "jane_doe" { t.Errorf("Model missing updated Username") }
-	if savedProfile.Age != 30 { t.Errorf("Model missing updated Age") }
-	if savedProfile.Bio != "Developer" { t.Errorf("Model missing updated Bio") }
-	if savedProfile.IsActive != true { t.Errorf("Model missing updated IsActive") }
+	if savedProfile.Username != "jane_doe" {
+		t.Errorf("Model missing updated Username")
+	}
+	if savedProfile.Age != 30 {
+		t.Errorf("Model missing updated Age")
+	}
+	if savedProfile.Bio != "Developer" {
+		t.Errorf("Model missing updated Bio")
+	}
+	if savedProfile.IsActive != true {
+		t.Errorf("Model missing updated IsActive")
+	}
 }
 
 func TestModelFormExcludes(t *testing.T) {
@@ -75,7 +90,13 @@ func TestModelFormExcludes(t *testing.T) {
 	if len(mf.Fields) != 2 {
 		t.Errorf("Expected 2 fields after excludes, got %d", len(mf.Fields))
 	}
-	if _, ok := mf.Fields["Username"]; !ok { t.Errorf("Missing Username") }
-	if _, ok := mf.Fields["Age"]; !ok { t.Errorf("Missing Age") }
-	if _, ok := mf.Fields["Bio"]; ok { t.Errorf("Bio should be excluded") }
+	if _, ok := mf.Fields["Username"]; !ok {
+		t.Errorf("Missing Username")
+	}
+	if _, ok := mf.Fields["Age"]; !ok {
+		t.Errorf("Missing Age")
+	}
+	if _, ok := mf.Fields["Bio"]; ok {
+		t.Errorf("Bio should be excluded")
+	}
 }

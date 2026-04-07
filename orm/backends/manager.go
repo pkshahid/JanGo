@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	"database/sql"
 
 	"github.com/godjango/godjango/core/settings"
 )

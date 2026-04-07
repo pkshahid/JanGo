@@ -11,16 +11,16 @@ import (
 )
 
 type DatabaseConfig struct {
-	Engine          string `env:"DATABASE_ENGINE"`
-	Name            string `env:"DATABASE_NAME"`
-	User            string `env:"DATABASE_USER"`
-	Password        string `env:"DATABASE_PASSWORD"`
-	Host            string `env:"DATABASE_HOST"`
-	Port            int    `env:"DATABASE_PORT"`
-	DSN             string `env:"DATABASE_URL"`
-	MAX_CONN        int    `env:"DATABASE_MAX_CONN"`
-	MAX_IDLE        int    `env:"DATABASE_MAX_IDLE"`
-	CONN_MAX_LIFETIME int  `env:"DATABASE_CONN_MAX_LIFETIME"` // in seconds
+	Engine            string `env:"DATABASE_ENGINE"`
+	Name              string `env:"DATABASE_NAME"`
+	User              string `env:"DATABASE_USER"`
+	Password          string `env:"DATABASE_PASSWORD"`
+	Host              string `env:"DATABASE_HOST"`
+	Port              int    `env:"DATABASE_PORT"`
+	DSN               string `env:"DATABASE_URL"`
+	MAX_CONN          int    `env:"DATABASE_MAX_CONN"`
+	MAX_IDLE          int    `env:"DATABASE_MAX_IDLE"`
+	CONN_MAX_LIFETIME int    `env:"DATABASE_CONN_MAX_LIFETIME"` // in seconds
 }
 
 type TemplateConfig struct {
@@ -37,49 +37,59 @@ type CacheConfig struct {
 }
 
 type Settings struct {
-	DEBUG              bool     `env:"DEBUG"`
-	SECRET_KEY         string   `env:"SECRET_KEY"`
-	ALLOWED_HOSTS      []string `env:"ALLOWED_HOSTS"`
-	INSTALLED_APPS     []string
-	MIDDLEWARE         []string
-	ROOT_URLCONF       string
-	TEMPLATES          []TemplateConfig
-	DATABASES          map[string]DatabaseConfig
-	STATIC_URL         string `env:"STATIC_URL"`
-	STATIC_ROOT        string `env:"STATIC_ROOT"`
-	MEDIA_URL          string `env:"MEDIA_URL"`
-	MEDIA_ROOT         string `env:"MEDIA_ROOT"`
-	STATICFILES_DIRS   []string
-	CACHES             map[string]CacheConfig
-	SESSION_ENGINE     string
-	AUTH_USER_MODEL    string
-	LOGIN_URL          string
-	LOGIN_REDIRECT_URL string
-	TIME_ZONE          string `env:"TIME_ZONE"`
-	USE_TZ             bool   `env:"USE_TZ"`
-	LANGUAGE_CODE      string `env:"LANGUAGE_CODE"`
-	EMAIL_BACKEND      string
-	EMAIL_HOST         string `env:"EMAIL_HOST"`
-	EMAIL_PORT         int    `env:"EMAIL_PORT"`
-	LOGGING            map[string]any
+	DEBUG               bool     `env:"DEBUG"`
+	SECRET_KEY          string   `env:"SECRET_KEY"`
+	ALLOWED_HOSTS       []string `env:"ALLOWED_HOSTS"`
+	INSTALLED_APPS      []string
+	MIDDLEWARE          []string
+	ROOT_URLCONF        string
+	TEMPLATES           []TemplateConfig
+	DATABASES           map[string]DatabaseConfig
+	STATIC_URL          string `env:"STATIC_URL"`
+	STATIC_ROOT         string `env:"STATIC_ROOT"`
+	MEDIA_URL           string `env:"MEDIA_URL"`
+	MEDIA_ROOT          string `env:"MEDIA_ROOT"`
+	DEFAULT_FILE_STORAGE string `env:"DEFAULT_FILE_STORAGE"`
+
+	// S3 Settings
+	AWS_STORAGE_BUCKET_NAME string `env:"AWS_STORAGE_BUCKET_NAME"`
+	AWS_S3_REGION_NAME      string `env:"AWS_S3_REGION_NAME"`
+	AWS_ACCESS_KEY_ID       string `env:"AWS_ACCESS_KEY_ID"`
+	AWS_SECRET_ACCESS_KEY   string `env:"AWS_SECRET_ACCESS_KEY"`
+	AWS_S3_ENDPOINT_URL     string `env:"AWS_S3_ENDPOINT_URL"`
+	STATICFILES_DIRS    []string
+	STATICFILES_STORAGE string
+	STATICFILES_FINDERS []string
+	CACHES              map[string]CacheConfig
+	SESSION_ENGINE      string
+	AUTH_USER_MODEL     string
+	LOGIN_URL           string
+	LOGIN_REDIRECT_URL  string
+	TIME_ZONE           string `env:"TIME_ZONE"`
+	USE_TZ              bool   `env:"USE_TZ"`
+	LANGUAGE_CODE       string `env:"LANGUAGE_CODE"`
+	EMAIL_BACKEND       string
+	EMAIL_HOST          string `env:"EMAIL_HOST"`
+	EMAIL_PORT          int    `env:"EMAIL_PORT"`
+	LOGGING             map[string]any
 
 	// Middleware specific settings
-	SECURE_SSL_REDIRECT           bool   `env:"SECURE_SSL_REDIRECT"`
-	SECURE_HSTS_SECONDS           int    `env:"SECURE_HSTS_SECONDS"`
+	SECURE_SSL_REDIRECT            bool   `env:"SECURE_SSL_REDIRECT"`
+	SECURE_HSTS_SECONDS            int    `env:"SECURE_HSTS_SECONDS"`
 	SECURE_HSTS_INCLUDE_SUBDOMAINS bool   `env:"SECURE_HSTS_INCLUDE_SUBDOMAINS"`
-	SECURE_HSTS_PRELOAD           bool   `env:"SECURE_HSTS_PRELOAD"`
-	SECURE_CONTENT_TYPE_NOSNIFF   bool   `env:"SECURE_CONTENT_TYPE_NOSNIFF"`
-	X_FRAME_OPTIONS               string `env:"X_FRAME_OPTIONS"`
-	SECURE_REFERRER_POLICY        string `env:"SECURE_REFERRER_POLICY"`
-	APPEND_SLASH                  bool   `env:"APPEND_SLASH"`
-	CSRF_COOKIE_NAME              string `env:"CSRF_COOKIE_NAME"`
-	SESSION_COOKIE_NAME           string `env:"SESSION_COOKIE_NAME"`
-	SESSION_COOKIE_AGE            int    `env:"SESSION_COOKIE_AGE"`
-	SESSION_COOKIE_DOMAIN         string `env:"SESSION_COOKIE_DOMAIN"`
-	SESSION_COOKIE_SECURE         bool   `env:"SESSION_COOKIE_SECURE"`
-	SESSION_COOKIE_HTTPONLY       bool   `env:"SESSION_COOKIE_HTTPONLY"`
-	SESSION_COOKIE_SAMESITE       string `env:"SESSION_COOKIE_SAMESITE"`
-	SESSION_FILE_PATH             string `env:"SESSION_FILE_PATH"`
+	SECURE_HSTS_PRELOAD            bool   `env:"SECURE_HSTS_PRELOAD"`
+	SECURE_CONTENT_TYPE_NOSNIFF    bool   `env:"SECURE_CONTENT_TYPE_NOSNIFF"`
+	X_FRAME_OPTIONS                string `env:"X_FRAME_OPTIONS"`
+	SECURE_REFERRER_POLICY         string `env:"SECURE_REFERRER_POLICY"`
+	APPEND_SLASH                   bool   `env:"APPEND_SLASH"`
+	CSRF_COOKIE_NAME               string `env:"CSRF_COOKIE_NAME"`
+	SESSION_COOKIE_NAME            string `env:"SESSION_COOKIE_NAME"`
+	SESSION_COOKIE_AGE             int    `env:"SESSION_COOKIE_AGE"`
+	SESSION_COOKIE_DOMAIN          string `env:"SESSION_COOKIE_DOMAIN"`
+	SESSION_COOKIE_SECURE          bool   `env:"SESSION_COOKIE_SECURE"`
+	SESSION_COOKIE_HTTPONLY        bool   `env:"SESSION_COOKIE_HTTPONLY"`
+	SESSION_COOKIE_SAMESITE        string `env:"SESSION_COOKIE_SAMESITE"`
+	SESSION_FILE_PATH              string `env:"SESSION_FILE_PATH"`
 }
 
 var (

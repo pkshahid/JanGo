@@ -25,8 +25,12 @@ func (w *BaseWidget) GetMedia() *Media {
 
 func buildAttrs(attrs map[string]string, defaults map[string]string) string {
 	merged := make(map[string]string)
-	for k, v := range defaults { merged[k] = v }
-	for k, v := range attrs { merged[k] = v }
+	for k, v := range defaults {
+		merged[k] = v
+	}
+	for k, v := range attrs {
+		merged[k] = v
+	}
 
 	var buf strings.Builder
 	for k, v := range merged {
@@ -113,16 +117,24 @@ type Textarea struct {
 }
 
 func NewTextarea(attrs map[string]string) *Textarea {
-	if attrs == nil { attrs = make(map[string]string) }
-	if _, ok := attrs["cols"]; !ok { attrs["cols"] = "40" }
-	if _, ok := attrs["rows"]; !ok { attrs["rows"] = "10" }
+	if attrs == nil {
+		attrs = make(map[string]string)
+	}
+	if _, ok := attrs["cols"]; !ok {
+		attrs["cols"] = "40"
+	}
+	if _, ok := attrs["rows"]; !ok {
+		attrs["rows"] = "10"
+	}
 	return &Textarea{BaseWidget: BaseWidget{Attrs: attrs}}
 }
 
 func (w *Textarea) Render(name string, value any, attrs map[string]string) template.SafeString {
 	mergedAttrs := buildAttrs(attrs, w.Attrs)
 	valStr := ""
-	if value != nil { valStr = fmt.Sprintf("%v", value) }
+	if value != nil {
+		valStr = fmt.Sprintf("%v", value)
+	}
 	return template.SafeString(fmt.Sprintf(`<textarea name="%s"%s>%s</textarea>`, name, mergedAttrs, html.EscapeString(valStr)))
 }
 
@@ -169,7 +181,9 @@ func NewSelect(choices []Choice, attrs map[string]string) *Select {
 func (w *Select) Render(name string, value any, attrs map[string]string) template.SafeString {
 	mergedAttrs := buildAttrs(attrs, w.Attrs)
 	valStr := ""
-	if value != nil { valStr = fmt.Sprintf("%v", value) }
+	if value != nil {
+		valStr = fmt.Sprintf("%v", value)
+	}
 
 	var buf strings.Builder
 	buf.WriteString(fmt.Sprintf(`<select name="%s"%s>`+"\n", name, mergedAttrs))
@@ -200,7 +214,9 @@ type SelectMultiple struct {
 }
 
 func NewSelectMultiple(choices []Choice, attrs map[string]string) *SelectMultiple {
-	if attrs == nil { attrs = make(map[string]string) }
+	if attrs == nil {
+		attrs = make(map[string]string)
+	}
 	attrs["multiple"] = "multiple"
 	return &SelectMultiple{Select: *NewSelect(choices, attrs)}
 }
@@ -249,7 +265,9 @@ func NewRadioSelect(choices []Choice, attrs map[string]string) *RadioSelect {
 
 func (w *RadioSelect) Render(name string, value any, attrs map[string]string) template.SafeString {
 	valStr := ""
-	if value != nil { valStr = fmt.Sprintf("%v", value) }
+	if value != nil {
+		valStr = fmt.Sprintf("%v", value)
+	}
 
 	var buf strings.Builder
 	buf.WriteString("<ul>\n")

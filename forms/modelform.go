@@ -76,27 +76,27 @@ func generateFormField(f *orm.Field) Field {
 		}
 		return cf
 	case orm.IntegerField, orm.SmallIntegerField, orm.BigIntegerField:
-		return &IntegerField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewNumberInput(nil)}}
+		return &IntegerField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewNumberInput(nil)}}
 	case orm.FloatField, orm.DecimalField:
-		return &FloatField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewNumberInput(map[string]string{"step": "any"})}}
+		return &FloatField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewNumberInput(map[string]string{"step": "any"})}}
 	case orm.BooleanField, orm.NullBooleanField:
 		// NullBooleanField might use a select, but we default to Checkbox for prototype
-		return &BooleanField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewCheckboxInput(nil)}}
+		return &BooleanField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewCheckboxInput(nil)}}
 	case orm.EmailField:
-		return &EmailField{CharField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewEmailInput(nil)}}}
+		return &EmailField{CharField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewEmailInput(nil)}}}
 	case orm.URLField:
-		return &URLField{CharField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewURLInput(nil)}}}
+		return &URLField{CharField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewURLInput(nil)}}}
 	case orm.SlugField:
 		return &SlugField{CharField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name}}}
 	case orm.DateField, orm.TimeField, orm.DateTimeField:
 		widget := NewDateInput(nil) // Default
-		return &DateField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: widget}}
+		return &DateField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: widget}}
 	case orm.FileField, orm.ImageField:
-		return &FileField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewFileInput(nil)}}
+		return &FileField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewFileInput(nil)}}
 	case orm.ForeignKey, orm.OneToOneField, orm.ManyToManyField:
 		// In a real framework, this would query the target model to generate choices.
 		// For prototype, we generate an empty ChoiceField.
-		return &ChoiceField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, Widget: NewSelect(nil, nil)}}
+		return &ChoiceField{BaseField: BaseField{IsRequired: req, LabelStr: f.Name, WidgetField: NewSelect(nil, nil)}}
 	}
 
 	return nil // Skip unknown or unmappable

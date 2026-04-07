@@ -17,8 +17,8 @@ type BaseFormSet struct {
 	InitialFormCount int
 	MaxNum           int
 
-	Errors       []FormErrors
-	IsBound      bool
+	Errors  []FormErrors
+	IsBound bool
 }
 
 // NewBaseFormSet initializes a BaseFormSet.
