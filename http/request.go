@@ -7,11 +7,27 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/godjango/godjango/auth"
 	"github.com/godjango/godjango/sessions"
 )
 
 // Request wraps an standard *http.Request and adds GoDjango specific fields.
+
+// User represents an authenticated user in the system. It mirrors auth.User to avoid circular dependencies.
+type User interface {
+	ID() uint64
+	Username() string
+	Email() string
+	IsAuthenticated() bool
+	IsAnonymous() bool
+	IsActive() bool
+	IsStaff() bool
+	IsSuperuser() bool
+	HasPerm(perm string) bool
+	HasPerms(perms []string) bool
+	HasModulePerm(appLabel string) bool
+}
+
+
 type Request struct {
 	context.Context
 	*http.Request
@@ -23,7 +39,7 @@ type Request struct {
 	FILES         map[string][]*multipart.FileHeader
 	COOKIES       map[string]string
 	META          map[string]string
-	User          auth.User
+	User          User
 	Session       sessions.Session
 	ResolverMatch any // populated by http/urls.ResolverMatch
 }

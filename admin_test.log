@@ -1,0 +1,7 @@
+# github.com/godjango/godjango/admin
+package github.com/godjango/godjango/admin
+	imports github.com/godjango/godjango/auth from models.go
+	imports github.com/godjango/godjango/http from session.go
+	imports github.com/godjango/godjango/auth from request.go: import cycle not allowed
+FAIL	github.com/godjango/godjango/admin [setup failed]
+FAIL
