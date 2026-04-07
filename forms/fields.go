@@ -5,6 +5,13 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"net/http"
+	"mime/multipart"
+	"io"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	_ "image/gif"
 	"time"
 )
 
@@ -19,19 +26,19 @@ type Field interface {
 }
 
 type BaseField struct {
-	Widget     Widget
-	IsRequired bool
-	LabelStr   string
+	WidgetField Widget
+	IsRequired  bool
+	LabelStr    string
 	HelpTextStr string
 }
 
 func (f *BaseField) Widget() Widget {
-	if f.Widget == nil {
-		f.Widget = NewTextInput(nil)
+	if f.WidgetField == nil {
+		f.WidgetField = NewTextInput(nil)
 	}
-	return f.Widget
+	return f.WidgetField
 }
-func (f *BaseField) SetWidget(w Widget) { f.Widget = w }
+func (f *BaseField) SetWidget(w Widget) { f.WidgetField = w }
 func (f *BaseField) Required() bool     { return f.IsRequired }
 func (f *BaseField) Label() string      { return f.LabelStr }
 func (f *BaseField) HelpText() string   { return f.HelpTextStr }
@@ -265,19 +272,77 @@ func (f *MultipleChoiceField) Clean(value any) (any, error) {
 // FileField and ImageField stubs
 type FileField struct {
 	BaseField
+	MaxBytes     int64
+	AllowedTypes []string
 }
 
 func (f *FileField) Clean(value any) (any, error) {
-	// Mock: value should be *multipart.FileHeader
 	if value == nil {
 		if f.IsRequired {
 			return nil, fmt.Errorf("this field is required")
 		}
 		return nil, nil
 	}
-	return value, nil
+
+	// Value should be *multipart.FileHeader
+	header, ok := value.(*multipart.FileHeader)
+	if !ok {
+		return nil, fmt.Errorf("invalid file upload format")
+	}
+
+	if f.MaxBytes > 0 && header.Size > f.MaxBytes {
+		return nil, fmt.Errorf("file size exceeds maximum allowed")
+	}
+
+	if len(f.AllowedTypes) > 0 {
+		file, err := header.Open()
+		if err != nil {
+			return nil, fmt.Errorf("could not read file")
+		}
+		defer file.Close()
+
+		buf := make([]byte, 512)
+		if _, err := file.Read(buf); err != nil && err != io.EOF {
+			return nil, fmt.Errorf("could not read file headers")
+		}
+
+		contentType := http.DetectContentType(buf)
+		allowed := false
+		for _, t := range f.AllowedTypes {
+			if strings.HasPrefix(contentType, t) {
+				allowed = true
+				break
+			}
+		}
+		if !allowed {
+			return nil, fmt.Errorf("file type %s is not allowed", contentType)
+		}
+	}
+
+	return header, nil
 }
 
 type ImageField struct {
 	FileField
+}
+
+func (f *ImageField) Clean(value any) (any, error) {
+	cleaned, err := f.FileField.Clean(value)
+	if err != nil || cleaned == nil {
+		return cleaned, err
+	}
+
+	header := cleaned.(*multipart.FileHeader)
+	file, err := header.Open()
+	if err != nil {
+		return nil, fmt.Errorf("could not read file")
+	}
+	defer file.Close()
+
+	_, _, err = image.DecodeConfig(file)
+	if err != nil {
+		return nil, fmt.Errorf("uploaded file is not a valid image")
+	}
+
+	return header, nil
 }

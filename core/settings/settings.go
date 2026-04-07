@@ -49,6 +49,14 @@ type Settings struct {
 	STATIC_ROOT         string `env:"STATIC_ROOT"`
 	MEDIA_URL           string `env:"MEDIA_URL"`
 	MEDIA_ROOT          string `env:"MEDIA_ROOT"`
+	DEFAULT_FILE_STORAGE string `env:"DEFAULT_FILE_STORAGE"`
+
+	// S3 Settings
+	AWS_STORAGE_BUCKET_NAME string `env:"AWS_STORAGE_BUCKET_NAME"`
+	AWS_S3_REGION_NAME      string `env:"AWS_S3_REGION_NAME"`
+	AWS_ACCESS_KEY_ID       string `env:"AWS_ACCESS_KEY_ID"`
+	AWS_SECRET_ACCESS_KEY   string `env:"AWS_SECRET_ACCESS_KEY"`
+	AWS_S3_ENDPOINT_URL     string `env:"AWS_S3_ENDPOINT_URL"`
 	STATICFILES_DIRS    []string
 	STATICFILES_STORAGE string
 	STATICFILES_FINDERS []string

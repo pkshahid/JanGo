@@ -1,15 +1,16 @@
 package forms
 
 import (
+	"github.com/godjango/godjango/orm"
 	"strings"
 	"testing"
-	"github.com/godjango/godjango/orm"
 )
 
 func TestFormSets(t *testing.T) {
 	// Basic FormFactory
 	factory := func() *Form {
-		return NewContactForm().Form
+		f := NewContactForm()
+	return &f.Form
 	}
 
 	formset := NewBaseFormSet(factory, "testprefix", 2, 0, 2)

@@ -19,6 +19,7 @@ import (
 	"github.com/godjango/godjango/http/middleware"
 	"github.com/godjango/godjango/http/urls"
 	"github.com/godjango/godjango/management"
+	"github.com/godjango/godjango/static/media"
 	staticmiddleware "github.com/godjango/godjango/static/middleware"
 	"github.com/spf13/cobra"
 )
@@ -91,6 +92,9 @@ func (c *Command) Execute(ctx context.Context, args []string) error {
 
 	wm := staticmiddleware.NewWhiteNoiseMiddleware()
 	middlewares = append([]middleware.MiddlewareFunc{wm.Process}, middlewares...)
+
+	// Add media serving middleware
+	middlewares = append([]middleware.MiddlewareFunc{media.MediaMiddleware}, middlewares...)
 
 	handler := wsgi.NewWSGIHandler(router, middlewares...)
 
