@@ -1,0 +1,54 @@
+# github.com/godjango/godjango/auth/hashers
+auth/hashers/hashers.go:7:2: "errors" imported and not used
+?   	github.com/godjango/godjango	[no test files]
+# github.com/godjango/godjango/orm/queryset
+orm/queryset/execute.go:146:2: declared and not used: c
+orm/queryset/execute.go:154:2: declared and not used: c
+# github.com/godjango/godjango/forms
+forms/fields.go:28:21: field and method with the same name Widget
+	forms/fields.go:22:2: other declaration of Widget
+forms/fields.go:30:3: cannot assign to f.Widget (neither addressable nor a map index expression)
+forms/fields.go:32:9: cannot use f.Widget (value of type func() Widget) as Widget value in return statement: func() Widget does not implement Widget (missing method GetMedia)
+forms/fields.go:34:43: cannot assign to f.Widget (neither addressable nor a map index expression)
+FAIL	github.com/godjango/godjango/admin [build failed]
+FAIL	github.com/godjango/godjango/auth [build failed]
+FAIL	github.com/godjango/godjango/auth/hashers [build failed]
+?   	github.com/godjango/godjango/cache	[no test files]
+?   	github.com/godjango/godjango/cmd/godjango-admin	[no test files]
+?   	github.com/godjango/godjango/contrib	[no test files]
+?   	github.com/godjango/godjango/core	[no test files]
+ok  	github.com/godjango/godjango/core/apps	(cached)
+FAIL	github.com/godjango/godjango/core/handlers/wsgi [build failed]
+ok  	github.com/godjango/godjango/core/settings	(cached)
+FAIL	github.com/godjango/godjango/forms [build failed]
+# github.com/godjango/godjango/http/views [github.com/godjango/godjango/http/views.test]
+http/views/views_test.go:55:14: cannot use &mockUser{…} (value of type *mockUser) as "github.com/godjango/godjango/http".User value in assignment: *mockUser does not implement "github.com/godjango/godjango/http".User (missing method Email)
+http/views/views_test.go:63:14: cannot use &mockUser{…} (value of type *mockUser) as "github.com/godjango/godjango/http".User value in assignment: *mockUser does not implement "github.com/godjango/godjango/http".User (missing method Email)
+http/views/views_test.go:68:14: cannot use &mockUser{…} (value of type *mockUser) as "github.com/godjango/godjango/http".User value in assignment: *mockUser does not implement "github.com/godjango/godjango/http".User (missing method Email)
+ok  	github.com/godjango/godjango/http	(cached)
+FAIL	github.com/godjango/godjango/http/middleware [build failed]
+ok  	github.com/godjango/godjango/http/urls	(cached)
+FAIL	github.com/godjango/godjango/http/views [build failed]
+?   	github.com/godjango/godjango/management	[no test files]
+# github.com/godjango/godjango/orm/backends
+orm/backends/manager.go:7:2: "database/sql" imported and not used
+orm/backends/mysql.go:9:2: "github.com/godjango/godjango/orm" imported and not used
+FAIL	github.com/godjango/godjango/management/commands [build failed]
+FAIL	github.com/godjango/godjango/management/commands/runserver [build failed]
+ok  	github.com/godjango/godjango/orm	(cached)
+FAIL	github.com/godjango/godjango/orm/backends [build failed]
+FAIL	github.com/godjango/godjango/orm/migrations [build failed]
+FAIL	github.com/godjango/godjango/orm/queryset [build failed]
+?   	github.com/godjango/godjango/sessions	[no test files]
+FAIL	github.com/godjango/godjango/sessions/backends [build failed]
+?   	github.com/godjango/godjango/static	[no test files]
+# github.com/godjango/godjango/template/context [github.com/godjango/godjango/template/context.test]
+template/context/processors_test.go:31:13: cannot use &mockUser{…} (value of type *mockUser) as "github.com/godjango/godjango/http".User value in assignment: *mockUser does not implement "github.com/godjango/godjango/http".User (missing method Email)
+ok  	github.com/godjango/godjango/template	(cached)
+FAIL	github.com/godjango/godjango/template/context [build failed]
+ok  	github.com/godjango/godjango/template/filters	(cached)
+ok  	github.com/godjango/godjango/template/loaders	(cached)
+ok  	github.com/godjango/godjango/template/response	(cached)
+ok  	github.com/godjango/godjango/template/tags	(cached)
+?   	github.com/godjango/godjango/test	[no test files]
+FAIL

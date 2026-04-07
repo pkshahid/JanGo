@@ -31,3 +31,8 @@ go.work.sum
 # .idea/
 # .vscode/
 godjango-admin
+*/testdata/*
+*/__pycache__
+node_modules/
+coverage/
+*.log

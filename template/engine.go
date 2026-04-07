@@ -3,10 +3,10 @@ package template
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"sync"
 
 	godjangohttp "github.com/godjango/godjango/http"
+	"github.com/godjango/godjango/template/loaders"
 )
 
 // Engine is responsible for loading and rendering templates.
@@ -14,6 +14,9 @@ type Engine struct {
 	DIRS       []string
 	APP_DIRS   bool
 	Autoescape bool
+	Libraries  map[string]*Library
+	Builtins   []*Library
+	Loaders    []loaders.Loader
 
 	cache      map[string]*Template
 	mu         sync.RWMutex
@@ -21,12 +24,37 @@ type Engine struct {
 
 // NewEngine creates a new template engine.
 func NewEngine(dirs []string, appDirs bool) *Engine {
-	return &Engine{
+	engine := &Engine{
 		DIRS:       dirs,
 		APP_DIRS:   appDirs,
 		Autoescape: true,
+		Libraries:  make(map[string]*Library),
+		Builtins:   []*Library{},
 		cache:      make(map[string]*Template),
+		Loaders:    []loaders.Loader{},
 	}
+
+	// Add default loaders
+	if len(dirs) > 0 {
+		engine.Loaders = append(engine.Loaders, loaders.NewFilesystemLoader(dirs))
+	}
+	// Simulated AppDirectoriesLoader based on APP_DIRS setting
+	if appDirs {
+		// Mock empty string list, in a real framework this queries the core/apps registry
+		engine.Loaders = append(engine.Loaders, loaders.NewAppDirectoriesLoader([]string{}))
+	}
+
+	return engine
+}
+
+// RegisterLibrary makes a library available for `{% load %}`
+func (e *Engine) RegisterLibrary(name string, lib *Library) {
+	e.Libraries[name] = lib
+}
+
+// AddBuiltin adds a library that is always loaded
+func (e *Engine) AddBuiltin(lib *Library) {
+	e.Builtins = append(e.Builtins, lib)
 }
 
 // Template represents a parsed template.
@@ -45,6 +73,7 @@ func (t *Template) Render(ctx *Context) (string, error) {
 	if ctx == nil {
 		ctx = NewContext(nil)
 	}
+	ctx.SetRenderState("engine", t.engine)
 	return t.nodes.Render(ctx)
 }
 
@@ -73,45 +102,34 @@ func (e *Engine) GetTemplate(name string) (*Template, error) {
 	}
 	e.mu.RUnlock()
 
-	// Try to find the file
-	var filePath string
-	var found bool
+	// Iterate through registered loaders to find template content
+	var content string
+	var err error
+	var loaded bool
 
-	// 1. Check DIRS
-	for _, dir := range e.DIRS {
-		fullPath := filepath.Join(dir, name)
-		if _, err := os.Stat(fullPath); err == nil {
-			filePath = fullPath
-			found = true
+	for _, loader := range e.Loaders {
+		content, err = loader.Load(name)
+		if err == nil {
+			loaded = true
 			break
 		}
 	}
 
-	// 2. Check APP_DIRS (Simulated for this implementation)
-	// In Django, it iterates through INSTALLED_APPS and checks app_dir/templates/
-	if !found && e.APP_DIRS {
-		// Mock logic: we assume apps are top-level directories
-		// We would iterate over core/apps.All() here
-	}
-
-	if !found {
-		// Just for testing, see if it exists as a relative path directly
-		if _, err := os.Stat(name); err == nil {
-			filePath = name
-			found = true
+	if !loaded {
+		// Fallback for tests if loaders are not explicitly set but file is locally accessible
+		if _, statErr := os.Stat(name); statErr == nil {
+			if fileContent, readErr := os.ReadFile(name); readErr == nil {
+				content = string(fileContent)
+				loaded = true
+			}
 		}
 	}
 
-	if !found {
-		return nil, fmt.Errorf("template %s not found", name)
+	if !loaded {
+		return nil, fmt.Errorf("template %s not found by any loader", name)
 	}
 
-	content, err := os.ReadFile(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	tmpl, err := e.FromString(string(content))
+	tmpl, err := e.FromString(content)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +147,7 @@ func (e *Engine) FromString(content string) (*Template, error) {
 	lexer := NewLexer(content)
 	tokens := lexer.Lex()
 
-	parser := NewParser(tokens)
+	parser := NewParser(tokens, e)
 	nodes, err := parser.Parse(nil)
 	if err != nil {
 		return nil, err

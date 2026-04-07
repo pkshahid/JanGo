@@ -11,13 +11,16 @@ import (
 )
 
 type DatabaseConfig struct {
-	Engine   string `env:"DATABASE_ENGINE"`
-	Name     string `env:"DATABASE_NAME"`
-	User     string `env:"DATABASE_USER"`
-	Password string `env:"DATABASE_PASSWORD"`
-	Host     string `env:"DATABASE_HOST"`
-	Port     int    `env:"DATABASE_PORT"`
-	DSN      string `env:"DATABASE_URL"`
+	Engine          string `env:"DATABASE_ENGINE"`
+	Name            string `env:"DATABASE_NAME"`
+	User            string `env:"DATABASE_USER"`
+	Password        string `env:"DATABASE_PASSWORD"`
+	Host            string `env:"DATABASE_HOST"`
+	Port            int    `env:"DATABASE_PORT"`
+	DSN             string `env:"DATABASE_URL"`
+	MAX_CONN        int    `env:"DATABASE_MAX_CONN"`
+	MAX_IDLE        int    `env:"DATABASE_MAX_IDLE"`
+	CONN_MAX_LIFETIME int  `env:"DATABASE_CONN_MAX_LIFETIME"` // in seconds
 }
 
 type TemplateConfig struct {
@@ -71,6 +74,12 @@ type Settings struct {
 	APPEND_SLASH                  bool   `env:"APPEND_SLASH"`
 	CSRF_COOKIE_NAME              string `env:"CSRF_COOKIE_NAME"`
 	SESSION_COOKIE_NAME           string `env:"SESSION_COOKIE_NAME"`
+	SESSION_COOKIE_AGE            int    `env:"SESSION_COOKIE_AGE"`
+	SESSION_COOKIE_DOMAIN         string `env:"SESSION_COOKIE_DOMAIN"`
+	SESSION_COOKIE_SECURE         bool   `env:"SESSION_COOKIE_SECURE"`
+	SESSION_COOKIE_HTTPONLY       bool   `env:"SESSION_COOKIE_HTTPONLY"`
+	SESSION_COOKIE_SAMESITE       string `env:"SESSION_COOKIE_SAMESITE"`
+	SESSION_FILE_PATH             string `env:"SESSION_FILE_PATH"`
 }
 
 var (

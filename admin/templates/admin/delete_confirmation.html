@@ -1,0 +1,12 @@
+{{define "content"}}
+<p>Are you sure you want to delete the {{(.model_admin.ModelInfo.Name | lower)}} "{{.object_name}}"? All of the following related items will be deleted:</p>
+
+<form method="post">
+	<input type="hidden" name="csrfmiddlewaretoken" value="{{.request.META.CSRF_TOKEN}}">
+	<div>
+		<input type="hidden" name="post" value="yes">
+		<input type="submit" value="Yes, I'm sure" class="btn">
+		<a href="#" class="button cancel-link">No, take me back</a>
+	</div>
+</form>
+{{end}}

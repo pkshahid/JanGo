@@ -1,0 +1,22 @@
+{{define "content"}}
+<form method="post" enctype="multipart/form-data">
+	<input type="hidden" name="csrfmiddlewaretoken" value="{{.request.META.CSRF_TOKEN}}">
+
+	{{if .errors}}
+		<p class="errornote">{{.errors}}</p>
+	{{end}}
+
+	<fieldset class="module aligned">
+		{{.form_html}}
+	</fieldset>
+
+	<div class="submit-row">
+		<input type="submit" value="Save" class="btn default" name="_save">
+		<input type="submit" value="Save and add another" name="_addanother">
+		<input type="submit" value="Save and continue editing" name="_continue">
+		{{if .change}}
+			<a href="../delete/" class="deletelink">Delete</a>
+		{{end}}
+	</div>
+</form>
+{{end}}

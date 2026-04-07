@@ -1,0 +1,13 @@
+{{define "content"}}
+<table>
+	<tr><th>App</th><th>Models</th></tr>
+	{{range $app, $models := .app_dict}}
+		{{range $model := $models}}
+			<tr>
+				<td>{{$app}}</td>
+				<td><a href="/admin/{{$app}}/{{$model.ModelInfo.Name | lower}}/">{{$model.ModelInfo.Name}}s</a></td>
+			</tr>
+		{{end}}
+	{{end}}
+</table>
+{{end}}

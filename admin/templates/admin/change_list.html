@@ -1,0 +1,41 @@
+{{define "content"}}
+<div>
+	<a href="add/" class="btn">Add {{(.model_admin.ModelInfo.Name)}}</a>
+</div>
+<br>
+
+<form method="post" action="">
+	<input type="hidden" name="csrfmiddlewaretoken" value="{{.request.META.CSRF_TOKEN}}">
+
+	{{if .actions}}
+	<select name="action">
+		<option value="">---------</option>
+		<option value="delete_selected">Delete selected {{(.model_admin.ModelInfo.Name | lower)}}s</option>
+	</select>
+	<button class="btn" type="submit">Go</button>
+	{{end}}
+
+	<table>
+		<tr>
+			<th><input type="checkbox" id="action-toggle"></th>
+			{{range .columns}}
+				<th>{{.}}</th>
+			{{end}}
+		</tr>
+		{{range .results}}
+		<tr>
+			<td><input type="checkbox" name="_selected_action" value="{{.pk}}"></td>
+			{{range $i, $val := .cells}}
+				{{if eq $i 0}}
+					<td><a href="{{$.pk}}/change/">{{$val}}</a></td>
+				{{else}}
+					<td>{{$val}}</td>
+				{{end}}
+			{{end}}
+		</tr>
+		{{end}}
+	</table>
+</form>
+
+<p>{{.count}} {{(.model_admin.ModelInfo.Name | lower)}}s</p>
+{{end}}

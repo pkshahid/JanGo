@@ -5,9 +5,16 @@ import (
 
 	"github.com/godjango/godjango/management"
 	_ "{{.ProjectName}}/{{.ProjectName}}" // Initialize project settings and apps
-	// Import registered management commands here
+
+	// Import framework built-in management commands
+	_ "github.com/godjango/godjango/management/commands/runserver"
+	_ "github.com/godjango/godjango/management/commands" // Register migrations
+
+	// Import custom registered management commands here
 )
 
 func main() {
-	management.Execute(os.Args[1:])
+	if err := management.Execute(os.Args[1:]); err != nil {
+		os.Exit(1)
+	}
 }
