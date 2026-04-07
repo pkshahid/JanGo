@@ -3,6 +3,8 @@ package template
 // Context represents a stack of dictionaries for template rendering.
 type Context struct {
 	dicts []map[string]any
+	// Internal render state
+	renderState map[string]any
 }
 
 // NewContext creates a new context with an initial dictionary.
@@ -11,7 +13,8 @@ func NewContext(data map[string]any) *Context {
 		data = make(map[string]any)
 	}
 	return &Context{
-		dicts: []map[string]any{data},
+		dicts:       []map[string]any{data},
+		renderState: make(map[string]any),
 	}
 }
 
