@@ -143,7 +143,7 @@ func (qs QuerySet[T]) Count() (int64, error) {
 
 // Values returns dictionaries (maps) rather than model instances.
 func (qs QuerySet[T]) Values(fields ...string) ([]map[string]any, error) {
-	c := qs.Only(fields...)
+	_ = qs.Only(fields...)
 
 	// Execute SQL and scan into maps instead of structs
 	return []map[string]any{}, nil
@@ -151,7 +151,7 @@ func (qs QuerySet[T]) Values(fields ...string) ([]map[string]any, error) {
 
 // ValuesList returns tuples (slices) rather than model instances.
 func (qs QuerySet[T]) ValuesList(fields ...string) ([][]any, error) {
-	c := qs.Only(fields...)
+	_ = qs.Only(fields...)
 
 	// Execute SQL and scan into slices
 	return [][]any{}, nil

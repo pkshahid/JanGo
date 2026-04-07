@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
 )
 
 func init() {
