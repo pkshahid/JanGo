@@ -1,0 +1,20 @@
+=== RUN   TestStaticTemplateTag
+--- PASS: TestStaticTemplateTag (0.00s)
+=== RUN   TestCollectStaticCommand
+Found 1 static files to process.
+Copied style.css
+Post-processing (hashing) files...
+
+Collectstatic complete. Copied: 1, Skipped: 0
+--- PASS: TestCollectStaticCommand (0.00s)
+=== RUN   TestWhiteNoiseMiddleware
+Found 1 static files to process.
+Copied style.css
+Post-processing (hashing) files...
+
+Collectstatic complete. Copied: 1, Skipped: 0
+--- PASS: TestWhiteNoiseMiddleware (0.01s)
+PASS
+ok  	github.com/godjango/godjango/static	0.024s
+?   	github.com/godjango/godjango/static/management	[no test files]
+?   	github.com/godjango/godjango/static/middleware	[no test files]

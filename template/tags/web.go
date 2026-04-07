@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
 	godjangohttp "github.com/godjango/godjango/http"
 	"github.com/godjango/godjango/http/urls"
+	"github.com/godjango/godjango/static"
 	godjango "github.com/godjango/godjango/template"
 )
 
@@ -62,31 +62,47 @@ func (n *UrlNode) Render(ctx *godjango.Context) (string, error) {
 }
 
 func StaticParser(parser *godjango.Parser, token godjango.Token) (godjango.Node, error) {
-	parts := strings.Split(token.Contents, " ")
+	parts := strings.Fields(token.Contents)
 	if len(parts) < 2 {
 		return nil, fmt.Errorf("static tag requires a path")
 	}
 
-	path := parts[1] // The resolver handles quoted strings
+	pathExpr := parts[1]
+	asVar := ""
 
-	return &StaticNode{PathExpr: path}, nil
+	if len(parts) >= 4 && parts[2] == "as" {
+		asVar = parts[3]
+	} else if len(parts) > 2 {
+		return nil, fmt.Errorf("invalid arguments for 'static' tag")
+	}
+
+	return &StaticNode{PathExpr: pathExpr, AsVar: asVar}, nil
 }
 
 type StaticNode struct {
 	PathExpr string
+	AsVar    string
 }
 
 func (n *StaticNode) Render(ctx *godjango.Context) (string, error) {
-	s := settings.Get()
-	staticUrl := s.STATIC_URL
-	if staticUrl == "" {
-		staticUrl = "/static/"
+	pathVal := ctx.Resolve(n.PathExpr)
+
+	var pathStr string
+	if pathVal == nil || pathVal == "" {
+		pathStr = strings.Trim(n.PathExpr, `"\'`)
+	} else {
+		pathStr = fmt.Sprintf("%v", pathVal)
 	}
 
-	pathVal := ctx.Resolve(n.PathExpr)
-	pathStr := fmt.Sprintf("%v", pathVal)
+	storage := static.GetStorage()
+	url := storage.URL(pathStr)
 
-	return staticUrl + pathStr, nil
+	if n.AsVar != "" {
+		ctx.Set(n.AsVar, url)
+		return "", nil
+	}
+
+	return url, nil
 }
 
 func CsrfTokenParser(parser *godjango.Parser, token godjango.Token) (godjango.Node, error) {

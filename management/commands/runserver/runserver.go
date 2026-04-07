@@ -19,6 +19,7 @@ import (
 	"github.com/godjango/godjango/http/middleware"
 	"github.com/godjango/godjango/http/urls"
 	"github.com/godjango/godjango/management"
+	staticmiddleware "github.com/godjango/godjango/static/middleware"
 	"github.com/spf13/cobra"
 )
 
@@ -87,6 +88,9 @@ func (c *Command) Execute(ctx context.Context, args []string) error {
 		middleware.AuthenticationMiddleware,
 		middleware.MessageMiddleware,
 	}
+
+	wm := staticmiddleware.NewWhiteNoiseMiddleware()
+	middlewares = append([]middleware.MiddlewareFunc{wm.Process}, middlewares...)
 
 	handler := wsgi.NewWSGIHandler(router, middlewares...)
 
