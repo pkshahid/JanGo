@@ -131,8 +131,16 @@ func (c *DatabaseCache) Set(ctx context.Context, key string, value any, timeout 
 		expires = time.Now().UTC().Add(timeout)
 	}
 
-	query := fmt.Sprintf("INSERT INTO %s (cache_key, value, expires) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET value=excluded.value, expires=excluded.expires", c.tableName)
-	_, err = db.ExecContext(ctx, query, c.makeKey(key), data, expires)
+	s := settings.Get()
+	dbConfig := s.DATABASES[c.dbAlias]
+
+	var query string
+	if dbConfig.Engine == "mysql" {
+		query = fmt.Sprintf("INSERT INTO %s (cache_key, value, expires) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value=VALUES(value), expires=VALUES(expires)", c.tableName)
+	} else {
+		query = fmt.Sprintf("INSERT INTO %s (cache_key, value, expires) VALUES (?, ?, ?) ON CONFLICT(cache_key) DO UPDATE SET value=excluded.value, expires=excluded.expires", c.tableName)
+	}
+	_, err = db.ExecContext(ctx, query, c.makeKey(key), string(data), expires)
 
 	return err
 }

@@ -68,9 +68,9 @@ func (m *WhiteNoiseMiddleware) preloadFiles() {
 		relPath = strings.ReplaceAll(relPath, string(os.PathSeparator), "/")
 
 		wg.Add(1)
+		semaphore <- struct{}{}
 		go func(p, rel string, i os.FileInfo) {
 			defer wg.Done()
-			semaphore <- struct{}{}
 			defer func() { <-semaphore }()
 
 			content, err := ioutil.ReadFile(p)
@@ -119,7 +119,10 @@ func (m *WhiteNoiseMiddleware) Process(next func(*godjangohttp.Request) godjango
 	return func(req *godjangohttp.Request) godjangohttp.Response {
 		if m.staticURL != "" && strings.HasPrefix(req.URL.Path, m.staticURL) {
 			relPath := strings.TrimPrefix(req.URL.Path, m.staticURL)
-			relPath = strings.TrimPrefix(relPath, "/")
+			relPath = filepath.FromSlash(filepath.Clean("/" + relPath))
+
+			// Remove the leading slash added by Clean
+			relPath = strings.TrimPrefix(relPath, string(os.PathSeparator))
 
 			m.filesMutex.RLock()
 			file, exists := m.files[relPath]
@@ -131,6 +134,12 @@ func (m *WhiteNoiseMiddleware) Process(next func(*godjangohttp.Request) godjango
 
 			// Fallback: try to read from disk if not preloaded (e.g., added later)
 			fullPath := filepath.Join(m.staticRoot, relPath)
+			absRoot, _ := filepath.Abs(m.staticRoot)
+			absFull, _ := filepath.Abs(fullPath)
+			if !strings.HasPrefix(absFull, absRoot) {
+				return godjangohttp.NewHttpResponse("Forbidden", http.StatusForbidden)
+			}
+
 			if info, err := os.Stat(fullPath); err == nil && !info.IsDir() {
 				content, err := ioutil.ReadFile(fullPath)
 				if err == nil {

@@ -44,8 +44,23 @@ func (s *FileSystemStorage) Path(name string) string {
 }
 
 func (s *FileSystemStorage) Save(name string, content io.Reader) (string, error) {
+	// Sanitize name to prevent path traversal
+	name = filepath.Clean(name)
+	name = filepath.ToSlash(name)
+	if strings.Contains(name, "..") || strings.HasPrefix(name, "/") || filepath.IsAbs(name) {
+		return "", fmt.Errorf("invalid file name")
+	}
+
 	name = s.GetAvailableName(name)
 	fullPath := s.Path(name)
+
+	// Double check it's inside Location
+	absLocation, _ := filepath.Abs(s.Location)
+	absFullPath, _ := filepath.Abs(fullPath)
+	if !strings.HasPrefix(absFullPath, absLocation) {
+		return "", fmt.Errorf("invalid file path escapes media root")
+	}
+
 	dir := filepath.Dir(fullPath)
 
 	if err := os.MkdirAll(dir, 0755); err != nil {

@@ -1,13 +1,13 @@
 package media
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
 	"github.com/godjango/godjango/core/settings"
-	"path/filepath"
-	"strings"
-	"os"
+	godjangohttp "github.com/godjango/godjango/http"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 // ServeMedia serves files from MEDIA_ROOT. It should only be used in development.
@@ -19,13 +19,15 @@ func ServeMedia(req *godjangohttp.Request) godjangohttp.Response {
 	}
 
 	relPath := strings.TrimPrefix(req.URL.Path, s.MEDIA_URL)
-	relPath = strings.TrimPrefix(relPath, "/")
-
-	if strings.Contains(relPath, "..") {
-		return godjangohttp.NewHttpResponse("Forbidden", http.StatusForbidden)
-	}
+	relPath = filepath.FromSlash(filepath.Clean("/" + relPath))
 
 	fullPath := filepath.Join(s.MEDIA_ROOT, relPath)
+	absRoot, _ := filepath.Abs(s.MEDIA_ROOT)
+	absFull, _ := filepath.Abs(fullPath)
+
+	if !strings.HasPrefix(absFull, absRoot) {
+		return godjangohttp.NewHttpResponse("Forbidden", http.StatusForbidden)
+	}
 
 	info, err := os.Stat(fullPath)
 	if err != nil || info.IsDir() {
@@ -36,6 +38,7 @@ func ServeMedia(req *godjangohttp.Request) godjangohttp.Response {
 	if err != nil {
 		return godjangohttp.NewHttpResponse("Forbidden", http.StatusForbidden)
 	}
+
 	// We don't defer file.Close() here because we pass it to the response body which closes it.
 
 	resp := godjangohttp.NewHttpResponse("", http.StatusOK)
