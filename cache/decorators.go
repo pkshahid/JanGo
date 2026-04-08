@@ -14,6 +14,12 @@ import (
 )
 
 // CachePage caches the output of the decorated view for the given timeout.
+// getVaryHeaders parses the Vary header from a response, if present.
+// Since we don't know the response's Vary headers until we render it, a robust framework does two-phase caching.
+// For this simplified implementation, we'll assume any `Vary` headers appended to `req.Header` or we just rely on standard ones.
+// A common trick is caching the `Vary` header names themselves under a separate key.
+// Let's implement two-phase caching!
+
 func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) views.ViewFunc {
 	cacheAlias := "default"
 	if len(alias) > 0 {
@@ -27,7 +33,22 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 			}
 
 			c := Get(cacheAlias)
-			key := generateCacheKey(req)
+
+			// Phase 1: Retrieve Vary headers from cache
+			headerKey := "views.decorators.cache.cache_header." + func() string { hash := md5.Sum([]byte(req.URL.String())); return hex.EncodeToString(hash[:]) }()
+			varyHeaders := []string{}
+
+			if hVal, err := c.Get(req.Context, headerKey); err == nil {
+				if hList, ok := hVal.([]any); ok {
+					for _, h := range hList {
+						if hs, ok := h.(string); ok {
+							varyHeaders = append(varyHeaders, hs)
+						}
+					}
+				}
+			}
+
+			key := generateCacheKeyWithHeaders(req, varyHeaders)
 
 			// Try to get from cache
 			val, err := c.Get(req.Context, key)
@@ -56,24 +77,31 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 			// Render response and cache it
 			resp := next(req)
 
+			// Phase 2: Save Vary headers and content to cache
+			var currentVary string
 			if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
-				// Read body to string
+				currentVary = hr.Headers.Get("Vary")
 				bodyBytes, err := ioutil.ReadAll(hr.Body)
+				hr.Body.Close()
 				if err == nil {
-					// Restore body
 					hr.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
-
-					// Save to cache
 					cacheData := map[string]any{
 						"status":  hr.StatusCode,
 						"content": string(bodyBytes),
 						"headers": convertHeadersToMap(hr.Headers),
 					}
-					c.Set(req.Context, key, cacheData, timeout)
+
+					// Re-evaluate key with new Vary headers if they changed
+					newVaryHeaders := parseVaryHeader(currentVary)
+					newKey := generateCacheKeyWithHeaders(req, newVaryHeaders)
+
+					c.Set(req.Context, headerKey, newVaryHeaders, timeout)
+					c.Set(req.Context, newKey, cacheData, timeout)
 				}
 			} else if jr, ok := resp.(*godjangohttp.JsonResponse); ok {
-				// Handle JsonResponse which wraps HttpResponse
+				currentVary = jr.Headers.Get("Vary")
 				bodyBytes, err := ioutil.ReadAll(jr.Body)
+				jr.Body.Close()
 				if err == nil {
 					jr.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 					cacheData := map[string]any{
@@ -81,7 +109,12 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 						"content": string(bodyBytes),
 						"headers": convertHeadersToMap(jr.Headers),
 					}
-					c.Set(req.Context, key, cacheData, timeout)
+
+					newVaryHeaders := parseVaryHeader(currentVary)
+					newKey := generateCacheKeyWithHeaders(req, newVaryHeaders)
+
+					c.Set(req.Context, headerKey, newVaryHeaders, timeout)
+					c.Set(req.Context, newKey, cacheData, timeout)
 				}
 			}
 
@@ -90,24 +123,15 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 	}
 }
 
-// VaryOnHeaders adds Vary headers to the response, which affects the cache key.
-func VaryOnHeaders(headers ...string) func(views.ViewFunc) views.ViewFunc {
-	return func(next views.ViewFunc) views.ViewFunc {
-		return func(req *godjangohttp.Request) godjangohttp.Response {
-			resp := next(req)
-			if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
-				addVary(hr.Headers, headers...)
-			} else if jr, ok := resp.(*godjangohttp.JsonResponse); ok {
-				addVary(jr.Headers, headers...)
-			}
-			return resp
-		}
+func parseVaryHeader(vary string) []string {
+	if vary == "" {
+		return nil
 	}
-}
-
-// VaryOnCookie adds the Cookie header to Vary.
-func VaryOnCookie() func(views.ViewFunc) views.ViewFunc {
-	return VaryOnHeaders("Cookie")
+	parts := strings.Split(vary, ",")
+	for i, p := range parts {
+		parts[i] = strings.TrimSpace(p)
+	}
+	return parts
 }
 
 func addVary(h http.Header, newHeaders ...string) {
@@ -176,4 +200,24 @@ func convertHeadersToMap(h http.Header) map[string]any {
 		res[k] = list
 	}
 	return res
+}
+
+// VaryOnHeaders adds Vary headers to the response, which affects the cache key.
+func VaryOnHeaders(headers ...string) func(views.ViewFunc) views.ViewFunc {
+	return func(next views.ViewFunc) views.ViewFunc {
+		return func(req *godjangohttp.Request) godjangohttp.Response {
+			resp := next(req)
+			if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
+				addVary(hr.Headers, headers...)
+			} else if jr, ok := resp.(*godjangohttp.JsonResponse); ok {
+				addVary(jr.Headers, headers...)
+			}
+			return resp
+		}
+	}
+}
+
+// VaryOnCookie adds the Cookie header to Vary.
+func VaryOnCookie() func(views.ViewFunc) views.ViewFunc {
+	return VaryOnHeaders("Cookie")
 }

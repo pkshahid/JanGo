@@ -8,6 +8,7 @@ import (
 	"github.com/godjango/godjango/http/middleware"
 	"github.com/godjango/godjango/http/urls"
 	"github.com/godjango/godjango/http/views"
+	httpsignals "github.com/godjango/godjango/http/signals"
 )
 
 // WSGIHandler implements http.Handler and acts as the entry point.
@@ -36,6 +37,10 @@ func (h *WSGIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Re-use request objects
 	req := h.requestPool.Get().(*godjangohttp.Request)
 	defer h.requestPool.Put(req)
+
+	// Trigger RequestStarted
+	httpsignals.RequestStarted.Send(req, nil)
+	defer httpsignals.RequestFinished.Send(req, nil)
 
 	// Initialize the Request by building a new one and copying to the pooled instance
 	newReq := godjangohttp.NewRequest(r)
