@@ -38,6 +38,7 @@ type CacheConfig struct {
 
 type Settings struct {
 	DEBUG               bool     `env:"DEBUG"`
+	INTERNAL_IPS        []string `env:"INTERNAL_IPS"`
 	SECRET_KEY          string   `env:"SECRET_KEY"`
 	ALLOWED_HOSTS       []string `env:"ALLOWED_HOSTS"`
 	INSTALLED_APPS      []string
