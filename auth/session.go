@@ -7,7 +7,6 @@ import (
 	godjangohttp "github.com/godjango/godjango/http"
 )
 
-// Login persists the authenticated user in the current session.
 func Login(req *godjangohttp.Request, user User) error {
 	if req.Session == nil {
 		return fmt.Errorf("session not found on request, ensure SessionMiddleware is active")
@@ -16,13 +15,11 @@ func Login(req *godjangohttp.Request, user User) error {
 	req.Session.Set("_auth_user_id", fmt.Sprintf("%d", user.ID()))
 	req.Session.Set("_auth_user_name", user.Username())
 
-	// Update request user
 	req.User = user
 
 	return nil
 }
 
-// Logout clears the user from the current session.
 func Logout(req *godjangohttp.Request) error {
 	if req.Session == nil {
 		return fmt.Errorf("session not found on request, ensure SessionMiddleware is active")
@@ -35,13 +32,17 @@ func Logout(req *godjangohttp.Request) error {
 	return nil
 }
 
-// GetUser retrieves the currently logged in user from the request session.
-func GetUser(req *godjangohttp.Request) User {
+func GetUserFromRequest(req *godjangohttp.Request) User {
 	if req.Session == nil {
 		return &AnonymousUser{}
 	}
 
-	userIDStr, ok := req.Session.Get("_auth_user_id").(string)
+	rawID, ok := req.Session.Get("_auth_user_id")
+	if !ok {
+		return &AnonymousUser{}
+	}
+
+	userIDStr, ok := rawID.(string)
 	if !ok || userIDStr == "" {
 		return &AnonymousUser{}
 	}
@@ -51,7 +52,7 @@ func GetUser(req *godjangohttp.Request) User {
 		return &AnonymousUser{}
 	}
 
-	user, err := GetUserByID(id) // Call to backends implementation
+	user, err := GetUserByID(id)
 	if err != nil {
 		return &AnonymousUser{}
 	}
@@ -59,7 +60,6 @@ func GetUser(req *godjangohttp.Request) User {
 	return user
 }
 
-// GetUserByID wraps backend calls dynamically
 func GetUserByID(id uint64) (User, error) {
 	return defaultBackend.GetUser(id)
 }

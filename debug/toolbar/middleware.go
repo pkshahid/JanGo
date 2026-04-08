@@ -55,11 +55,9 @@ func DebugToolbarMiddleware(next func(*godjangohttp.Request) godjangohttp.Respon
 			return next(req)
 		}
 
-		// Check INTERNAL_IPS
+		// Check INTERNAL_IPS based on actual RemoteAddr
+		// (Do not blindly trust X-Forwarded-For to prevent IP spoofing)
 		ip := req.RemoteAddr
-		if req.Header.Get("X-Forwarded-For") != "" {
-			ip = strings.Split(req.Header.Get("X-Forwarded-For"), ",")[0]
-		}
 		if !isInternalIP(ip, s.INTERNAL_IPS) {
 			return next(req)
 		}

@@ -9,7 +9,7 @@ import (
 // It depends on SessionMiddleware being executed first.
 func AuthenticationMiddleware(next Handler) Handler {
 	return func(req *godjangohttp.Request) godjangohttp.Response {
-		req.User = auth.GetUser(req)
+		req.User = auth.GetUserFromRequest(req)
 		return next(req)
 	}
 }

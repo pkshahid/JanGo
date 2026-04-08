@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.ExceptionType}} at {{.Path}}</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; margin: 0; padding: 0; }
+        header { background-color: #e74c3c; color: white; padding: 20px 40px; }
+        h1 { margin: 0; font-size: 24px; font-weight: normal; }
+        .exception-value { font-size: 32px; font-weight: bold; margin-top: 10px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 40px; color: #555; }
+        .traceback { background: white; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; font-size: 14px; color: #24292e; line-height: 1.5; }
+        .frame { background: white; border: 1px solid #eee; margin-bottom: 10px; border-radius: 4px; }
+        .frame-header { background: #f9f9f9; padding: 10px; font-family: monospace; font-size: 13px; border-bottom: 1px solid #eee; }
+        .snippet { margin: 0; padding: 15px; background: #fff; overflow-x: auto; }
+        .local-vars { padding: 10px; background: #fcfcfc; border-top: 1px dashed #eee; font-family: monospace; font-size: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; border: 1px solid #ddd; border-radius: 5px; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background-color: #f1f1f1; font-weight: 600; width: 25%; }
+        .empty { color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{.ExceptionType}} at {{.Path}}</h1>
+        <div class="exception-value">{{.ExceptionValue}}</div>
+    </header>
+    <div class="container">
+        <h2>Traceback Snippets</h2>
+        {{range .Frames}}
+        <div class="frame">
+            <div class="frame-header">
+                <strong>{{.File}}:{{.Line}}</strong> in {{.Function}}
+            </div>
+            <pre class="snippet">{{.Snippet}}</pre>
+            <div class="local-vars">
+                <strong>Local Vars:</strong><br>
+                {{range $k, $v := .Vars}}
+                {{$k}} = {{$v}}<br>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+
+        <h2>Raw Traceback</h2>
+        <div class="traceback"><pre>{{.Traceback}}</pre></div>
+
+        <h2>Request Information</h2>
+
+        <h3>GET</h3>
+        {{if .GET}}
+        <table>
+            {{range $k, $v := .GET}}
+            <tr><th>{{$k}}</th><td>{{$v}}</td></tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p class="empty">No GET data.</p>
+        {{end}}
+
+        <h3>POST</h3>
+        {{if .POST}}
+        <table>
+            {{range $k, $v := .POST}}
+            <tr><th>{{$k}}</th><td>{{$v}}</td></tr>
+            {{end}}
+        </table>
+        {{else}}
+        <p class="empty">No POST data.</p>
+        {{end}}
+
+        <h3>Headers</h3>
+        <table>
+            {{range $k, $v := .Headers}}
+            <tr><th>{{$k}}</th><td>{{$v}}</td></tr>
+            {{end}}
+        </table>
+
+        <h2>Settings</h2>
+        <table>
+            {{range $k, $v := .Settings}}
+            <tr><th>{{$k}}</th><td>{{$v}}</td></tr>
+            {{end}}
+        </table>
+    </div>
+</body>
+</html>
