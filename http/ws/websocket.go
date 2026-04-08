@@ -27,9 +27,10 @@ type WebSocketView interface {
 
 // WebSocketConn wraps gorilla websocket to provide a concurrent-safe API.
 type WebSocketConn struct {
-	conn *websocket.Conn
-	send chan []byte
-	mu   sync.Mutex
+	conn   *websocket.Conn
+	send   chan []byte
+	mu     sync.Mutex
+	closed bool
 }
 
 // NewWebSocketConn initializes a new WebSocketConn.
@@ -42,6 +43,11 @@ func NewWebSocketConn(c *websocket.Conn) *WebSocketConn {
 
 // Send queues data to be sent.
 func (c *WebSocketConn) Send(data []byte) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.closed {
+		return fmt.Errorf("websocket connection closed")
+	}
 	c.send <- data
 	return nil
 }
@@ -58,9 +64,19 @@ func (c *WebSocketConn) SendJSON(v any) error {
 // Close gracefully closes the connection.
 func (c *WebSocketConn) Close(code int, reason string) error {
 	c.mu.Lock()
-	defer c.mu.Unlock()
+	if c.closed {
+		c.mu.Unlock()
+		return nil
+	}
+	c.closed = true
+	c.mu.Unlock()
+
 	msg := websocket.FormatCloseMessage(code, reason)
-	return c.conn.WriteMessage(websocket.CloseMessage, msg)
+	c.conn.WriteMessage(websocket.CloseMessage, msg)
+
+	// Close send channel to unblock writePump
+	close(c.send)
+	return nil
 }
 
 // writePump pumps messages from the send channel to the websocket connection.
@@ -109,8 +125,7 @@ func (c *WebSocketConn) writePump() {
 func (c *WebSocketConn) readPump(view WebSocketView, req *godjangohttp.Request) {
 	defer func() {
 		view.Disconnect(c, websocket.CloseNormalClosure, "Connection closed")
-		c.conn.Close()
-		close(c.send)
+		c.Close(websocket.CloseNormalClosure, "Connection closed")
 	}()
 
 	c.conn.SetReadLimit(maxMessageSize)

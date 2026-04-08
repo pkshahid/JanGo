@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Posts{% endblock title %}
+
+{% block content %}
+    <h2>Recent Posts</h2>
+    {% for post in object_list %}
+        <div class="post">
+            <h3><a href="/post/{{ post.ID }}/">{{ post.Title }}</a></h3>
+            <p>{{ post.Content|truncatewords:20 }}</p>
+        </div>
+    {% empty %}
+        <p>No posts found.</p>
+    {% endfor %}
+
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.HasPrevious %}
+                <a href="?page={{ page_obj.PreviousPageNumber }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.Number }} of {{ paginator.NumPages }}</span>
+
+            {% if page_obj.HasNext %}
+                <a href="?page={{ page_obj.NextPageNumber }}">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock content %}
