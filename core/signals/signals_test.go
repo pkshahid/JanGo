@@ -1,7 +1,7 @@
 package signals_test
 
 import (
-	"github.com/godjango/godjango/core/signals"
+	"github.com/pkshahid/JanGo/core/signals"
 	"testing"
 )
 

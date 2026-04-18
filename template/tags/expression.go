@@ -2,7 +2,7 @@ package tags
 
 import (
 	"strings"
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func evaluateExpression(expr string, ctx *godjango.Context) bool {

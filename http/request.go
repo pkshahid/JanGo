@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/godjango/godjango/sessions"
+	"github.com/pkshahid/JanGo/sessions"
 )
 
 // Request wraps an standard *http.Request and adds GoDjango specific fields.

@@ -1,7 +1,7 @@
 package signals_test
 
 import (
-	ormsignals "github.com/godjango/godjango/orm/signals"
+	ormsignals "github.com/pkshahid/JanGo/orm/signals"
 	"testing"
 )
 

@@ -1,11 +1,11 @@
 package static_test
 
 import (
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/static/management"
-	"github.com/godjango/godjango/static/middleware"
-	"github.com/godjango/godjango/template"
-	godjangotags "github.com/godjango/godjango/template/tags"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/static/management"
+	"github.com/pkshahid/JanGo/static/middleware"
+	"github.com/pkshahid/JanGo/template"
+	godjangotags "github.com/pkshahid/JanGo/template/tags"
 	"io/ioutil"
 	"os"
 	"strings"

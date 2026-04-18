@@ -2,7 +2,7 @@ package filters
 
 import (
 	"testing"
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestStringHtmlFilters(t *testing.T) {

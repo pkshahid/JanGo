@@ -10,8 +10,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/orm/backends"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/orm/backends"
 )
 
 var (

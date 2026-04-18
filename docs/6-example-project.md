@@ -16,8 +16,8 @@ import (
 	"fmt"
 	"os"
 
-	_ "github.com/godjango/godjango/examples/blog/app"
-	"github.com/godjango/godjango/management"
+	_ "github.com/pkshahid/JanGo/examples/blog/app"
+	"github.com/pkshahid/JanGo/management"
 )
 
 func main() {
@@ -42,10 +42,10 @@ func init() {
 			"default": {Engine: "sqlite3", Name: "blog.db"},
 		},
 		INSTALLED_APPS: []string{
-			"github.com/godjango/godjango/auth",
-			"github.com/godjango/godjango/admin",
+			"github.com/pkshahid/JanGo/auth",
+			"github.com/pkshahid/JanGo/admin",
 			// ... other core apps
-			"github.com/godjango/godjango/examples/blog/app", // The blog app itself
+			"github.com/pkshahid/JanGo/examples/blog/app", // The blog app itself
 		},
 		ROOT_URLCONF: &UrlPatterns,
 		// ... template and static settings

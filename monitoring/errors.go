@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"sync"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // ErrorReporter defines the interface for capturing exceptions.

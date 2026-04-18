@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/godjango/godjango/i18n"
+	"github.com/pkshahid/JanGo/i18n"
 	"github.com/spf13/cobra"
 )
 

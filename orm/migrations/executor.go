@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/godjango/godjango/orm/backends"
+	"github.com/pkshahid/JanGo/orm/backends"
 )
 
 // MigrationRecord represents a row in the godjango_migrations table.

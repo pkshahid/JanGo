@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // ViewFunc represents a view handling a request.

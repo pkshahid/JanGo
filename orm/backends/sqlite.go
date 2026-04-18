@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
 
 	// Import the modernc.org/sqlite pure Go driver
 	_ "modernc.org/sqlite"

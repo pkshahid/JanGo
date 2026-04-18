@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func RegisterDateTimeFilters(lib *godjango.Library) {

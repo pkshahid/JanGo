@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 import (

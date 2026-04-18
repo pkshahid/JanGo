@@ -7,7 +7,7 @@ import (
 	"strings"
 	"io"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 func TestPanicRecoveryMiddleware(t *testing.T) {

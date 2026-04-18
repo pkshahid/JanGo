@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"sync"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
-	"github.com/godjango/godjango/http/ws"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
+	"github.com/pkshahid/JanGo/http/ws"
 )
 
 // Router interface defines the contract for looking up views by path.

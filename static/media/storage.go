@@ -1,7 +1,7 @@
 package media
 
 import (
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 	"fmt"
 	"io"
 	"os"

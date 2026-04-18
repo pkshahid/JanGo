@@ -7,9 +7,9 @@ import (
 	"os"
 	"path/filepath"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/template"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/template"
 )
 
 func TestResponses(t *testing.T) {

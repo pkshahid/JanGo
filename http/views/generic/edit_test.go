@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"testing"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 func TestFormView(t *testing.T) {

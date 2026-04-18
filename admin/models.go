@@ -3,8 +3,8 @@ package admin
 import (
 	"time"
 
-	"github.com/godjango/godjango/auth"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/auth"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func init() {

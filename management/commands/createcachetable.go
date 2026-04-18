@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/management"
-	"github.com/godjango/godjango/orm/backends"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/management"
+	"github.com/pkshahid/JanGo/orm/backends"
 	"github.com/spf13/cobra"
 )
 

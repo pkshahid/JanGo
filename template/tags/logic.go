@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 // RegisterLogicTags registers if, for, etc into a library.

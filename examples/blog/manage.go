@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	_ "github.com/godjango/godjango/examples/blog/app"
-	"github.com/godjango/godjango/management"
+	_ "github.com/pkshahid/JanGo/examples/blog/app"
+	"github.com/pkshahid/JanGo/management"
 )
 
 func main() {

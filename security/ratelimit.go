@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
 )
 
 type bucket struct {

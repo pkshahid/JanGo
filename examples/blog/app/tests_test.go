@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/godjango/godjango/http/urls"
-	"github.com/godjango/godjango/core/handlers/wsgi"
+	"github.com/pkshahid/JanGo/http/urls"
+	"github.com/pkshahid/JanGo/core/handlers/wsgi"
 )
 
 // A quick simulated TestCase environment

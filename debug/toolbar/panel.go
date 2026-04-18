@@ -1,7 +1,7 @@
 package toolbar
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // Panel defines the interface for debug toolbar panels.

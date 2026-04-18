@@ -3,9 +3,9 @@ package admin
 import (
 	"fmt"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/orm"
-	"github.com/godjango/godjango/orm/queryset"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/orm"
+	"github.com/pkshahid/JanGo/orm/queryset"
 )
 
 // AdminAction is a bulk action applied to a queryset of models.

@@ -3,9 +3,9 @@ package response
 import (
 	"net/http"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/template"
-	"github.com/godjango/godjango/template/context"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/template"
+	"github.com/pkshahid/JanGo/template/context"
 )
 
 // Default processors used if none configured on the engine (for prototype simplicity)

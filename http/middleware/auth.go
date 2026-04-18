@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/godjango/godjango/auth"
-	godjangohttp "github.com/godjango/godjango/http"
+	"github.com/pkshahid/JanGo/auth"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // AuthenticationMiddleware attaches a User to the request.

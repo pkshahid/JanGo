@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 // Sign encrypts and signs session data into a base64 string.

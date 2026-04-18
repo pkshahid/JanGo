@@ -10,8 +10,8 @@ GoDjango uses a straightforward routing system. You define URL patterns and map 
 package myapp
 
 import (
-    "github.com/godjango/godjango/http/urls"
-    "github.com/godjango/godjango/http/views"
+    "github.com/pkshahid/JanGo/http/urls"
+    "github.com/pkshahid/JanGo/http/views"
 )
 
 var UrlPatterns = []urls.Path{
@@ -32,8 +32,8 @@ package myapp
 
 import (
     "net/http"
-    "github.com/godjango/godjango/http/request"
-    "github.com/godjango/godjango/http/response"
+    "github.com/pkshahid/JanGo/http/request"
+    "github.com/pkshahid/JanGo/http/response"
 )
 
 func HomeView(req *request.Request) response.Response {
@@ -54,7 +54,7 @@ GoDjango leverages Go generics to provide reusable class-based views (e.g., `Lis
 package myapp
 
 import (
-    "github.com/godjango/godjango/http/views/generic"
+    "github.com/pkshahid/JanGo/http/views/generic"
 )
 
 var PostListView = generic.ListView[Post]{
@@ -72,7 +72,7 @@ The ORM allows you to define your database schema using Go structs and struct ta
 package myapp
 
 import (
-    "github.com/godjango/godjango/orm"
+    "github.com/pkshahid/JanGo/orm"
 )
 
 type Post struct {
@@ -156,7 +156,7 @@ Forms handle input validation, binding, and HTML generation. You can define regu
 package myapp
 
 import (
-    "github.com/godjango/godjango/forms"
+    "github.com/pkshahid/JanGo/forms"
 )
 
 // A standard form

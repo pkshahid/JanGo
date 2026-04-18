@@ -3,8 +3,8 @@ package migrations
 import (
 	"fmt"
 
-	"github.com/godjango/godjango/orm"
-	"github.com/godjango/godjango/orm/backends"
+	"github.com/pkshahid/JanGo/orm"
+	"github.com/pkshahid/JanGo/orm/backends"
 )
 
 // Dep represents a dependency on another migration.

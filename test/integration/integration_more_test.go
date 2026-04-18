@@ -8,14 +8,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/godjango/godjango/cache"
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/core/handlers/wsgi"
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
-	"github.com/godjango/godjango/http/urls"
-	"github.com/godjango/godjango/orm/migrations"
-	"github.com/godjango/godjango/http/ws"
+	"github.com/pkshahid/JanGo/cache"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/core/handlers/wsgi"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
+	"github.com/pkshahid/JanGo/http/urls"
+	"github.com/pkshahid/JanGo/orm/migrations"
+	"github.com/pkshahid/JanGo/http/ws"
 	"github.com/gorilla/websocket"
 )
 

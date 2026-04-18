@@ -3,8 +3,8 @@ package orm_test
 import (
 	"fmt"
 
-	"github.com/godjango/godjango/orm"
-	"github.com/godjango/godjango/orm/queryset"
+	"github.com/pkshahid/JanGo/orm"
+	"github.com/pkshahid/JanGo/orm/queryset"
 )
 
 type ExampleModel struct {

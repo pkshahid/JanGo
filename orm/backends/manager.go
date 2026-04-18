@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 var (

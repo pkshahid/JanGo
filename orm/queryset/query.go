@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // Query holds the AST for a SQL query.

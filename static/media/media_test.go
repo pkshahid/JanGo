@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/static/media"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/static/media"
 )
 
 func setupSettings() {

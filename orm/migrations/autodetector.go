@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // MigrationAutodetector detects changes between two project states

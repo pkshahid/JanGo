@@ -28,8 +28,8 @@ package pages
 
 import (
     "net/http"
-    "github.com/godjango/godjango/http/request"
-    "github.com/godjango/godjango/http/response"
+    "github.com/pkshahid/JanGo/http/request"
+    "github.com/pkshahid/JanGo/http/response"
 )
 
 func HomePageView(req *request.Request) response.Response {
@@ -49,8 +49,8 @@ Next, map these views to specific URLs in `pages/urls.go`.
 package pages
 
 import (
-    "github.com/godjango/godjango/http/urls"
-    "github.com/godjango/godjango/http/views"
+    "github.com/pkshahid/JanGo/http/urls"
+    "github.com/pkshahid/JanGo/http/views"
 )
 
 var UrlPatterns = []urls.Path{
@@ -69,7 +69,7 @@ Open your project's root `urls.go` (e.g., `mywebsite/urls.go`) and include the `
 package mywebsite
 
 import (
-    "github.com/godjango/godjango/http/urls"
+    "github.com/pkshahid/JanGo/http/urls"
     "mywebsite/pages" // Import your new app
 )
 

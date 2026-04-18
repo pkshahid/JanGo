@@ -2,7 +2,7 @@ package tags
 
 import (
 	"testing"
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestLogicTags(t *testing.T) {

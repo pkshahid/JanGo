@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // DatabaseFeatures describes what a database backend supports.

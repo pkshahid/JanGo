@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
 
 	// Import PostgreSQL driver
 	_ "github.com/lib/pq"

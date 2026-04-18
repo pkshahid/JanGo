@@ -3,8 +3,8 @@ package i18n
 import (
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
 	"golang.org/x/text/language"
 )
 

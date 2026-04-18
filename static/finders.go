@@ -2,8 +2,8 @@ package static
 
 import (
 	"errors"
-	"github.com/godjango/godjango/core/apps"
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/apps"
+	"github.com/pkshahid/JanGo/core/settings"
 	"os"
 	"path/filepath"
 )

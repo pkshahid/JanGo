@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"io"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/auth"
-	"github.com/godjango/godjango/orm"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/auth"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 type TestAdminModel struct {

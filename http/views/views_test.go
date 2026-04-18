@@ -6,8 +6,8 @@ import (
 	"testing"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 func setupTestSettings() {

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/management"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/management"
 	"github.com/spf13/cobra"
 )
 

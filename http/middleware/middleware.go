@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // Handler represents the core HTTP request handler type.

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/godjango/godjango/management"
-	"github.com/godjango/godjango/orm/backends"
-	"github.com/godjango/godjango/orm/migrations"
+	"github.com/pkshahid/JanGo/management"
+	"github.com/pkshahid/JanGo/orm/backends"
+	"github.com/pkshahid/JanGo/orm/migrations"
 	"github.com/spf13/cobra"
 )
 

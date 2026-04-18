@@ -1,8 +1,8 @@
 package async
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
 )
 
 // AsyncView represents a view that returns a channel of Response.

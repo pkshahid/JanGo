@@ -5,7 +5,7 @@ import (
 	"html"
 	"strings"
 
-	"github.com/godjango/godjango/template"
+	"github.com/pkshahid/JanGo/template"
 )
 
 // Widget interface defining the rendering of a form field.

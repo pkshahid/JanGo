@@ -3,7 +3,7 @@ package migrations
 import (
 	"strings"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // ProjectState represents the entire database schema state at a specific point in time.

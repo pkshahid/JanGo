@@ -4,8 +4,8 @@ import (
 	"strings"
 	"net/http"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // CommonMiddleware handles append slash, content-length, and conditional GETs.

@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/exceptions"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/exceptions"
 )
 
 // ExceptionMiddleware transforms recognized error panics into standard HTTP responses.

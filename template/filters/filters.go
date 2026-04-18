@@ -1,7 +1,7 @@
 package filters
 
 import (
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 // RegisterFilters registers all core Django template filters.

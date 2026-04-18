@@ -2,7 +2,7 @@ package generic
 
 import (
 	"fmt"
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // DateMixin provides common attributes for date-based views.

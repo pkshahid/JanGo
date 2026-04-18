@@ -4,16 +4,16 @@ import (
 	"strings"
 	"net/smtp"
 
-	httpsignals "github.com/godjango/godjango/http/signals"
+	httpsignals "github.com/pkshahid/JanGo/http/signals"
 
 	"fmt"
 	"log/slog"
 	"runtime"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/exceptions"
-	"github.com/godjango/godjango/monitoring"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/exceptions"
+	"github.com/pkshahid/JanGo/monitoring"
 )
 
 // PanicRecoveryMiddleware catches panics, logs the stack trace, and returns a 500 error page.

@@ -1,7 +1,7 @@
 package views
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // ViewFunc represents a function that handles an HTTP request.

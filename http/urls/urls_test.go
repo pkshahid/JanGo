@@ -3,7 +3,7 @@ package urls
 import (
 	"testing"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 func dummyView(req *godjangohttp.Request) godjangohttp.Response {

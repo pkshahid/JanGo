@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func RegisterListSeqFilters(lib *godjango.Library) {

@@ -19,7 +19,7 @@ GoDjango provides a global CLI tool called `godjango-admin` that is used to boot
 1.  **Install the `godjango-admin` tool globally:**
 
     ```bash
-    go install github.com/godjango/godjango/cmd/godjango-admin@latest
+    go install github.com/pkshahid/JanGo/cmd/godjango-admin@latest
     ```
 
     *Note: Ensure that your `GOPATH/bin` directory is added to your system's `PATH` environment variable so you can run the command from anywhere.*

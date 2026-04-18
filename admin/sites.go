@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/urls"
-	"github.com/godjango/godjango/orm"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/urls"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // AdminSite encapsulates an instance of the admin application.

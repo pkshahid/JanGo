@@ -7,10 +7,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/godjango/godjango/auth"
-	"github.com/godjango/godjango/auth/hashers"
-	"github.com/godjango/godjango/management"
-	"github.com/godjango/godjango/orm/queryset"
+	"github.com/pkshahid/JanGo/auth"
+	"github.com/pkshahid/JanGo/auth/hashers"
+	"github.com/pkshahid/JanGo/management"
+	"github.com/pkshahid/JanGo/orm/queryset"
 	"github.com/spf13/cobra"
 )
 
