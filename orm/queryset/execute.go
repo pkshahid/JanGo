@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	ormsignals "github.com/godjango/godjango/orm/signals"
 )
 
 // All executes the query and returns all matched records.
@@ -159,7 +160,13 @@ func (qs QuerySet[T]) ValuesList(fields ...string) ([][]any, error) {
 
 // Create inserts a new record into the database.
 func (qs QuerySet[T]) Create(obj *T) error {
+	// Trigger PreSave
+	ormsignals.PreSave.Send(obj, map[string]any{"instance": obj, "created": true})
+
 	// INSERT INTO table (fields) VALUES (values)
+
+	// Trigger PostSave
+	ormsignals.PostSave.Send(obj, map[string]any{"instance": obj, "created": true})
 	return nil
 }
 
@@ -171,7 +178,10 @@ func (qs QuerySet[T]) Update(fields map[string]any) (int64, error) {
 
 // Delete deletes the records matched by the query.
 func (qs QuerySet[T]) Delete() (int64, error) {
+	var zero T
+	ormsignals.PreDelete.Send(zero, map[string]any{"instance": nil}) // In a real ORM we would iterate deleted instances
 	// DELETE FROM table WHERE (query conditions)
+	ormsignals.PostDelete.Send(zero, map[string]any{"instance": nil})
 	return 0, nil
 }
 

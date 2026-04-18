@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Blog{% endblock title %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <header class="container">
+        <h1><a href="/">My Blog</a></h1>
+        <nav>
+            {% if request.User.IsAuthenticated %}
+                Welcome, {{ request.User.Username }}! | <a href="/post/new/">New Post</a> | <a href="/admin/">Admin</a> | <a href="/logout/">Logout</a>
+            {% else %}
+                <a href="/login/">Login</a> | <a href="/register/">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer class="container" style="text-align: center; margin-top: 20px; font-size: 0.8em;">
+        &copy; 2024 GoDjango Blog
+    </footer>
+</body>
+</html>

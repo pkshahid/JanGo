@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/godjango/godjango/auth"
 	godjangohttp "github.com/godjango/godjango/http"
 	"github.com/godjango/godjango/http/urls"
 	"github.com/godjango/godjango/orm"

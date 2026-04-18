@@ -1,8 +1,8 @@
 package backends
 
 import (
+	"strings"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -115,7 +115,7 @@ func (b *FileBackend) getPath() string {
 func (b *FileBackend) Load(ctx context.Context, key string) (map[string]any, error) {
 	filePath := filepath.Join(b.getPath(), "godjango_session_"+key)
 
-	stat, err := os.Stat(filePath)
+	_, err := os.Stat(filePath)
 	if err != nil {
 		return nil, err
 	}

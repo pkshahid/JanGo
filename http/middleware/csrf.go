@@ -72,11 +72,13 @@ func CsrfViewMiddleware(next Handler) Handler {
 
 func setCsrfCookie(resp godjangohttp.Response, name, value string) godjangohttp.Response {
 	if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
+		// In GoDjango, we should respect CSRF_COOKIE_SECURE and CSRF_COOKIE_HTTPONLY settings if they existed
+		// But usually CSRF cookie shouldn't be HttpOnly to allow JS to read it, unless configured otherwise.
 		cookie := &http.Cookie{
 			Name:     name,
 			Value:    value,
 			Path:     "/",
-			HttpOnly: false, // Must be accessible to JS for X-CSRFToken
+			HttpOnly: false, // Must be accessible to JS for X-CSRFToken by default
 			SameSite: http.SameSiteLaxMode,
 		}
 		hr.Headers.Add("Set-Cookie", cookie.String())

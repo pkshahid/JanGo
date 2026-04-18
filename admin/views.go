@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"strings"
 
 	"github.com/godjango/godjango/forms"
 	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/orm/queryset"
+	"github.com/godjango/godjango/http/urls"
 )
 
 func (s *AdminSite) index(req *godjangohttp.Request) godjangohttp.Response {
@@ -25,7 +24,7 @@ func (s *AdminSite) appIndex(req *godjangohttp.Request) godjangohttp.Response {
 }
 
 func (s *AdminSite) changelistView(req *godjangohttp.Request) godjangohttp.Response {
-	rm := req.ResolverMatch.(*godjangohttp.ResolverMatch)
+	rm := req.ResolverMatch.(*urls.ResolverMatch)
 	app := rm.Kwargs["app_label"].(string)
 	model := rm.Kwargs["model_name"].(string)
 
@@ -64,7 +63,7 @@ func (s *AdminSite) changelistView(req *godjangohttp.Request) godjangohttp.Respo
 }
 
 func (s *AdminSite) addView(req *godjangohttp.Request) godjangohttp.Response {
-	rm := req.ResolverMatch.(*godjangohttp.ResolverMatch)
+	rm := req.ResolverMatch.(*urls.ResolverMatch)
 	app := rm.Kwargs["app_label"].(string)
 	model := rm.Kwargs["model_name"].(string)
 
@@ -83,7 +82,16 @@ func (s *AdminSite) addView(req *godjangohttp.Request) godjangohttp.Response {
 	}
 
 	if req.Method == http.MethodPost {
-		mf.Bind(req.POST, req.FILES)
+
+		// Convert url.Values to map[string]any for form binding
+		postData := make(map[string]any)
+		for k, v := range req.POST {
+			if len(v) > 0 {
+				postData[k] = v[0]
+			}
+		}
+
+		mf.Bind(postData, req.FILES)
 		if mf.IsValid() {
 			saved, _ := mf.Save(true)
 			admin.SaveModel(req, saved, mf, false)
@@ -107,7 +115,7 @@ func (s *AdminSite) addView(req *godjangohttp.Request) godjangohttp.Response {
 }
 
 func (s *AdminSite) changeView(req *godjangohttp.Request) godjangohttp.Response {
-	rm := req.ResolverMatch.(*godjangohttp.ResolverMatch)
+	rm := req.ResolverMatch.(*urls.ResolverMatch)
 	app := rm.Kwargs["app_label"].(string)
 	model := rm.Kwargs["model_name"].(string)
 	idStr := rm.Kwargs["object_id"].(string)
@@ -128,7 +136,15 @@ func (s *AdminSite) changeView(req *godjangohttp.Request) godjangohttp.Response 
 	}
 
 	if req.Method == http.MethodPost {
-		mf.Bind(req.POST, req.FILES)
+		// Convert url.Values to map[string]any for form binding
+		postData := make(map[string]any)
+		for k, v := range req.POST {
+			if len(v) > 0 {
+				postData[k] = v[0]
+			}
+		}
+
+		mf.Bind(postData, req.FILES)
 		if mf.IsValid() {
 			saved, _ := mf.Save(true)
 			admin.SaveModel(req, saved, mf, true)
@@ -148,7 +164,7 @@ func (s *AdminSite) changeView(req *godjangohttp.Request) godjangohttp.Response 
 }
 
 func (s *AdminSite) deleteView(req *godjangohttp.Request) godjangohttp.Response {
-	rm := req.ResolverMatch.(*godjangohttp.ResolverMatch)
+	rm := req.ResolverMatch.(*urls.ResolverMatch)
 	app := rm.Kwargs["app_label"].(string)
 	model := rm.Kwargs["model_name"].(string)
 
@@ -178,7 +194,7 @@ func (s *AdminSite) historyView(req *godjangohttp.Request) godjangohttp.Response
 
 // ServeStatic wraps static file serving for admin
 func (s *AdminSite) ServeStatic(req *godjangohttp.Request) godjangohttp.Response {
-	rm := req.ResolverMatch.(*godjangohttp.ResolverMatch)
+	rm := req.ResolverMatch.(*urls.ResolverMatch)
 	path := rm.Kwargs["path"].(string)
 	return serveStatic(req, path)
 }

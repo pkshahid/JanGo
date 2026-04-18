@@ -38,11 +38,17 @@ type CacheConfig struct {
 
 type Settings struct {
 	DEBUG               bool     `env:"DEBUG"`
+	INTERNAL_IPS        []string `env:"INTERNAL_IPS"`
 	SECRET_KEY          string   `env:"SECRET_KEY"`
 	ALLOWED_HOSTS       []string `env:"ALLOWED_HOSTS"`
 	INSTALLED_APPS      []string
 	MIDDLEWARE          []string
 	ROOT_URLCONF        string
+	HANDLER_404         string
+	HANDLER_500         string
+	HANDLER_403         string
+	HANDLER_400         string
+	ADMINS              []string
 	TEMPLATES           []TemplateConfig
 	DATABASES           map[string]DatabaseConfig
 	STATIC_URL          string `env:"STATIC_URL"`

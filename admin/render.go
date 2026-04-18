@@ -1,10 +1,12 @@
 package admin
 
 import (
+	"bytes"
 	"embed"
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	godjangohttp "github.com/godjango/godjango/http"
 )
@@ -16,7 +18,10 @@ var adminTemplates *template.Template
 
 func init() {
 	// Pre-parse the embedded html/templates on startup
-	adminTemplates = template.Must(template.ParseFS(adminFS, "templates/admin/*.html"))
+	funcs := template.FuncMap{
+		"lower": strings.ToLower,
+	}
+	adminTemplates = template.Must(template.New("").Funcs(funcs).ParseFS(adminFS, "templates/admin/*.html"))
 }
 
 // render is a helper function to render `html/template` blocks seamlessly.
@@ -32,8 +37,6 @@ func render(req *godjangohttp.Request, tmplName string, data map[string]any) god
 	data["site_header"] = DefaultAdminSite.SiteHeader
 	data["site_title"] = DefaultAdminSite.SiteTitle
 
-	w := godjangohttp.NewHttpResponse("", http.StatusOK)
-
 	// Clone the base template so we can define the required block dynamically based on tmplName
 	tmpl, err := adminTemplates.Clone()
 	if err != nil {
@@ -48,12 +51,13 @@ func render(req *godjangohttp.Request, tmplName string, data map[string]any) god
 	}
 
 	// Standard html/template rendering
-	err = tmpl.ExecuteTemplate(w.Body, "base.html", data)
+	var buf bytes.Buffer
+	err = tmpl.ExecuteTemplate(&buf, "base.html", data)
 	if err != nil {
 		return godjangohttp.NewHttpResponse("Admin template render error: "+err.Error(), http.StatusInternalServerError)
 	}
 
-	return w
+	return godjangohttp.NewHttpResponse(buf.String(), http.StatusOK)
 }
 
 // serveStatic serves the embedded CSS/JS files

@@ -1,0 +1,61 @@
+<div id="djDebug" dir="ltr" data-store-id="{{.ID}}" data-render-panel-url="/djdt/render_panel/">
+  <style>
+    #djDebug { position: fixed; top: 0; right: 0; bottom: 0; width: 300px; background: #222; color: #fff; font-family: sans-serif; z-index: 10000; overflow-y: auto; transition: right 0.3s ease; }
+    #djDebug.djdt-collapsed { right: -280px; }
+    .djDebugPanel { display: none; padding: 10px; }
+    .djDebugPanel.active { display: block; }
+    .djdt-bar { cursor: pointer; padding: 10px; border-bottom: 1px solid #444; }
+    .djdt-bar:hover { background: #333; }
+    #djdt-toggle { width: 20px; height: 100%; position: absolute; left: 0; top: 0; background: #444; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    #djdt-content { margin-left: 20px; height: 100%; display: flex; flex-direction: column; }
+    #djDebugWindow { flex-grow: 1; overflow-y: auto; padding: 10px; background: #333; display: none; }
+    #djDebugWindow.active { display: block; }
+    .djdt-close-btn { cursor: pointer; float: right; color: #aaa; }
+    .djdt-close-btn:hover { color: #fff; }
+  </style>
+  <div id="djdt-toggle" onclick="djdt.toggleCollapse()" title="Toggle Debug Toolbar">«</div>
+  <div id="djdt-content">
+    <div id="djDebugToolbar">
+      {{range .Panels}}
+      {{if .Enable}}
+      <div class="djdt-bar" onclick="djdt.loadPanel('{{.Name}}')">
+        <strong>{{.NavTitle}}</strong> <small>{{.NavSubtitle}}</small>
+      </div>
+      {{end}}
+      {{end}}
+    </div>
+    <div id="djDebugWindow"></div>
+  </div>
+  <script>
+    var djdt = {
+      storeId: '{{.ID}}',
+      url: '/djdt/render_panel/',
+      loadPanel: function(panelId) {
+        var win = document.getElementById('djDebugWindow');
+        win.classList.add('active');
+        win.innerHTML = 'Loading...';
+        fetch(this.url + '?store_id=' + this.storeId + '&panel_id=' + panelId)
+          .then(r => r.text())
+          .then(html => {
+             win.innerHTML = '<span class="djdt-close-btn" onclick="djdt.closePanel()">×</span>' + html;
+          });
+      },
+      closePanel: function() {
+        var win = document.getElementById('djDebugWindow');
+        win.classList.remove('active');
+        win.innerHTML = '';
+      },
+      toggleCollapse: function() {
+        var el = document.getElementById('djDebug');
+        var toggle = document.getElementById('djdt-toggle');
+        if (el.classList.contains('djdt-collapsed')) {
+            el.classList.remove('djdt-collapsed');
+            toggle.innerHTML = '«';
+        } else {
+            el.classList.add('djdt-collapsed');
+            toggle.innerHTML = '»';
+        }
+      }
+    };
+  </script>
+</div>
