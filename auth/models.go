@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func init() {

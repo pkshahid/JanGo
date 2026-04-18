@@ -14,13 +14,13 @@ import (
 	"time"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/godjango/godjango/core/handlers/wsgi"
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/http/middleware"
-	"github.com/godjango/godjango/http/urls"
-	"github.com/godjango/godjango/management"
-	"github.com/godjango/godjango/static/media"
-	staticmiddleware "github.com/godjango/godjango/static/middleware"
+	"github.com/pkshahid/JanGo/core/handlers/wsgi"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/http/middleware"
+	"github.com/pkshahid/JanGo/http/urls"
+	"github.com/pkshahid/JanGo/management"
+	"github.com/pkshahid/JanGo/static/media"
+	staticmiddleware "github.com/pkshahid/JanGo/static/middleware"
 	"github.com/spf13/cobra"
 )
 

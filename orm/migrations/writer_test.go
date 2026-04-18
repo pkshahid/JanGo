@@ -3,7 +3,7 @@ package migrations
 import (
 	"strings"
 	"testing"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func TestMigrationWriter(t *testing.T) {

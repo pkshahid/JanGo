@@ -1,7 +1,7 @@
 package signals
 
 import (
-	"github.com/godjango/godjango/core/signals"
+	"github.com/pkshahid/JanGo/core/signals"
 )
 
 var (

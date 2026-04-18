@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 func init() {

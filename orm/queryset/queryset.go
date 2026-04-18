@@ -3,7 +3,7 @@ package queryset
 import (
 	"fmt"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // QuerySet represents a lazy database query for a specific model type T.

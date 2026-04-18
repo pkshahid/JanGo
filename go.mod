@@ -1,4 +1,4 @@
-module github.com/godjango/godjango
+module github.com/pkshahid/JanGo
 
 go 1.25.0
 

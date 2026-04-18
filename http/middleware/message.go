@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // MessageMiddleware manages flash messages in the session.

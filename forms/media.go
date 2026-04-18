@@ -3,7 +3,7 @@ package forms
 import (
 	"strings"
 
-	"github.com/godjango/godjango/template"
+	"github.com/pkshahid/JanGo/template"
 )
 
 // Media handles CSS and JS files for a widget or form.

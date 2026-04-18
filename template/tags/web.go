@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/urls"
-	"github.com/godjango/godjango/static"
-	godjango "github.com/godjango/godjango/template"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/urls"
+	"github.com/pkshahid/JanGo/static"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 // RegisterWebTags registers url, static, csrf_token.

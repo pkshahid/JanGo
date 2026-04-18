@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/orm/queryset"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/orm/queryset"
 )
 
 // ListView handles displaying a list of objects, potentially paginated.

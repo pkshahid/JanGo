@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // GZipMiddleware compresses responses above a threshold length.

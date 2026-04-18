@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/gorilla/websocket"
 )
 

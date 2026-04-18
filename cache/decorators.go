@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/views"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/views"
 )
 
 // CachePage caches the output of the decorated view for the given timeout.

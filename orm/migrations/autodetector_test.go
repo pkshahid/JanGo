@@ -2,7 +2,7 @@ package migrations
 
 import (
 	"testing"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func TestAutodetector(t *testing.T) {

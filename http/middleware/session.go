@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/sessions"
-	"github.com/godjango/godjango/sessions/backends"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/sessions"
+	"github.com/pkshahid/JanGo/sessions/backends"
 )
 
 func getSessionBackend(engine string) sessions.Backend {

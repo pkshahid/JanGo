@@ -8,7 +8,7 @@ import (
 	"image"
 	"image/color"
 	"image/png"
-	"github.com/godjango/godjango/forms"
+	"github.com/pkshahid/JanGo/forms"
 )
 
 func createTestFileHeader(t *testing.T, filename string, content []byte) *multipart.FileHeader {

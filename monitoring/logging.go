@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 var Logger *slog.Logger

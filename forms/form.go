@@ -5,7 +5,7 @@ import (
 	"mime/multipart"
 	"strings"
 
-	"github.com/godjango/godjango/template"
+	"github.com/pkshahid/JanGo/template"
 )
 
 // FormErrors maps field names to lists of error messages.

@@ -3,7 +3,7 @@ package queryset
 import (
 	"reflect"
 	"testing"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 type TestArticle struct {

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"strings"
 
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestUtilTags(t *testing.T) {

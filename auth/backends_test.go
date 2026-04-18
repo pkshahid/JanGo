@@ -2,8 +2,8 @@ package auth
 
 import (
 	"testing"
-	"github.com/godjango/godjango/auth/hashers"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/auth/hashers"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func TestModelBackend(t *testing.T) {

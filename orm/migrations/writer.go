@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // MigrationWriter handles generating Go code for a Migration.
@@ -31,8 +31,8 @@ func (w *MigrationWriter) AsString() (string, error) {
 	// Write header
 	buf.WriteString("package migrations\n\n")
 	buf.WriteString("import (\n")
-	buf.WriteString("\t\"github.com/godjango/godjango/orm\"\n")
-	buf.WriteString("\t\"github.com/godjango/godjango/orm/migrations\"\n")
+	buf.WriteString("\t\"github.com/pkshahid/JanGo/orm\"\n")
+	buf.WriteString("\t\"github.com/pkshahid/JanGo/orm/migrations\"\n")
 	buf.WriteString(")\n\n")
 
 	// Write init function for self-registration

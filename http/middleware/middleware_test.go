@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 func TestChain(t *testing.T) {

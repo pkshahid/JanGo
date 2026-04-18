@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/godjango/godjango/template"
+	"github.com/pkshahid/JanGo/template"
 )
 
 var Library *template.Library

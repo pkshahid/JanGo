@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 // RegisterUtilTags registers with, comment, cycle, now, spaceless, verbatim, lorem.

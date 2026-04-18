@@ -3,7 +3,7 @@ package filters
 import (
 	"testing"
 	"time"
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestDateTimeFilters(t *testing.T) {

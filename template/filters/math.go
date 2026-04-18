@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func RegisterMathLogicFilters(lib *godjango.Library) {

@@ -3,7 +3,7 @@ package monitoring
 import (
 	"context"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
@@ -15,7 +15,7 @@ var tracer trace.Tracer
 
 func init() {
 	// Initialize a noop tracer by default
-	tracer = otel.Tracer("github.com/godjango/godjango")
+	tracer = otel.Tracer("github.com/pkshahid/JanGo")
 }
 
 // InitTracing sets up OpenTelemetry tracing.
@@ -45,7 +45,7 @@ func InitTracing(exporterType string) error {
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.TraceContext{})
 
-	tracer = tp.Tracer("github.com/godjango/godjango")
+	tracer = tp.Tracer("github.com/pkshahid/JanGo")
 	return nil
 }
 

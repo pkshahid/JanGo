@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/godjango/godjango/core"
-	"github.com/godjango/godjango/management"
+	"github.com/pkshahid/JanGo/core"
+	"github.com/pkshahid/JanGo/management"
 	"github.com/spf13/cobra"
 )
 

@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"github.com/godjango/godjango/http/views"
+	"github.com/pkshahid/JanGo/http/views"
 )
 
 type View = views.View

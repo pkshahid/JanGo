@@ -1,8 +1,8 @@
 package app
 
 import (
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/views/generic"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/views/generic"
 )
 
 // PostListView is the main blog index.

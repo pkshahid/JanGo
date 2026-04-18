@@ -3,9 +3,9 @@ package context
 import (
 	"sync"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
-	godjango "github.com/godjango/godjango/template"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 // ProcessorFunc is a function that returns a map of context variables to add to the template.

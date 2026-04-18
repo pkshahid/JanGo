@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
 )
 
 // CSPSettings defines the CSP directives.

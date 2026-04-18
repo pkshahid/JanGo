@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 	"io"
 	"io/ioutil"
 	"os"

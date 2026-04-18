@@ -3,9 +3,9 @@ package security
 import (
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
 )
 
 // AllowedHostsMiddleware checks the Host header against ALLOWED_HOSTS.

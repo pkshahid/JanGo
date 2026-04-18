@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 func TestRunserverCommand(t *testing.T) {

@@ -1,7 +1,7 @@
 package forms
 
 import (
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 	"testing"
 )
 

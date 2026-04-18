@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm/backends"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm/backends"
 )
 
 func init() {

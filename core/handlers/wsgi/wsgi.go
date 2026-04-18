@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"sync"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/middleware"
-	"github.com/godjango/godjango/http/urls"
-	"github.com/godjango/godjango/http/views"
-	httpsignals "github.com/godjango/godjango/http/signals"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
+	"github.com/pkshahid/JanGo/http/urls"
+	"github.com/pkshahid/JanGo/http/views"
+	httpsignals "github.com/pkshahid/JanGo/http/signals"
 )
 
 // WSGIHandler implements http.Handler and acts as the entry point.

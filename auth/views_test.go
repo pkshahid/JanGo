@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/orm"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func TestAuthViews(t *testing.T) {

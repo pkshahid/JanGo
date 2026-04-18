@@ -2,15 +2,15 @@ package cache_test
 
 import (
 	"context"
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/godjango/godjango/cache"
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/cache"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 func initSettings() {

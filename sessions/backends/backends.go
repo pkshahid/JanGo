@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
-	"github.com/godjango/godjango/orm/queryset"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
+	"github.com/pkshahid/JanGo/orm/queryset"
 )
 
 // SessionModel represents the database table structure for sessions.

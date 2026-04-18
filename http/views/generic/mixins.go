@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // LoginRequiredMixin ensures the user is authenticated.

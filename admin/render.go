@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 //go:embed templates/* static/*

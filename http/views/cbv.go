@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strings"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // View is the interface for all Class-Based Views.

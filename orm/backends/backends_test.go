@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 type DummyModel struct {

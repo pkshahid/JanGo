@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/godjango/godjango/core/settings"
+	"github.com/pkshahid/JanGo/core/settings"
 )
 
 func init() {
@@ -17,8 +17,8 @@ func init() {
 			},
 		},
 		INSTALLED_APPS: []string{
-			"github.com/godjango/godjango/admin",
-			"github.com/godjango/godjango/auth",
+			"github.com/pkshahid/JanGo/admin",
+			"github.com/pkshahid/JanGo/auth",
 			"blog",
 		},
 	})

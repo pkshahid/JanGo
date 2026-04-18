@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/orm"
-	"github.com/godjango/godjango/orm/backends"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
+	"github.com/pkshahid/JanGo/orm/backends"
 )
 
 func setupTestDB() string {

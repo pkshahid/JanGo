@@ -3,8 +3,8 @@ package generic
 import (
 	"fmt"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/views"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/views"
 )
 
 // FormView displays a form and handles validation.

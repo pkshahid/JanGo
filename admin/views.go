@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/godjango/godjango/forms"
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/urls"
+	"github.com/pkshahid/JanGo/forms"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/urls"
 )
 
 func (s *AdminSite) index(req *godjangohttp.Request) godjangohttp.Response {

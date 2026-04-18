@@ -3,8 +3,8 @@ package toolbar
 import (
 	"net/http"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/urls"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/urls"
 )
 
 // RenderPanel is the AJAX endpoint view that renders a specific panel's content.

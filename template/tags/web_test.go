@@ -5,10 +5,10 @@ import (
 	"testing"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/http/urls"
-	godjango "github.com/godjango/godjango/template"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/urls"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func setupTestSettings() {

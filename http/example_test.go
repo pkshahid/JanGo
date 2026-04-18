@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http/httptest"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // Example of building and returning an HTTP response.

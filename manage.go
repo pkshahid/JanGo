@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"github.com/godjango/godjango/management"
+	"github.com/pkshahid/JanGo/management"
 )
 
 func main() {

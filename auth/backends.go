@@ -3,8 +3,8 @@ package auth
 import (
 	"fmt"
 
-	"github.com/godjango/godjango/auth/hashers"
-	"github.com/godjango/godjango/orm/queryset"
+	"github.com/pkshahid/JanGo/auth/hashers"
+	"github.com/pkshahid/JanGo/orm/queryset"
 )
 
 // AuthBackend represents the interface for authentication mechanisms.

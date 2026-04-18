@@ -2,7 +2,7 @@ package queryset
 
 import (
 	"testing"
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func TestExecutionMethods(t *testing.T) {

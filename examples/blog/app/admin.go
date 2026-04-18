@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/godjango/godjango/admin"
+	"github.com/pkshahid/JanGo/admin"
 )
 
 type PostAdmin struct {

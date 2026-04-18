@@ -5,8 +5,8 @@ import (
 	"os"
 	"sync"
 
-	godjangohttp "github.com/godjango/godjango/http"
-	"github.com/godjango/godjango/template/loaders"
+	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/template/loaders"
 )
 
 // Engine is responsible for loading and rendering templates.

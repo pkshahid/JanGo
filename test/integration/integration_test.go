@@ -6,17 +6,17 @@ import (
 	"testing"
 	"go.uber.org/goleak"
 
-	_ "github.com/godjango/godjango/examples/blog/app"
-	"github.com/godjango/godjango/core/handlers/wsgi"
-	"github.com/godjango/godjango/http/urls"
+	_ "github.com/pkshahid/JanGo/examples/blog/app"
+	"github.com/pkshahid/JanGo/core/handlers/wsgi"
+	"github.com/pkshahid/JanGo/http/urls"
 )
 
 func TestMain(m *testing.M) {
 	// We ignore monitoring background routine which is by-design.
 	// We also ignore cache cleanup routine because it loops indefinitely in LocMem.
 	goleak.VerifyTestMain(m,
-		goleak.IgnoreTopFunction("github.com/godjango/godjango/monitoring.updateRuntimeMetrics"),
-		goleak.IgnoreTopFunction("github.com/godjango/godjango/cache.(*LocMemCache).startCleanup"),
+		goleak.IgnoreTopFunction("github.com/pkshahid/JanGo/monitoring.updateRuntimeMetrics"),
+		goleak.IgnoreTopFunction("github.com/pkshahid/JanGo/cache.(*LocMemCache).startCleanup"),
 	)
 }
 

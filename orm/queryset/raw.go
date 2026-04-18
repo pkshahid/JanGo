@@ -3,7 +3,7 @@ package queryset
 import (
 	"fmt"
 
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 // RawQuerySet represents a raw SQL query.

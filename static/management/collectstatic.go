@@ -3,9 +3,9 @@ package management
 import (
 	"context"
 	"fmt"
-	"github.com/godjango/godjango/core/settings"
-	"github.com/godjango/godjango/management"
-	"github.com/godjango/godjango/static"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/management"
+	"github.com/pkshahid/JanGo/static"
 	"github.com/spf13/cobra"
 	"io"
 	"os"

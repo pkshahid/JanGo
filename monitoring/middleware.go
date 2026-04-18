@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // RequestLogMiddleware logs each HTTP request with structured fields.

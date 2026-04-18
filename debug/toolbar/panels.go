@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	godjangohttp "github.com/godjango/godjango/http"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // TimerPanel measures total request time

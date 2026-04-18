@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"sync"
-	ormsignals "github.com/godjango/godjango/orm/signals"
+	ormsignals "github.com/pkshahid/JanGo/orm/signals"
 )
 
 // All executes the query and returns all matched records.

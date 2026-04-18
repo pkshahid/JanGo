@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/godjango/godjango/forms"
+	"github.com/pkshahid/JanGo/forms"
 )
 
 // CommentForm uses the ModelForm pattern to bind to Comment.

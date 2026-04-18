@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/godjango/godjango/orm"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 type Category struct {

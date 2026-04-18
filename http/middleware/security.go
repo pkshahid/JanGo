@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/godjango/godjango/core/settings"
-	godjangohttp "github.com/godjango/godjango/http"
+	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 // SecurityMiddleware adds security headers and redirects to HTTPS.

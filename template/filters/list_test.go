@@ -3,7 +3,7 @@ package filters
 import (
 	"reflect"
 	"testing"
-	godjango "github.com/godjango/godjango/template"
+	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestListSeqFilters(t *testing.T) {
