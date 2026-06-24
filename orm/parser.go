@@ -11,6 +11,7 @@ import (
 // ModelInfo holds all metadata and parsed fields for a registered model.
 type ModelInfo struct {
 	Name        string
+	AppLabel    string
 	Type        reflect.Type
 	Fields      []*Field
 	FieldByName map[string]*Field
