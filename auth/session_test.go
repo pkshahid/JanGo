@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"testing"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
@@ -9,11 +10,22 @@ import (
 
 // Mock session map for testing
 type mockSession struct {
-	data map[string]any
+	data     map[string]any
+	modified bool
 }
-func (m *mockSession) Get(key string) any { return m.data[key] }
-func (m *mockSession) Set(key string, val any) { m.data[key] = val }
-func (m *mockSession) Delete(key string) { delete(m.data, key) }
+
+func (m *mockSession) Get(key string) (any, bool) {
+	v, ok := m.data[key]
+	return v, ok
+}
+func (m *mockSession) Set(key string, val any)         { m.data[key] = val; m.modified = true }
+func (m *mockSession) Delete(key string)               { delete(m.data, key); m.modified = true }
+func (m *mockSession) Clear()                          { m.data = make(map[string]any); m.modified = true }
+func (m *mockSession) SessionKey() string              { return "test-session-key" }
+func (m *mockSession) IsModified() bool                { return m.modified }
+func (m *mockSession) Flush(_ context.Context) error   { m.Clear(); return nil }
+func (m *mockSession) CycleKey(_ context.Context) error { return nil }
+func (m *mockSession) Save(_ context.Context) error    { return nil }
 
 func TestSessionAuth(t *testing.T) {
 	// 1. Setup Request and Session
@@ -33,8 +45,9 @@ func TestSessionAuth(t *testing.T) {
 		t.Fatalf("Login error: %v", err)
 	}
 
-	if req.Session.Get("_auth_user_id") != "42" {
-		t.Errorf("Session _auth_user_id not set correctly")
+	val, ok := req.Session.Get("_auth_user_id")
+	if !ok || val != "42" {
+		t.Errorf("Session _auth_user_id not set correctly, got %v", val)
 	}
 
 	// 4. Test Logout
@@ -43,7 +56,8 @@ func TestSessionAuth(t *testing.T) {
 		t.Fatalf("Logout error: %v", err)
 	}
 
-	if req.Session.Get("_auth_user_id") != nil {
+	val, ok = req.Session.Get("_auth_user_id")
+	if ok && val != nil {
 		t.Errorf("Session _auth_user_id should be deleted")
 	}
 

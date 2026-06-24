@@ -2,6 +2,7 @@ package migrations
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/pkshahid/JanGo/orm"
 	"github.com/pkshahid/JanGo/orm/backends"
@@ -49,7 +50,7 @@ func (o CreateModel) StateForwards(appLabel string, state *ProjectState) {
 }
 
 func (o CreateModel) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := toState.Models[appLabel+"."+o.Name]
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Name)]
 
 	// Convert ModelState to ModelInfo
 	info := &orm.ModelInfo{
@@ -61,7 +62,7 @@ func (o CreateModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 }
 
 func (o CreateModel) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := fromState.Models[appLabel+"."+o.Name]
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Name)]
 	info := &orm.ModelInfo{
 		Name: mState.Name,
 		Fields: mState.Fields,
@@ -79,7 +80,7 @@ func (o DeleteModel) StateForwards(appLabel string, state *ProjectState) {
 }
 
 func (o DeleteModel) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := fromState.Models[appLabel+"."+o.Name]
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Name)]
 	info := &orm.ModelInfo{
 		Name: mState.Name,
 		Fields: mState.Fields,
@@ -89,7 +90,7 @@ func (o DeleteModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 }
 
 func (o DeleteModel) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := toState.Models[appLabel+"."+o.Name]
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Name)]
 	info := &orm.ModelInfo{
 		Name: mState.Name,
 		Fields: mState.Fields,
@@ -105,20 +106,20 @@ type AddField struct {
 }
 
 func (o AddField) StateForwards(appLabel string, state *ProjectState) {
-	mState := state.Models[appLabel+"."+o.Model]
+	mState := state.Models[strings.ToLower(appLabel+"."+o.Model)]
 	if mState != nil {
 		mState.Fields = append(mState.Fields, o.Field)
 	}
 }
 
 func (o AddField) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := toState.Models[appLabel+"."+o.Model]
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Model)]
 	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
 	return schemaEditor.AddColumn(info, o.Field)
 }
 
 func (o AddField) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := fromState.Models[appLabel+"."+o.Model]
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Model)]
 	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
 	return schemaEditor.RemoveColumn(info, o.Field.Column)
 }
@@ -130,20 +131,20 @@ type RemoveField struct {
 }
 
 func (o RemoveField) StateForwards(appLabel string, state *ProjectState) {
-	mState := state.Models[appLabel+"."+o.Model]
+	mState := state.Models[strings.ToLower(appLabel+"."+o.Model)]
 	if mState != nil {
 		mState.RemoveField(o.Name)
 	}
 }
 
 func (o RemoveField) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := fromState.Models[appLabel+"."+o.Model]
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Model)]
 	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
 	return schemaEditor.RemoveColumn(info, o.Field.Column)
 }
 
 func (o RemoveField) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := toState.Models[appLabel+"."+o.Model]
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Model)]
 	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
 	return schemaEditor.AddColumn(info, o.Field)
 }
@@ -155,7 +156,7 @@ type AlterField struct {
 }
 
 func (o AlterField) StateForwards(appLabel string, state *ProjectState) {
-	mState := state.Models[appLabel+"."+o.Model]
+	mState := state.Models[strings.ToLower(appLabel+"."+o.Model)]
 	if mState != nil {
 		for i, f := range mState.Fields {
 			if f.Name == o.Name {
@@ -167,16 +168,16 @@ func (o AlterField) StateForwards(appLabel string, state *ProjectState) {
 }
 
 func (o AlterField) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := toState.Models[appLabel+"."+o.Model]
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Model)]
 	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
-	oldField := fromState.Models[appLabel+"."+o.Model].GetField(o.Name)
+	oldField := fromState.Models[strings.ToLower(appLabel+"."+o.Model)].GetField(o.Name)
 	return schemaEditor.AlterColumn(info, oldField, o.Field)
 }
 
 func (o AlterField) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
-	mState := fromState.Models[appLabel+"."+o.Model]
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Model)]
 	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
-	oldField := toState.Models[appLabel+"."+o.Model].GetField(o.Name)
+	oldField := toState.Models[strings.ToLower(appLabel+"."+o.Model)].GetField(o.Name)
 	return schemaEditor.AlterColumn(info, o.Field, oldField) // o.Field is the new field coming backwards
 }
 

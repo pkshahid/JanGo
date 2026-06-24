@@ -1,7 +1,6 @@
 package migrations
 
 import (
-	"reflect"
 	"testing"
 )
 

@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/pkshahid/JanGo/core/settings"
-	"github.com/pkshahid/JanGo/orm"
 )
 
 func setupTestSettings() {
 	settings.Configure(settings.Settings{
-		SECRET_KEY: "test_secret_key",
+		SECRET_KEY:        "test_secret_key",
+		ROOT_URLCONF:      "test.urls",
 		SESSION_FILE_PATH: "", // Default to os.TempDir()
 	})
 }
@@ -51,11 +51,9 @@ func TestSignAndUnsign(t *testing.T) {
 }
 
 func TestDatabaseBackend(t *testing.T) {
-	// Requires ORM to be initialized to some DB.
-	// Since we rely on pure unit testing, we'll ensure it returns DoesNotExist cleanly when empty.
-	orm.ClearRegistry()
-	orm.Register(&SessionModel{})
+	setupTestSettings()
 
+	// SessionModel is registered via init(), no need to re-register.
 	backend := &DatabaseBackend{}
 	ctx := context.Background()
 

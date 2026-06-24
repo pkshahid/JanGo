@@ -206,6 +206,7 @@ func TestGZipMiddleware(t *testing.T) {
 }
 
 func TestMessageMiddleware(t *testing.T) {
+	setupTestSettings()
 	chain := NewChain(SessionMiddleware, MessageMiddleware)
 
 	handler := chain.Then(func(req *godjangohttp.Request) godjangohttp.Response {

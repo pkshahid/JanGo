@@ -22,19 +22,18 @@ func NewContactForm() *ContactForm {
 	f := &ContactForm{
 		Form: *NewForm(fields, order),
 	}
-	return f
-}
-
-// Override Clean for cross-field validation
-func (f *ContactForm) Clean() error {
-	if sender, ok := f.CleanedData["sender"].(string); ok {
-		if subject, ok := f.CleanedData["subject"].(string); ok {
-			if strings.Contains(subject, "spam") && !strings.Contains(sender, "admin") {
-				return fmt.Errorf("Spam subject requires admin sender")
+	// Cross-field validation via CleanFunc
+	f.CleanFunc = func() error {
+		if sender, ok := f.CleanedData["sender"].(string); ok {
+			if subject, ok := f.CleanedData["subject"].(string); ok {
+				if strings.Contains(subject, "spam") && !strings.Contains(sender, "admin") {
+					return fmt.Errorf("Spam subject requires admin sender")
+				}
 			}
 		}
+		return nil
 	}
-	return nil
+	return f
 }
 
 func TestFormValidation(t *testing.T) {

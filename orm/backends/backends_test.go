@@ -3,6 +3,7 @@ package backends
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -27,6 +28,8 @@ func setupTestDB(t *testing.T) string {
 	dbPath := filepath.Join(tmpDir, "test.sqlite3")
 
 	settings.Configure(settings.Settings{
+		SECRET_KEY:  "test-secret-key",
+		ROOT_URLCONF: "test.urls",
 		DATABASES: map[string]settings.DatabaseConfig{
 			"default": {
 				Engine:   "sqlite",
@@ -123,7 +126,8 @@ func TestAtomicTransactions(t *testing.T) {
 	// 1. Success case with OnCommit
 	var hookRan bool
 	err := Atomic(ctx, "default", func(txCtx context.Context, tx *sql.Tx) error {
-		_, err := tx.Exec("INSERT INTO dummy_model (name, age) VALUES (?, ?)", "Alice", 30)
+		now := time.Now().Format(time.RFC3339)
+		_, err := tx.Exec("INSERT INTO dummy_model (name, age, created_at, updated_at) VALUES (?, ?, ?, ?)", "Alice", 30, now, now)
 		if err != nil {
 			return err
 		}
@@ -151,7 +155,8 @@ func TestAtomicTransactions(t *testing.T) {
 	// 2. Rollback case
 	hookRan = false
 	err = Atomic(ctx, "default", func(txCtx context.Context, tx *sql.Tx) error {
-		_, err := tx.Exec("INSERT INTO dummy_model (name, age) VALUES (?, ?)", "Bob", 25)
+		now := time.Now().Format(time.RFC3339)
+		_, err := tx.Exec("INSERT INTO dummy_model (name, age, created_at, updated_at) VALUES (?, ?, ?, ?)", "Bob", 25, now, now)
 		if err != nil {
 			return err
 		}
@@ -177,11 +182,12 @@ func TestAtomicTransactions(t *testing.T) {
 
 	// 3. Nested Savepoints
 	err = Atomic(ctx, "default", func(txCtx context.Context, tx *sql.Tx) error {
-		tx.Exec("INSERT INTO dummy_model (name, age) VALUES (?, ?)", "Charlie", 40)
+		now := time.Now().Format(time.RFC3339)
+		tx.Exec("INSERT INTO dummy_model (name, age, created_at, updated_at) VALUES (?, ?, ?, ?)", "Charlie", 40, now, now)
 
 		// Nested block
 		Atomic(txCtx, "default", func(nestedCtx context.Context, ntx *sql.Tx) error {
-			ntx.Exec("INSERT INTO dummy_model (name, age) VALUES (?, ?)", "Dave", 50)
+			ntx.Exec("INSERT INTO dummy_model (name, age, created_at, updated_at) VALUES (?, ?, ?, ?)", "Dave", 50, now, now)
 			return fmt.Errorf("nested rollback")
 		})
 

@@ -10,9 +10,16 @@ import (
 	"github.com/pkshahid/JanGo/orm"
 )
 
+// mockSession for views_test (same package as session_test.go won't compile
+// two definitions, so we reuse via build tags or keep one definition)
+// Since session_test.go already defines mockSession, we reuse it here.
+
 func TestAuthViews(t *testing.T) {
 	orm.ClearRegistry()
 	orm.Register(&AbstractUser{}, &Group{}, &Permission{})
+
+	// Register minimal templates needed by auth views
+	godjangohttp.RegisterTemplate(TemplateLoggedOut, "Logged out")
 
 	// Test LoginView GET Redirect (already logged in)
 	loginView := NewLoginView()
@@ -43,3 +50,5 @@ func TestAuthViews(t *testing.T) {
 		t.Errorf("PasswordChangeView should redirect unauthorized users, got %v", resp3)
 	}
 }
+
+

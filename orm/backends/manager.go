@@ -1,6 +1,7 @@
 package backends
 
 import (
+	"database/sql"
 	"fmt"
 	"sync"
 	"time"
@@ -99,6 +100,16 @@ func GetBackend(alias string) (Backend, error) {
 	}
 
 	return nil, fmt.Errorf("orm: database alias %s not found", alias)
+}
+
+// GetConnection returns the raw *sql.DB connection for the given database alias.
+// This is useful for management commands that need direct database access.
+func GetConnection(alias string) (*sql.DB, error) {
+	b, err := GetBackend(alias)
+	if err != nil {
+		return nil, err
+	}
+	return b.DB(), nil
 }
 
 // DefaultRouter routes everything to "default".

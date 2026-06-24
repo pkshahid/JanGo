@@ -23,6 +23,10 @@ type Form struct {
 	Order []string
 
 	IsBound bool
+
+	// CleanFunc is an optional cross-field validation callback.
+	// Set this to implement form-level validation (equivalent to Django's clean()).
+	CleanFunc func() error
 }
 
 // NewForm initializes an empty form.
@@ -90,7 +94,11 @@ func (f *Form) IsValid() bool {
 
 	// Cross-field validation override
 	if len(f.Errors) == 0 {
-		if err := f.Clean(); err != nil {
+		if f.CleanFunc != nil {
+			if err := f.CleanFunc(); err != nil {
+				f.addError("__all__", err.Error())
+			}
+		} else if err := f.Clean(); err != nil {
 			f.addError("__all__", err.Error())
 		}
 	}
