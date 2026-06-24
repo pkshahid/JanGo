@@ -162,12 +162,7 @@ func (b *FileBackend) Save(ctx context.Context, key string, data map[string]any,
 	}
 
 	filePath := filepath.Join(b.getPath(), "godjango_session_"+key)
-
-	go func() {
-		os.WriteFile(filePath, jsonData, 0600)
-	}()
-
-	return nil
+	return os.WriteFile(filePath, jsonData, 0600)
 }
 
 func (b *FileBackend) Delete(ctx context.Context, key string) error {

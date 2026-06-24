@@ -30,6 +30,9 @@ func NewModelForm(modelInstance any, includes, excludes []string) (*ModelForm, e
 		if f.PrimaryKey && f.Type == orm.BigAutoField {
 			continue // Skip auto PK
 		}
+		if f.Options.AutoCreated || f.Options.AutoNow || f.Options.AutoNowAdd {
+			continue // Skip non-editable auto-managed fields (mirrors Django editable=False)
+		}
 
 		// Check includes/excludes
 		if len(includes) > 0 && !contains(includes, f.Name) {

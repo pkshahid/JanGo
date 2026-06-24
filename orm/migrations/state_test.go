@@ -18,7 +18,7 @@ func TestProjectState(t *testing.T) {
 
 	state := ProjectStateFromApps()
 
-	modelKey := "migrations.TestAppModel"
+	modelKey := "migrations.testappmodel"
 	if _, ok := state.Models[modelKey]; !ok {
 		t.Errorf("Expected model %s in state", modelKey)
 	}

@@ -8,7 +8,7 @@ import (
 	"io"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
-	"github.com/pkshahid/JanGo/auth"
+	godjangourls "github.com/pkshahid/JanGo/http/urls"
 	"github.com/pkshahid/JanGo/orm"
 )
 
@@ -58,7 +58,7 @@ func TestAdminSite(t *testing.T) {
 	// Test Unauthorized access
 	req.User = &mockUser{authenticated: false}
 
-	resp := site.index(req)
+	_ = site.index(req)
 	// Since we called `site.index` directly, we bypass the decorator in tests.
 	// We need to test the decorator.
 
@@ -97,7 +97,7 @@ func TestAdminSite(t *testing.T) {
 
 	// Test static serving
 	reqStatic := godjangohttp.NewRequest(httptest.NewRequest("GET", "/admin/static/css/base.css", nil))
-	reqStatic.ResolverMatch = &godjangohttp.ResolverMatch{Kwargs: map[string]any{"path": "css/base.css"}}
+	reqStatic.ResolverMatch = &godjangourls.ResolverMatch{Kwargs: map[string]any{"path": "css/base.css"}}
 
 	staticResp := site.ServeStatic(reqStatic).(*godjangohttp.HttpResponse)
 	if staticResp.Headers.Get("Content-Type") != "text/css" {

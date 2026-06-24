@@ -26,8 +26,15 @@ type mockUser struct {
 	username      string
 	perms         []string
 }
-func (u *mockUser) IsAuthenticated() bool { return u.authenticated }
-func (u *mockUser) GetUsername() string   { return u.username }
+
+func (u *mockUser) ID() uint64            { return 1 }
+func (u *mockUser) Username() string       { return u.username }
+func (u *mockUser) Email() string          { return "" }
+func (u *mockUser) IsAuthenticated() bool  { return u.authenticated }
+func (u *mockUser) IsAnonymous() bool      { return !u.authenticated }
+func (u *mockUser) IsActive() bool         { return true }
+func (u *mockUser) IsStaff() bool          { return false }
+func (u *mockUser) IsSuperuser() bool      { return false }
 func (u *mockUser) HasPerm(perm string) bool {
 	for _, p := range u.perms {
 		if p == perm {
@@ -36,6 +43,15 @@ func (u *mockUser) HasPerm(perm string) bool {
 	}
 	return false
 }
+func (u *mockUser) HasPerms(perms []string) bool {
+	for _, p := range perms {
+		if !u.HasPerm(p) {
+			return false
+		}
+	}
+	return true
+}
+func (u *mockUser) HasModulePerm(appLabel string) bool { return true }
 
 func TestDecorators(t *testing.T) {
 	setupTestSettings()

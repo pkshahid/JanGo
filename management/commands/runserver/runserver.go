@@ -91,10 +91,16 @@ func (c *Command) Execute(ctx context.Context, args []string) error {
 	}
 
 	wm := staticmiddleware.NewWhiteNoiseMiddleware()
-	middlewares = append([]middleware.MiddlewareFunc{wm.Process}, middlewares...)
+	wmMiddleware := func(next middleware.Handler) middleware.Handler {
+		return wm.Process(next)
+	}
+	middlewares = append([]middleware.MiddlewareFunc{wmMiddleware}, middlewares...)
 
 	// Add media serving middleware
-	middlewares = append([]middleware.MiddlewareFunc{media.MediaMiddleware}, middlewares...)
+	mediaFunc := func(next middleware.Handler) middleware.Handler {
+		return media.MediaMiddleware(next)
+	}
+	middlewares = append([]middleware.MiddlewareFunc{mediaFunc}, middlewares...)
 
 	handler := wsgi.NewWSGIHandler(router, middlewares...)
 

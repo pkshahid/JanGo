@@ -66,7 +66,7 @@ func (c *CreateSuperuserCommand) Execute(ctx context.Context, args []string) err
 		IsSuperuserVal: true,
 	}
 
-	err := qs.Create(&user)
+	err := qs.Create(user)
 	if err != nil {
 		return fmt.Errorf("Error: Could not create superuser: %v", err)
 	}

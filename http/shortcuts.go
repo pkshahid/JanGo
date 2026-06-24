@@ -15,6 +15,12 @@ func init() {
 	templates = template.New("base")
 }
 
+// RegisterTemplate registers a named template with the given body for rendering.
+func RegisterTemplate(name, body string) error {
+	_, err := templates.New(name).Parse(body)
+	return err
+}
+
 // Render renders a template with the given context and returns an HttpResponse.
 func Render(req *Request, tmplName string, ctx map[string]any) *HttpResponse {
 	// Add request to the context

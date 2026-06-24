@@ -16,6 +16,8 @@ func setupTestDB() string {
 	dbPath := filepath.Join(tmpDir, "migrate.sqlite3")
 
 	settings.Configure(settings.Settings{
+		SECRET_KEY:   "test-secret-key",
+		ROOT_URLCONF: "test.urls",
 		DATABASES: map[string]settings.DatabaseConfig{
 			"default": {
 				Engine: "sqlite",

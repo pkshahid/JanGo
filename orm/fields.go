@@ -58,6 +58,7 @@ type FieldOptions struct {
 	DbIndex         bool
 	AutoNow         bool
 	AutoNowAdd      bool
+	AutoCreated     bool     // Field was auto-created by base Model (can be overridden by child)
 	UploadTo        string
 	To              string   // ForeignKey target
 	OnDelete        string   // CASCADE, SET_NULL, PROTECT, RESTRICT, DO_NOTHING

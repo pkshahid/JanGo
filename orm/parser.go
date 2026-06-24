@@ -53,13 +53,24 @@ func parseModel(m any) (*ModelInfo, error) {
 		return nil, err
 	}
 
-	// Find PK
+	// Find PK. If a model defines its own primary key, it overrides the
+	// auto_created PK inherited from the base Model (mirrors Django behavior).
 	for _, f := range info.Fields {
 		if f.PrimaryKey {
 			if info.PrimaryKey != nil {
-				return nil, fmt.Errorf("orm: multiple primary keys defined on %s", info.Name)
+				// Allow override: non-auto-created PK supersedes auto-created PK.
+				if info.PrimaryKey.Options.AutoCreated && !f.Options.AutoCreated {
+					info.PrimaryKey.PrimaryKey = false
+					info.PrimaryKey = f
+				} else if !info.PrimaryKey.Options.AutoCreated && f.Options.AutoCreated {
+					// Keep existing non-auto PK, skip the auto-created one.
+					f.PrimaryKey = false
+				} else {
+					return nil, fmt.Errorf("orm: multiple primary keys defined on %s", info.Name)
+				}
+			} else {
+				info.PrimaryKey = f
 			}
-			info.PrimaryKey = f
 		}
 	}
 
@@ -183,6 +194,8 @@ func parseFieldTag(sf reflect.StructField, tag string) (*Field, error) {
 			f.Options.Through = val
 		case "primary_key":
 			f.PrimaryKey = val == "true"
+		case "auto_created":
+			f.Options.AutoCreated = val == "true"
 		}
 	}
 

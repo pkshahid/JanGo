@@ -74,44 +74,44 @@ func serializeOperation(op Operation) string {
 	case CreateModel:
 		var fieldsStr []string
 		for _, f := range o.Fields {
-			fieldsStr = append(fieldsStr, serializeField(f))
+			fieldsStr = append(fieldsStr, "\t\t\t\t"+serializeField(f)+",")
 		}
 
 		metaStr := "nil"
 		if o.Meta != nil {
-			metaStr = fmt.Sprintf("&orm.Meta{DbTable: \"%s\"}", o.Meta.DbTable)
+			metaStr = fmt.Sprintf("&orm.Meta{DbTable: %q}", o.Meta.DbTable)
 		}
 
-		return fmt.Sprintf(`migrations.CreateModel{
-			Name: "%s",
-			Fields: []*orm.Field{
-				%s
-			},
-			Meta: %s,
-		}`, o.Name, strings.Join(fieldsStr, ",\n\t\t\t\t"), metaStr)
+		return fmt.Sprintf("migrations.CreateModel{\n"+
+			"\t\t\tName: %q,\n"+
+			"\t\t\tFields: []*orm.Field{\n"+
+			"%s\n"+
+			"\t\t\t},\n"+
+			"\t\t\tMeta: %s,\n"+
+			"\t\t}", o.Name, strings.Join(fieldsStr, "\n"), metaStr)
 
 	case DeleteModel:
-		return fmt.Sprintf(`migrations.DeleteModel{Name: "%s"}`, o.Name)
+		return fmt.Sprintf("migrations.DeleteModel{Name: %q}", o.Name)
 
 	case AddField:
-		return fmt.Sprintf(`migrations.AddField{
-			Model: "%s",
-			Name:  "%s",
-			Field: %s,
-		}`, o.Model, o.Name, serializeField(o.Field))
+		return fmt.Sprintf("migrations.AddField{\n"+
+			"\t\t\tModel: %q,\n"+
+			"\t\t\tName:  %q,\n"+
+			"\t\t\tField: %s,\n"+
+			"\t\t}", o.Model, o.Name, serializeField(o.Field))
 
 	case RemoveField:
-		return fmt.Sprintf(`migrations.RemoveField{
-			Model: "%s",
-			Name:  "%s",
-		}`, o.Model, o.Name)
+		return fmt.Sprintf("migrations.RemoveField{\n"+
+			"\t\t\tModel: %q,\n"+
+			"\t\t\tName:  %q,\n"+
+			"\t\t}", o.Model, o.Name)
 
 	case AlterField:
-		return fmt.Sprintf(`migrations.AlterField{
-			Model: "%s",
-			Name:  "%s",
-			Field: %s,
-		}`, o.Model, o.Name, serializeField(o.Field))
+		return fmt.Sprintf("migrations.AlterField{\n"+
+			"\t\t\tModel: %q,\n"+
+			"\t\t\tName:  %q,\n"+
+			"\t\t\tField: %s,\n"+
+			"\t\t}", o.Model, o.Name, serializeField(o.Field))
 
 	case RunSQL:
 		return fmt.Sprintf("migrations.RunSQL{SQL: `%s`, ReverseSQL: `%s`}", o.SQL, o.ReverseSQL)
@@ -123,11 +123,65 @@ func serializeOperation(op Operation) string {
 
 func serializeField(f *orm.Field) string {
 	opts := f.Options
-	optsStr := fmt.Sprintf(`MaxLength: %d, MaxDigits: %d, DecimalPlaces: %d, Blank: %t, Null: %t, Unique: %t, DbIndex: %t, AutoNow: %t, AutoNowAdd: %t, UploadTo: "%s", To: "%s", OnDelete: "%s", RelatedName: "%s", DbColumn: "%s"`,
-		opts.MaxLength, opts.MaxDigits, opts.DecimalPlaces, opts.Blank, opts.Null, opts.Unique, opts.DbIndex, opts.AutoNow, opts.AutoNowAdd, opts.UploadTo, opts.To, opts.OnDelete, opts.RelatedName, opts.DbColumn)
+	var optParts []string
+	if opts.MaxLength != 0 {
+		optParts = append(optParts, fmt.Sprintf("MaxLength: %d", opts.MaxLength))
+	}
+	if opts.MaxDigits != 0 {
+		optParts = append(optParts, fmt.Sprintf("MaxDigits: %d", opts.MaxDigits))
+	}
+	if opts.DecimalPlaces != 0 {
+		optParts = append(optParts, fmt.Sprintf("DecimalPlaces: %d", opts.DecimalPlaces))
+	}
+	if opts.Blank {
+		optParts = append(optParts, "Blank: true")
+	}
+	if opts.Null {
+		optParts = append(optParts, "Null: true")
+	}
+	if opts.Unique {
+		optParts = append(optParts, "Unique: true")
+	}
+	if opts.DbIndex {
+		optParts = append(optParts, "DbIndex: true")
+	}
+	if opts.AutoNow {
+		optParts = append(optParts, "AutoNow: true")
+	}
+	if opts.AutoNowAdd {
+		optParts = append(optParts, "AutoNowAdd: true")
+	}
+	if opts.AutoCreated {
+		optParts = append(optParts, "AutoCreated: true")
+	}
+	if opts.UploadTo != "" {
+		optParts = append(optParts, fmt.Sprintf("UploadTo: %q", opts.UploadTo))
+	}
+	if opts.To != "" {
+		optParts = append(optParts, fmt.Sprintf("To: %q", opts.To))
+	}
+	if opts.OnDelete != "" {
+		optParts = append(optParts, fmt.Sprintf("OnDelete: %q", opts.OnDelete))
+	}
+	if opts.RelatedName != "" {
+		optParts = append(optParts, fmt.Sprintf("RelatedName: %q", opts.RelatedName))
+	}
+	if opts.DbColumn != "" {
+		optParts = append(optParts, fmt.Sprintf("DbColumn: %q", opts.DbColumn))
+	}
 
-	return fmt.Sprintf(`&orm.Field{Name: "%s", Column: "%s", Type: orm.%s, PrimaryKey: %t, Options: orm.FieldOptions{%s}}`,
-		f.Name, f.Column, string(f.Type), f.PrimaryKey, optsStr)
+	var fieldParts []string
+	fieldParts = append(fieldParts, fmt.Sprintf("Name: %q", f.Name))
+	fieldParts = append(fieldParts, fmt.Sprintf("Column: %q", f.Column))
+	fieldParts = append(fieldParts, fmt.Sprintf("Type: orm.%s", string(f.Type)))
+	if f.PrimaryKey {
+		fieldParts = append(fieldParts, "PrimaryKey: true")
+	}
+	if len(optParts) > 0 {
+		fieldParts = append(fieldParts, fmt.Sprintf("Options: orm.FieldOptions{%s}", strings.Join(optParts, ", ")))
+	}
+
+	return "&orm.Field{" + strings.Join(fieldParts, ", ") + "}"
 }
 
 // WriteToFile generates the Go code and writes it to the app's migrations directory.
