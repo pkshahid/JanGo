@@ -1,12 +1,12 @@
 package backends
 
 import (
-	"strings"
 	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -184,9 +184,11 @@ func (b *FileBackend) ClearExpired(ctx context.Context) error {
 			filePath := filepath.Join(dir, e.Name())
 
 			content, err := os.ReadFile(filePath)
-			if err != nil { continue }
+			if err != nil {
+				continue
+			}
 
-			var payload struct { Expire time.Time }
+			var payload struct{ Expire time.Time }
 			if json.Unmarshal(content, &payload) == nil {
 				if payload.Expire.Before(now) {
 					os.Remove(filePath)
@@ -239,4 +241,4 @@ func (b *CookieBackend) Save(ctx context.Context, key string, data map[string]an
 }
 
 func (b *CookieBackend) Delete(ctx context.Context, key string) error { return nil }
-func (b *CookieBackend) ClearExpired(ctx context.Context) error { return nil }
+func (b *CookieBackend) ClearExpired(ctx context.Context) error       { return nil }

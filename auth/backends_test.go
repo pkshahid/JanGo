@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"testing"
 	"github.com/pkshahid/JanGo/auth/hashers"
 	"github.com/pkshahid/JanGo/orm"
+	"testing"
 )
 
 func TestModelBackend(t *testing.T) {

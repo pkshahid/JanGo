@@ -8,11 +8,11 @@ type LanguagePair struct {
 
 // Settings holds global configuration for internationalization.
 type Settings struct {
-	LanguageCode       string
-	UseI18n            bool
-	LocalePaths        []string
-	Languages          []LanguagePair
-	CookieName         string
+	LanguageCode string
+	UseI18n      bool
+	LocalePaths  []string
+	Languages    []LanguagePair
+	CookieName   string
 }
 
 // Global default settings.

@@ -13,24 +13,24 @@ type mockUser struct {
 	username      string
 }
 
-func (u *mockUser) ID() uint64                       { return 1 }
-func (u *mockUser) Username() string                 { return u.username }
-func (u *mockUser) Email() string                    { return "test@example.com" }
-func (u *mockUser) IsAuthenticated() bool            { return u.authenticated }
-func (u *mockUser) IsAnonymous() bool                { return !u.authenticated }
-func (u *mockUser) IsActive() bool                   { return true }
-func (u *mockUser) IsStaff() bool                    { return false }
-func (u *mockUser) IsSuperuser() bool                { return false }
-func (u *mockUser) HasPerm(perm string) bool         { return true }
-func (u *mockUser) HasPerms(perms []string) bool     { return true }
+func (u *mockUser) ID() uint64                         { return 1 }
+func (u *mockUser) Username() string                   { return u.username }
+func (u *mockUser) Email() string                      { return "test@example.com" }
+func (u *mockUser) IsAuthenticated() bool              { return u.authenticated }
+func (u *mockUser) IsAnonymous() bool                  { return !u.authenticated }
+func (u *mockUser) IsActive() bool                     { return true }
+func (u *mockUser) IsStaff() bool                      { return false }
+func (u *mockUser) IsSuperuser() bool                  { return false }
+func (u *mockUser) HasPerm(perm string) bool           { return true }
+func (u *mockUser) HasPerms(perms []string) bool       { return true }
 func (u *mockUser) HasModulePerm(appLabel string) bool { return true }
 
 func TestContextProcessors(t *testing.T) {
 	settings.Configure(settings.Settings{
-		DEBUG:      true,
-		STATIC_URL: "/static/",
-		MEDIA_URL:  "/media/",
-		SECRET_KEY: "secret",
+		DEBUG:        true,
+		STATIC_URL:   "/static/",
+		MEDIA_URL:    "/media/",
+		SECRET_KEY:   "secret",
 		ROOT_URLCONF: "test",
 	})
 

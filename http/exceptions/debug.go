@@ -56,7 +56,9 @@ func RenderDebug500(req *godjangohttp.Request, err interface{}, traceback string
 
 	getData := make(map[string]string)
 	for k, v := range req.GET {
-		if len(v) > 0 { getData[k] = v[0] }
+		if len(v) > 0 {
+			getData[k] = v[0]
+		}
 	}
 
 	postData := make(map[string]string)
@@ -173,9 +175,13 @@ func extractSnippet(file string, targetLine int) string {
 
 	lines := strings.Split(string(content), "\n")
 	start := targetLine - 5
-	if start < 0 { start = 0 }
+	if start < 0 {
+		start = 0
+	}
 	end := targetLine + 5
-	if end > len(lines) { end = len(lines) }
+	if end > len(lines) {
+		end = len(lines)
+	}
 
 	var sb strings.Builder
 	for i := start; i < end; i++ {
@@ -208,8 +214,8 @@ func dumpSettingsMasked() map[string]string {
 
 		lowerName := strings.ToLower(name)
 		if strings.Contains(lowerName, "secret") ||
-		   strings.Contains(lowerName, "password") ||
-		   strings.Contains(lowerName, "key") {
+			strings.Contains(lowerName, "password") ||
+			strings.Contains(lowerName, "key") {
 			vStr = "********************"
 		}
 

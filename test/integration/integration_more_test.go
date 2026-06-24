@@ -8,15 +8,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gorilla/websocket"
 	"github.com/pkshahid/JanGo/cache"
-	"github.com/pkshahid/JanGo/core/settings"
 	"github.com/pkshahid/JanGo/core/handlers/wsgi"
+	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/http/middleware"
 	"github.com/pkshahid/JanGo/http/urls"
-	"github.com/pkshahid/JanGo/orm/migrations"
 	"github.com/pkshahid/JanGo/http/ws"
-	"github.com/gorilla/websocket"
+	"github.com/pkshahid/JanGo/orm/migrations"
 )
 
 // TestAdminFlow tests the admin endpoints logic directly.
@@ -52,8 +52,8 @@ func TestSignals(t *testing.T) {
 // TestMigrations simulates applying and rolling back a migration.
 func TestMigrations(t *testing.T) {
 	m := &migrations.Migration{
-		Name:         "0001_initial",
-		Operations:   []migrations.Operation{},
+		Name:       "0001_initial",
+		Operations: []migrations.Operation{},
 	}
 
 	// Mock apply/unapply via schema editor abstraction
@@ -82,7 +82,8 @@ func TestStaticFileServing(t *testing.T) {
 }
 
 type wsEchoView struct{}
-func (v *wsEchoView) Connect(conn *ws.WebSocketConn, req *godjangohttp.Request) error { return nil }
+
+func (v *wsEchoView) Connect(conn *ws.WebSocketConn, req *godjangohttp.Request) error  { return nil }
 func (v *wsEchoView) Disconnect(conn *ws.WebSocketConn, code int, reason string) error { return nil }
 func (v *wsEchoView) Receive(conn *ws.WebSocketConn, msgType int, data []byte) error {
 	conn.Send(data)

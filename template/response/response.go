@@ -56,8 +56,8 @@ type TemplateResponse struct {
 	StatusCode int
 	Headers    http.Header
 
-	rendered   bool
-	content    []byte
+	rendered bool
+	content  []byte
 }
 
 func NewTemplateResponse(engine *template.Engine, req *godjangohttp.Request, templateName string, contextData map[string]any) *TemplateResponse {

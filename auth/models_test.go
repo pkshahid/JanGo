@@ -14,10 +14,10 @@ func TestAbstractUserModel(t *testing.T) {
 
 	// Create user
 	user := &AbstractUser{
-		UsernameStr:    "testuser",
-		IsActiveVal:    true,
-		IsStaffVal:     false,
-		IsSuperuserVal: false,
+		UsernameStr:     "testuser",
+		IsActiveVal:     true,
+		IsStaffVal:      false,
+		IsSuperuserVal:  false,
 		UserPermissions: []*Permission{perm1},
 		Groups:          []*Group{group},
 	}

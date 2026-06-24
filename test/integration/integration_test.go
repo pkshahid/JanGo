@@ -1,13 +1,13 @@
 package integration
 
 import (
+	"go.uber.org/goleak"
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"go.uber.org/goleak"
 
-	_ "github.com/pkshahid/JanGo/examples/blog/app"
 	"github.com/pkshahid/JanGo/core/handlers/wsgi"
+	_ "github.com/pkshahid/JanGo/examples/blog/app"
 	"github.com/pkshahid/JanGo/http/urls"
 )
 

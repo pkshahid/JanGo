@@ -82,7 +82,6 @@ func (m *DayMixin) GetDay(req *godjangohttp.Request) string {
 	return req.URL.Query().Get("day") // Fallback
 }
 
-
 // ArchiveIndexView shows the latest objects.
 type ArchiveIndexView[T any] struct {
 	ListView[T]
@@ -99,7 +98,6 @@ func (v *ArchiveIndexView[T]) Get(req *godjangohttp.Request) godjangohttp.Respon
 	// For mock purposes, just defer to ListView logic
 	return v.ListView.Get(req)
 }
-
 
 // YearArchiveView shows objects for a specific year.
 type YearArchiveView[T any] struct {
@@ -151,7 +149,6 @@ func (v *YearArchiveView[T]) Get(req *godjangohttp.Request) godjangohttp.Respons
 	return resp
 }
 
-
 // MonthArchiveView shows objects for a specific month.
 type MonthArchiveView[T any] struct {
 	ListView[T]
@@ -173,7 +170,6 @@ func (v *MonthArchiveView[T]) Get(req *godjangohttp.Request) godjangohttp.Respon
 	return v.ListView.Get(req)
 }
 
-
 // DayArchiveView shows objects for a specific day.
 type DayArchiveView[T any] struct {
 	ListView[T]
@@ -194,7 +190,6 @@ func (v *DayArchiveView[T]) Get(req *godjangohttp.Request) godjangohttp.Response
 	}
 	return v.ListView.Get(req)
 }
-
 
 // DateDetailView fetches an object by date and pk/slug.
 type DateDetailView[T any] struct {

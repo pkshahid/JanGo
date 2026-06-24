@@ -1,10 +1,10 @@
 package tags
 
 import (
+	godjango "github.com/pkshahid/JanGo/template"
 	"os"
 	"path/filepath"
 	"testing"
-	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestInheritanceTags(t *testing.T) {

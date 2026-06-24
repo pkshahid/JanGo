@@ -18,8 +18,8 @@ type Engine struct {
 	Builtins   []*Library
 	Loaders    []loaders.Loader
 
-	cache      map[string]*Template
-	mu         sync.RWMutex
+	cache map[string]*Template
+	mu    sync.RWMutex
 }
 
 // NewEngine creates a new template engine.

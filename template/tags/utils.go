@@ -102,7 +102,7 @@ func (n *CycleNode) Render(ctx *godjango.Context) (string, error) {
 	}
 
 	val := n.Values[idx]
-	ctx.SetRenderState(stateKey, (idx + 1) % len(n.Values))
+	ctx.SetRenderState(stateKey, (idx+1)%len(n.Values))
 	return val, nil
 }
 

@@ -1,12 +1,12 @@
 package toolbar
 
 import (
-	"net"
 	"bytes"
+	"context"
 	"embed"
 	"html/template"
-	"context"
 	"io"
+	"net"
 	"net/http/httptest"
 	"strings"
 
@@ -134,7 +134,7 @@ func DebugToolbarMiddleware(next func(*godjangohttp.Request) godjangohttp.Respon
 				}
 
 				type TemplateData struct {
-					ID string
+					ID     string
 					Panels []Panel
 				}
 
@@ -145,7 +145,7 @@ func DebugToolbarMiddleware(next func(*godjangohttp.Request) godjangohttp.Respon
 
 				var tplBuf bytes.Buffer
 				err = tmpl.Execute(&tplBuf, TemplateData{
-					ID: tb.ID,
+					ID:     tb.ID,
 					Panels: orderedPanels,
 				})
 
@@ -154,7 +154,7 @@ func DebugToolbarMiddleware(next func(*godjangohttp.Request) godjangohttp.Respon
 					injection = tplBuf.String()
 				}
 
-// Insert before </body>
+				// Insert before </body>
 				idx := strings.LastIndex(strings.ToLower(bodyStr), "</body>")
 				if idx != -1 {
 					bodyStr = bodyStr[:idx] + injection + bodyStr[idx:]

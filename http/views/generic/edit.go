@@ -59,7 +59,6 @@ func (v *FormView) renderResponse(req *godjangohttp.Request, ctx map[string]any)
 	return resp
 }
 
-
 // CreateView handles creating a new object.
 type CreateView[T any] struct {
 	FormView
@@ -106,7 +105,6 @@ func (v *CreateView[T]) renderResponse(req *godjangohttp.Request, ctx map[string
 	}
 	return resp
 }
-
 
 // UpdateView handles editing an existing object.
 type UpdateView[T any] struct {
@@ -171,11 +169,10 @@ func (v *UpdateView[T]) renderResponse(req *godjangohttp.Request, ctx map[string
 	return resp
 }
 
-
 // DeleteView handles deleting an object, usually asking for confirmation on GET and deleting on POST.
 type DeleteView[T any] struct {
 	DetailView[T]
-	SuccessUrl string
+	SuccessUrl    string
 	PerformDelete func(req *godjangohttp.Request, obj T) error
 }
 

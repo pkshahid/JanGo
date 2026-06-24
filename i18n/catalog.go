@@ -141,10 +141,14 @@ func parsePOFile(lang, path string) {
 			// Continuation line
 			val := unquote(line)
 			switch state {
-			case "msgctxt": msgctxt += val
-			case "msgid": msgid += val
-			case "msgid_plural": msgidPlural += val
-			case "msgstr": msgstrs[0] += val
+			case "msgctxt":
+				msgctxt += val
+			case "msgid":
+				msgid += val
+			case "msgid_plural":
+				msgidPlural += val
+			case "msgstr":
+				msgstrs[0] += val
 			case "msgstr_plural":
 				if len(msgstrs) > 0 {
 					msgstrs[len(msgstrs)-1] += val
@@ -159,7 +163,7 @@ func unquote(s string) string {
 	s = strings.TrimSpace(s)
 	if len(s) >= 2 && s[0] == '"' && s[len(s)-1] == '"' {
 		// handle simple escapes
-		s = s[1:len(s)-1]
+		s = s[1 : len(s)-1]
 		s = strings.ReplaceAll(s, "\\n", "\n")
 		s = strings.ReplaceAll(s, "\\\"", "\"")
 		return s
@@ -233,11 +237,21 @@ func getPluralIndex(lang string, n int) int {
 		}
 		return 2
 	case "ar":
-		if n == 0 { return 0 }
-		if n == 1 { return 1 }
-		if n == 2 { return 2 }
-		if n%100 >= 3 && n%100 <= 10 { return 3 }
-		if n%100 >= 11 && n%100 <= 99 { return 4 }
+		if n == 0 {
+			return 0
+		}
+		if n == 1 {
+			return 1
+		}
+		if n == 2 {
+			return 2
+		}
+		if n%100 >= 3 && n%100 <= 10 {
+			return 3
+		}
+		if n%100 >= 11 && n%100 <= 99 {
+			return 4
+		}
 		return 5
 	default:
 		// Germanic languages (en, de, nl, sv, da) + es, it, etc.

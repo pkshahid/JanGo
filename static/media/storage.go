@@ -1,14 +1,14 @@
 package media
 
 import (
-	"github.com/pkshahid/JanGo/core/settings"
+	"crypto/rand"
+	"encoding/hex"
 	"fmt"
+	"github.com/pkshahid/JanGo/core/settings"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	"crypto/rand"
-	"encoding/hex"
 )
 
 // Storage defines the interface for file storage backends.

@@ -1,10 +1,10 @@
 package toolbar
 
 import (
-	"strings"
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/pkshahid/JanGo/core/settings"
@@ -13,9 +13,9 @@ import (
 
 func TestMiddleware(t *testing.T) {
 	settings.Configure(settings.Settings{
-		SECRET_KEY: "test",
+		SECRET_KEY:   "test",
 		ROOT_URLCONF: "test",
-		DEBUG: true,
+		DEBUG:        true,
 		INTERNAL_IPS: []string{"127.0.0.1"},
 	})
 

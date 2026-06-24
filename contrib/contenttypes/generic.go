@@ -28,8 +28,8 @@ func (gfk *GenericForeignKey) Resolve() (*ContentType, error) {
 // GenericRelation represents the reverse side of a generic foreign key.
 // Equivalent to Django's GenericRelation.
 type GenericRelation struct {
-	ContentType    *ContentType
-	RelatedModel   reflect.Type
+	ContentType      *ContentType
+	RelatedModel     reflect.Type
 	ContentTypeField string
 	ObjectIDField    string
 }
@@ -51,10 +51,10 @@ func NewGenericRelation(relatedModel reflect.Type, ctField, objIDField string) *
 
 // GenericInlineModelAdmin represents inline admin for generic relations.
 type GenericInlineModelAdmin struct {
-	Model          reflect.Type
+	Model            reflect.Type
 	ContentTypeField string
 	ObjectIDField    string
-	Extra          int
+	Extra            int
 }
 
 // TaggedItem is a common pattern: tagging using generic relations.

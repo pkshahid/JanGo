@@ -36,7 +36,7 @@ type EmailMessage struct {
 
 	Alternatives []Alternative // Used internally by EmailMultiAlternatives
 
-	connection  EmailBackend
+	connection EmailBackend
 }
 
 // NewEmailMessage creates a new EmailMessage.
@@ -167,7 +167,9 @@ func (e *EmailMessage) Message() ([]byte, error) {
 			altPartHeader.Set("Content-Type", fmt.Sprintf("multipart/alternative; boundary=%q", bodyWriter.Boundary()))
 
 			part, err := rootWriter.CreatePart(altPartHeader)
-			if err != nil { return nil, err }
+			if err != nil {
+				return nil, err
+			}
 
 			// We will write into `part` after we build the alternative body
 
@@ -196,7 +198,9 @@ func (e *EmailMessage) Message() ([]byte, error) {
 			attHeader.Set("Content-Transfer-Encoding", "base64")
 
 			part, err := rootWriter.CreatePart(attHeader)
-			if err != nil { return nil, err }
+			if err != nil {
+				return nil, err
+			}
 			// In a real impl, we'd base64 encode here, for simplicity we just write
 			part.Write(att.Content)
 		}
@@ -229,7 +233,6 @@ func (e *EmailMessage) Recipients() []string {
 	rec = append(rec, e.Bcc...)
 	return rec
 }
-
 
 // EmailMultiAlternatives extends EmailMessage to support alternative formats like HTML.
 type EmailMultiAlternatives struct {

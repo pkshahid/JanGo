@@ -12,12 +12,12 @@ import (
 
 // AdminSite encapsulates an instance of the admin application.
 type AdminSite struct {
-	Name             string
-	SiteHeader       string
-	SiteTitle        string
-	IndexTitle       string
-	_registry        map[string]*ModelAdmin
-	appDict          map[string][]*ModelAdmin
+	Name       string
+	SiteHeader string
+	SiteTitle  string
+	IndexTitle string
+	_registry  map[string]*ModelAdmin
+	appDict    map[string][]*ModelAdmin
 }
 
 // NewAdminSite creates a new AdminSite.

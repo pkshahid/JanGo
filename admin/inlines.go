@@ -14,20 +14,20 @@ const (
 
 // InlineFormset represents a set of forms for inline editing.
 type InlineFormset struct {
-	Inline     *InlineModelAdmin
-	Forms      []*InlineForm
-	CanDelete  bool
-	CanOrder   bool
-	Prefix     string
+	Inline    *InlineModelAdmin
+	Forms     []*InlineForm
+	CanDelete bool
+	CanOrder  bool
+	Prefix    string
 }
 
 // InlineForm represents a single form within an inline formset.
 type InlineForm struct {
-	Instance    interface{}
-	Fields      map[string]interface{}
-	IsNew       bool
-	OrderIndex  int
-	DeleteFlag  bool
+	Instance   interface{}
+	Fields     map[string]interface{}
+	IsNew      bool
+	OrderIndex int
+	DeleteFlag bool
 }
 
 // NewInlineFormset creates a new inline formset for the given inline configuration.

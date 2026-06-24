@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"testing"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"testing"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/orm"
@@ -50,5 +50,3 @@ func TestAuthViews(t *testing.T) {
 		t.Errorf("PasswordChangeView should redirect unauthorized users, got %v", resp3)
 	}
 }
-
-

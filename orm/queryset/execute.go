@@ -2,9 +2,9 @@ package queryset
 
 import (
 	"fmt"
+	ormsignals "github.com/pkshahid/JanGo/orm/signals"
 	"strings"
 	"sync"
-	ormsignals "github.com/pkshahid/JanGo/orm/signals"
 )
 
 // All executes the query and returns all matched records.

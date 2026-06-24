@@ -18,8 +18,8 @@ func init() {
 
 type MigrateCommand struct{}
 
-func (c *MigrateCommand) Name() string { return "migrate" }
-func (c *MigrateCommand) Help() string { return "Updates database schema." }
+func (c *MigrateCommand) Name() string                { return "migrate" }
+func (c *MigrateCommand) Help() string                { return "Updates database schema." }
 func (c *MigrateCommand) AddFlags(cmd *cobra.Command) {}
 
 func (c *MigrateCommand) Execute(ctx context.Context, args []string) error {
@@ -63,7 +63,9 @@ func (c *MigrateCommand) Execute(ctx context.Context, args []string) error {
 type MakeMigrationsCommand struct{}
 
 func (c *MakeMigrationsCommand) Name() string { return "makemigrations" }
-func (c *MakeMigrationsCommand) Help() string { return "Creates new migrations based on the changes detected to your models." }
+func (c *MakeMigrationsCommand) Help() string {
+	return "Creates new migrations based on the changes detected to your models."
+}
 func (c *MakeMigrationsCommand) AddFlags(cmd *cobra.Command) {}
 
 func (c *MakeMigrationsCommand) Execute(ctx context.Context, args []string) error {

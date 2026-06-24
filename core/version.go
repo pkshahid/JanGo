@@ -7,11 +7,11 @@ const VERSION = "1.0.0"
 
 // VersionInfo represents detailed version information.
 type VersionInfo struct {
-	Major      int
-	Minor      int
-	Micro      int
+	Major        int
+	Minor        int
+	Micro        int
 	ReleaseLevel string
-	Serial     int
+	Serial       int
 }
 
 // String returns the formatted version string.

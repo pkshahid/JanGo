@@ -191,7 +191,9 @@ func (n *BlockNode) Render(ctx *Context) (string, error) {
 		// A full implementation would use reflect to iterate anything iterable.
 		sliceVal := []any{}
 		if s, ok := val.([]string); ok {
-			for _, v := range s { sliceVal = append(sliceVal, v) }
+			for _, v := range s {
+				sliceVal = append(sliceVal, v)
+			}
 		} else if s, ok := val.([]any); ok {
 			sliceVal = s
 		}

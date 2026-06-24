@@ -2,13 +2,13 @@ package forms_test
 
 import (
 	"bytes"
-	"mime/multipart"
-	"net/http"
-	"testing"
+	"github.com/pkshahid/JanGo/forms"
 	"image"
 	"image/color"
 	"image/png"
-	"github.com/pkshahid/JanGo/forms"
+	"mime/multipart"
+	"net/http"
+	"testing"
 )
 
 func createTestFileHeader(t *testing.T, filename string, content []byte) *multipart.FileHeader {
@@ -40,8 +40,8 @@ func createTestFileHeader(t *testing.T, filename string, content []byte) *multip
 
 func TestFileField(t *testing.T) {
 	field := forms.FileField{
-		BaseField: forms.BaseField{IsRequired: true},
-		MaxBytes:  100,
+		BaseField:    forms.BaseField{IsRequired: true},
+		MaxBytes:     100,
 		AllowedTypes: []string{"text/plain", "application/octet-stream"},
 	}
 

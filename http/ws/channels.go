@@ -73,7 +73,6 @@ func (l *InMemoryChannelLayer) GroupSend(group string, message any) error {
 	return nil
 }
 
-
 // RedisChannelLayer uses Redis pub/sub for multi-process scalability.
 type RedisChannelLayer struct {
 	client *redis.Client

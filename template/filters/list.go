@@ -28,7 +28,9 @@ func RegisterListSeqFilters(lib *godjango.Library) {
 func getSlice(val any) []any {
 	v := reflect.ValueOf(val)
 	for v.Kind() == reflect.Ptr {
-		if v.IsNil() { return nil }
+		if v.IsNil() {
+			return nil
+		}
 		v = v.Elem()
 	}
 
@@ -45,7 +47,9 @@ func getSlice(val any) []any {
 func getMapKeyValue(m any, key string) string {
 	v := reflect.ValueOf(m)
 	for v.Kind() == reflect.Ptr {
-		if v.IsNil() { return "" }
+		if v.IsNil() {
+			return ""
+		}
 		v = v.Elem()
 	}
 	if v.Kind() == reflect.Map {
@@ -161,10 +165,18 @@ func parseSliceArgs(args string, length int) (int, int) {
 		fmt.Sscanf(parts[1], "%d", &end)
 	}
 
-	if start < 0 { start = length + start }
-	if end < 0 { end = length + end }
-	if start < 0 { start = 0 }
-	if end < 0 { end = 0 }
+	if start < 0 {
+		start = length + start
+	}
+	if end < 0 {
+		end = length + end
+	}
+	if start < 0 {
+		start = 0
+	}
+	if end < 0 {
+		end = 0
+	}
 
 	return start, end
 }

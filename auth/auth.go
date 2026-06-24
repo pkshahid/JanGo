@@ -18,14 +18,14 @@ type User interface {
 // AnonymousUser represents an unauthenticated user.
 type AnonymousUser struct{}
 
-func (u *AnonymousUser) ID() uint64                     { return 0 }
-func (u *AnonymousUser) Username() string               { return "" }
-func (u *AnonymousUser) Email() string                  { return "" }
-func (u *AnonymousUser) IsAuthenticated() bool          { return false }
-func (u *AnonymousUser) IsAnonymous() bool              { return true }
-func (u *AnonymousUser) IsActive() bool                 { return false }
-func (u *AnonymousUser) IsStaff() bool                  { return false }
-func (u *AnonymousUser) IsSuperuser() bool              { return false }
-func (u *AnonymousUser) HasPerm(perm string) bool       { return false }
-func (u *AnonymousUser) HasPerms(perms []string) bool   { return false }
+func (u *AnonymousUser) ID() uint64                         { return 0 }
+func (u *AnonymousUser) Username() string                   { return "" }
+func (u *AnonymousUser) Email() string                      { return "" }
+func (u *AnonymousUser) IsAuthenticated() bool              { return false }
+func (u *AnonymousUser) IsAnonymous() bool                  { return true }
+func (u *AnonymousUser) IsActive() bool                     { return false }
+func (u *AnonymousUser) IsStaff() bool                      { return false }
+func (u *AnonymousUser) IsSuperuser() bool                  { return false }
+func (u *AnonymousUser) HasPerm(perm string) bool           { return false }
+func (u *AnonymousUser) HasPerms(perms []string) bool       { return false }
 func (u *AnonymousUser) HasModulePerm(appLabel string) bool { return false }

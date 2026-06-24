@@ -1,8 +1,8 @@
 package tags
 
 import (
-	"strings"
 	godjango "github.com/pkshahid/JanGo/template"
+	"strings"
 )
 
 func evaluateExpression(expr string, ctx *godjango.Context) bool {
@@ -54,8 +54,8 @@ func evaluateExpression(expr string, ctx *godjango.Context) bool {
 			return lVal == rVal
 		case "!=":
 			return lVal != rVal
-		// Note: complex operator logic omitted for brevity in prototype.
-		// A full implementation would compare ints, floats, and strings properly.
+			// Note: complex operator logic omitted for brevity in prototype.
+			// A full implementation would compare ints, floats, and strings properly.
 		}
 		return false
 	}

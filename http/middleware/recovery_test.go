@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"io"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"strings"
-	"io"
+	"testing"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 )

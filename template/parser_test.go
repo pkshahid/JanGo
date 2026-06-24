@@ -75,8 +75,8 @@ func TestFiltersAndEscaping(t *testing.T) {
 	nodes, _ := parser.Parse(nil)
 
 	ctx := NewContext(map[string]any{
-		"val1": "test",
-		"val2": "",
+		"val1":    "test",
+		"val2":    "",
 		"htmlVar": "<script>",
 	})
 

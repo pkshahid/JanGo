@@ -31,10 +31,10 @@ func (ct *ContentType) ModelClass() reflect.Type {
 
 // Registry manages all registered content types.
 type Registry struct {
-	mu         sync.RWMutex
-	types      map[int]*ContentType
-	byKey      map[string]*ContentType // key = "app_label.model"
-	nextID     int
+	mu     sync.RWMutex
+	types  map[int]*ContentType
+	byKey  map[string]*ContentType // key = "app_label.model"
+	nextID int
 }
 
 var globalRegistry = &Registry{

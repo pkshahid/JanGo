@@ -39,8 +39,8 @@ func TestFormView(t *testing.T) {
 	// POST Invalid
 	reqPostInvalid := &godjangohttp.Request{
 		Request: &http.Request{
-			URL: urlParsed,
-			Method: "POST",
+			URL:      urlParsed,
+			Method:   "POST",
 			PostForm: url.Values{"is_valid": []string{"false"}},
 		},
 	}

@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/pkshahid/JanGo/http/urls"
 	"github.com/pkshahid/JanGo/core/handlers/wsgi"
+	"github.com/pkshahid/JanGo/http/urls"
 )
 
 // A quick simulated TestCase environment

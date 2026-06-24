@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"strings"
 	"net/smtp"
+	"strings"
 
 	httpsignals "github.com/pkshahid/JanGo/http/signals"
 
@@ -62,7 +62,7 @@ func PanicRecoveryMiddleware(next Handler) Handler {
 							addr := fmt.Sprintf("%s:%d", s.EMAIL_HOST, s.EMAIL_PORT)
 
 							msg := []byte("To: " + strings.Join(admins, ",") + "\r\nSubject: " + subject + "\r\n\r\n" + body + "\r\n")
-								// Fire and forget
+							// Fire and forget
 							err := smtp.SendMail(addr, auth, "errors@godjango.local", admins, msg)
 							if err != nil {
 								slog.Error("Failed to send 500 error email", slog.Any("error", err))

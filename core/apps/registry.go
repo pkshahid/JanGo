@@ -24,11 +24,11 @@ type AppConfig interface {
 
 // Registry manages all registered GoDjango applications.
 type Registry struct {
-	mu           sync.RWMutex
-	apps         map[string]AppConfig // Keyed by Name
-	labels       map[string]string    // Maps Label to Name
-	ordered      []AppConfig          // Ordered by INSTALLED_APPS
-	ready        bool                 // Indicates if Setup() has been completed
+	mu      sync.RWMutex
+	apps    map[string]AppConfig // Keyed by Name
+	labels  map[string]string    // Maps Label to Name
+	ordered []AppConfig          // Ordered by INSTALLED_APPS
+	ready   bool                 // Indicates if Setup() has been completed
 }
 
 var (

@@ -6,17 +6,17 @@ import (
 )
 
 type mockApp struct {
-	name   string
-	label  string
-	path   string
-	ready  bool
+	name  string
+	label string
+	path  string
+	ready bool
 }
 
-func (m *mockApp) Name() string          { return m.name }
-func (m *mockApp) Label() string         { return m.label }
-func (m *mockApp) Path() string          { return m.path }
-func (m *mockApp) Models() []ModelInfo   { return nil }
-func (m *mockApp) Ready()                { m.ready = true }
+func (m *mockApp) Name() string        { return m.name }
+func (m *mockApp) Label() string       { return m.label }
+func (m *mockApp) Path() string        { return m.path }
+func (m *mockApp) Models() []ModelInfo { return nil }
+func (m *mockApp) Ready()              { m.ready = true }
 
 func TestAppRegistry(t *testing.T) {
 	t.Cleanup(Reset)

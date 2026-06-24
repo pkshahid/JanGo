@@ -1,11 +1,11 @@
 package admin
 
 import (
-	"strings"
-	"testing"
+	"io"
 	"net/http"
 	"net/http/httptest"
-	"io"
+	"strings"
+	"testing"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	godjangourls "github.com/pkshahid/JanGo/http/urls"
@@ -23,16 +23,16 @@ type mockUser struct {
 	username      string
 }
 
-func (u *mockUser) ID() uint64 { return 1 }
-func (u *mockUser) Username() string { return u.username }
-func (u *mockUser) Email() string { return "" }
-func (u *mockUser) IsAuthenticated() bool { return u.authenticated }
-func (u *mockUser) IsAnonymous() bool { return !u.authenticated }
-func (u *mockUser) IsActive() bool { return true }
-func (u *mockUser) IsStaff() bool { return u.staff }
-func (u *mockUser) IsSuperuser() bool { return u.staff }
-func (u *mockUser) HasPerm(perm string) bool { return true }
-func (u *mockUser) HasPerms(perms []string) bool { return true }
+func (u *mockUser) ID() uint64                         { return 1 }
+func (u *mockUser) Username() string                   { return u.username }
+func (u *mockUser) Email() string                      { return "" }
+func (u *mockUser) IsAuthenticated() bool              { return u.authenticated }
+func (u *mockUser) IsAnonymous() bool                  { return !u.authenticated }
+func (u *mockUser) IsActive() bool                     { return true }
+func (u *mockUser) IsStaff() bool                      { return u.staff }
+func (u *mockUser) IsSuperuser() bool                  { return u.staff }
+func (u *mockUser) HasPerm(perm string) bool           { return true }
+func (u *mockUser) HasPerms(perms []string) bool       { return true }
 func (u *mockUser) HasModulePerm(appLabel string) bool { return true }
 
 func TestAdminSite(t *testing.T) {

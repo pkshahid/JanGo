@@ -11,10 +11,10 @@ import (
 // Redirect represents a stored URL redirect rule.
 // Equivalent to Django's Redirect model.
 type Redirect struct {
-	ID          int
-	OldPath     string
-	NewPath     string
-	StatusCode  int  // 301 (permanent) or 302 (temporary)
+	ID         int
+	OldPath    string
+	NewPath    string
+	StatusCode int // 301 (permanent) or 302 (temporary)
 }
 
 // Store defines the interface for redirect persistence.

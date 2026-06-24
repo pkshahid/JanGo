@@ -1,9 +1,9 @@
 package migrations
 
 import (
+	"github.com/pkshahid/JanGo/orm"
 	"strings"
 	"testing"
-	"github.com/pkshahid/JanGo/orm"
 )
 
 func TestMigrationWriter(t *testing.T) {

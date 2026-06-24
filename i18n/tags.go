@@ -70,7 +70,6 @@ func (n *TransNode) Render(ctx *template.Context) (string, error) {
 	return translated, nil
 }
 
-
 // BlockTransTag handles {% blocktrans %}...{% plural %}...{% endblocktrans %}
 func BlockTransTag(parser *template.Parser, token template.Token) (template.Node, error) {
 	node := &BlockTransNode{}
@@ -125,7 +124,6 @@ func (n *BlockTransNode) Render(ctx *template.Context) (string, error) {
 	return Gettext(reqCtx, singularStr), nil
 }
 
-
 // GetCurrentLanguageTag handles {% get_current_language as LANGUAGE_CODE %}
 func GetCurrentLanguageTag(parser *template.Parser, token template.Token) (template.Node, error) {
 	args := strings.Fields(token.Contents)
@@ -151,7 +149,6 @@ func (n *GetCurrentLanguageNode) Render(ctx *template.Context) (string, error) {
 	ctx.Set(n.AsVar, lang)
 	return "", nil
 }
-
 
 // GetAvailableLanguagesTag handles {% get_available_languages as LANGUAGES %}
 func GetAvailableLanguagesTag(parser *template.Parser, token template.Token) (template.Node, error) {

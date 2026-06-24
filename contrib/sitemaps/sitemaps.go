@@ -40,9 +40,9 @@ type URLSet struct {
 
 // SitemapIndex represents an index of multiple sitemaps.
 type SitemapIndex struct {
-	XMLName  xml.Name        `xml:"sitemapindex"`
-	XMLNS    string          `xml:"xmlns,attr"`
-	Sitemaps []SitemapEntry  `xml:"sitemap"`
+	XMLName  xml.Name       `xml:"sitemapindex"`
+	XMLNS    string         `xml:"xmlns,attr"`
+	Sitemaps []SitemapEntry `xml:"sitemap"`
 }
 
 // SitemapEntry represents a single sitemap in the index.
@@ -72,7 +72,7 @@ type Sitemap interface {
 
 // StaticSitemap is a simple sitemap for static URLs.
 type StaticSitemap struct {
-	URLs       []string
+	URLs            []string
 	ChangeFrequency ChangeFreq
 	PriorityValue   float64
 }

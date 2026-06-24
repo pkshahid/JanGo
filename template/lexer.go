@@ -23,10 +23,10 @@ type Token struct {
 
 // Lexer breaks a template string into tokens.
 type Lexer struct {
-	input    string
-	pos      int
-	line     int
-	Tokens   []Token
+	input  string
+	pos    int
+	line   int
+	Tokens []Token
 }
 
 // NewLexer creates a new lexer.

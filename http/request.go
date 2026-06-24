@@ -27,7 +27,6 @@ type User interface {
 	HasModulePerm(appLabel string) bool
 }
 
-
 type Request struct {
 	context.Context
 	*http.Request

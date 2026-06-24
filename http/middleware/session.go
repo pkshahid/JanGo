@@ -32,15 +32,15 @@ type LazySession struct {
 	base *sessions.BaseSession
 }
 
-func (s *LazySession) Get(key string) (any, bool) { return s.base.Get(key) }
-func (s *LazySession) Set(key string, value any)  { s.base.Set(key, value) }
-func (s *LazySession) Delete(key string)          { s.base.Delete(key) }
-func (s *LazySession) Clear()                     { s.base.Clear() }
-func (s *LazySession) SessionKey() string         { return s.base.SessionKey() }
-func (s *LazySession) IsModified() bool           { return s.base.IsModified() }
-func (s *LazySession) Flush(ctx context.Context) error { return s.base.Flush(ctx) }
+func (s *LazySession) Get(key string) (any, bool)         { return s.base.Get(key) }
+func (s *LazySession) Set(key string, value any)          { s.base.Set(key, value) }
+func (s *LazySession) Delete(key string)                  { s.base.Delete(key) }
+func (s *LazySession) Clear()                             { s.base.Clear() }
+func (s *LazySession) SessionKey() string                 { return s.base.SessionKey() }
+func (s *LazySession) IsModified() bool                   { return s.base.IsModified() }
+func (s *LazySession) Flush(ctx context.Context) error    { return s.base.Flush(ctx) }
 func (s *LazySession) CycleKey(ctx context.Context) error { return s.base.CycleKey(ctx) }
-func (s *LazySession) Save(ctx context.Context) error { return s.base.Save(ctx) }
+func (s *LazySession) Save(ctx context.Context) error     { return s.base.Save(ctx) }
 
 // SessionMiddleware loads and saves session data lazily via the configured backend.
 func SessionMiddleware(next Handler) Handler {
@@ -48,10 +48,14 @@ func SessionMiddleware(next Handler) Handler {
 		s := settings.Get()
 
 		cookieName := s.SESSION_COOKIE_NAME
-		if cookieName == "" { cookieName = "sessionid" }
+		if cookieName == "" {
+			cookieName = "sessionid"
+		}
 
 		sessionEngine := s.SESSION_ENGINE
-		if sessionEngine == "" { sessionEngine = "file" } // Fallback to file for easy dev testing
+		if sessionEngine == "" {
+			sessionEngine = "file"
+		} // Fallback to file for easy dev testing
 
 		sessionID := req.COOKIES[cookieName]
 		backend := getSessionBackend(sessionEngine)
@@ -84,10 +88,10 @@ func SessionMiddleware(next Handler) Handler {
 			if newKey == "" {
 				if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
 					cookie := &http.Cookie{
-						Name:     cookieName,
-						Value:    "",
-						Path:     "/",
-						MaxAge:   -1,
+						Name:   cookieName,
+						Value:  "",
+						Path:   "/",
+						MaxAge: -1,
 					}
 					hr.Headers.Add("Set-Cookie", cookie.String())
 				}
@@ -96,12 +100,16 @@ func SessionMiddleware(next Handler) Handler {
 				// We also apply cookie security settings.
 				if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
 					age := s.SESSION_COOKIE_AGE
-					if age == 0 { age = 1209600 } // 2 weeks default
+					if age == 0 {
+						age = 1209600
+					} // 2 weeks default
 
 					sameSite := http.SameSiteLaxMode
 					switch strings.ToLower(s.SESSION_COOKIE_SAMESITE) {
-					case "strict": sameSite = http.SameSiteStrictMode
-					case "none": sameSite = http.SameSiteNoneMode
+					case "strict":
+						sameSite = http.SameSiteStrictMode
+					case "none":
+						sameSite = http.SameSiteNoneMode
 					}
 
 					cookie := &http.Cookie{

@@ -193,13 +193,13 @@ func PolygonField(srid int) *GeoField {
 type SpatialLookup string
 
 const (
-	LookupContains    SpatialLookup = "contains"
-	LookupWithin      SpatialLookup = "within"
-	LookupIntersects  SpatialLookup = "intersects"
-	LookupOverlaps    SpatialLookup = "overlaps"
-	LookupDistance    SpatialLookup = "distance_lte"
-	LookupBBContains  SpatialLookup = "bbcontains"
-	LookupBBOverlaps  SpatialLookup = "bboverlaps"
+	LookupContains   SpatialLookup = "contains"
+	LookupWithin     SpatialLookup = "within"
+	LookupIntersects SpatialLookup = "intersects"
+	LookupOverlaps   SpatialLookup = "overlaps"
+	LookupDistance   SpatialLookup = "distance_lte"
+	LookupBBContains SpatialLookup = "bbcontains"
+	LookupBBOverlaps SpatialLookup = "bboverlaps"
 )
 
 // Helper functions

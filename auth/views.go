@@ -9,9 +9,9 @@ import (
 
 // Standard implementation templates mapping
 var (
-	TemplateLogin             = "registration/login.html"
-	TemplateLoggedOut         = "registration/logged_out.html"
-	TemplatePasswordChange    = "registration/password_change_form.html"
+	TemplateLogin              = "registration/login.html"
+	TemplateLoggedOut          = "registration/logged_out.html"
+	TemplatePasswordChange     = "registration/password_change_form.html"
 	TemplatePasswordChangeDone = "registration/password_change_done.html"
 )
 

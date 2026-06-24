@@ -91,9 +91,9 @@ func (v *TemplateView) GetContextData(req *godjangohttp.Request) map[string]any 
 // RedirectView redirects to a specific URL.
 type RedirectView struct {
 	BaseView
-	URL          string
-	Permanent    bool
-	PatternName  string
+	URL         string
+	Permanent   bool
+	PatternName string
 }
 
 func (v *RedirectView) Dispatch(req *godjangohttp.Request) godjangohttp.Response {

@@ -10,9 +10,9 @@ import (
 
 func TestRunserverCommand(t *testing.T) {
 	settings.Configure(settings.Settings{
-		DEBUG: false, // Avoid spawning the fsnotify infinite loop in tests
+		DEBUG:        false, // Avoid spawning the fsnotify infinite loop in tests
 		ROOT_URLCONF: "test",
-		SECRET_KEY: "secret",
+		SECRET_KEY:   "secret",
 	})
 
 	cmd := &Command{}

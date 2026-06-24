@@ -2,11 +2,11 @@ package middleware
 
 import (
 	"bytes"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"strings"
-	"log/slog"
+	"testing"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 )

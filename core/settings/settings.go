@@ -37,24 +37,24 @@ type CacheConfig struct {
 }
 
 type Settings struct {
-	DEBUG               bool     `env:"DEBUG"`
-	INTERNAL_IPS        []string `env:"INTERNAL_IPS"`
-	SECRET_KEY          string   `env:"SECRET_KEY"`
-	ALLOWED_HOSTS       []string `env:"ALLOWED_HOSTS"`
-	INSTALLED_APPS      []string
-	MIDDLEWARE          []string
-	ROOT_URLCONF        string
-	HANDLER_404         string
-	HANDLER_500         string
-	HANDLER_403         string
-	HANDLER_400         string
-	ADMINS              []string
-	TEMPLATES           []TemplateConfig
-	DATABASES           map[string]DatabaseConfig
-	STATIC_URL          string `env:"STATIC_URL"`
-	STATIC_ROOT         string `env:"STATIC_ROOT"`
-	MEDIA_URL           string `env:"MEDIA_URL"`
-	MEDIA_ROOT          string `env:"MEDIA_ROOT"`
+	DEBUG                bool     `env:"DEBUG"`
+	INTERNAL_IPS         []string `env:"INTERNAL_IPS"`
+	SECRET_KEY           string   `env:"SECRET_KEY"`
+	ALLOWED_HOSTS        []string `env:"ALLOWED_HOSTS"`
+	INSTALLED_APPS       []string
+	MIDDLEWARE           []string
+	ROOT_URLCONF         string
+	HANDLER_404          string
+	HANDLER_500          string
+	HANDLER_403          string
+	HANDLER_400          string
+	ADMINS               []string
+	TEMPLATES            []TemplateConfig
+	DATABASES            map[string]DatabaseConfig
+	STATIC_URL           string `env:"STATIC_URL"`
+	STATIC_ROOT          string `env:"STATIC_ROOT"`
+	MEDIA_URL            string `env:"MEDIA_URL"`
+	MEDIA_ROOT           string `env:"MEDIA_ROOT"`
 	DEFAULT_FILE_STORAGE string `env:"DEFAULT_FILE_STORAGE"`
 
 	// S3 Settings
@@ -63,21 +63,21 @@ type Settings struct {
 	AWS_ACCESS_KEY_ID       string `env:"AWS_ACCESS_KEY_ID"`
 	AWS_SECRET_ACCESS_KEY   string `env:"AWS_SECRET_ACCESS_KEY"`
 	AWS_S3_ENDPOINT_URL     string `env:"AWS_S3_ENDPOINT_URL"`
-	STATICFILES_DIRS    []string
-	STATICFILES_STORAGE string
-	STATICFILES_FINDERS []string
-	CACHES              map[string]CacheConfig
-	SESSION_ENGINE      string
-	AUTH_USER_MODEL     string
-	LOGIN_URL           string
-	LOGIN_REDIRECT_URL  string
-	TIME_ZONE           string `env:"TIME_ZONE"`
-	USE_TZ              bool   `env:"USE_TZ"`
-	LANGUAGE_CODE       string `env:"LANGUAGE_CODE"`
-	EMAIL_BACKEND       string
-	EMAIL_HOST          string `env:"EMAIL_HOST"`
-	EMAIL_PORT          int    `env:"EMAIL_PORT"`
-	LOGGING             map[string]any
+	STATICFILES_DIRS        []string
+	STATICFILES_STORAGE     string
+	STATICFILES_FINDERS     []string
+	CACHES                  map[string]CacheConfig
+	SESSION_ENGINE          string
+	AUTH_USER_MODEL         string
+	LOGIN_URL               string
+	LOGIN_REDIRECT_URL      string
+	TIME_ZONE               string `env:"TIME_ZONE"`
+	USE_TZ                  bool   `env:"USE_TZ"`
+	LANGUAGE_CODE           string `env:"LANGUAGE_CODE"`
+	EMAIL_BACKEND           string
+	EMAIL_HOST              string `env:"EMAIL_HOST"`
+	EMAIL_PORT              int    `env:"EMAIL_PORT"`
+	LOGGING                 map[string]any
 
 	// Middleware specific settings
 	SECURE_SSL_REDIRECT            bool   `env:"SECURE_SSL_REDIRECT"`

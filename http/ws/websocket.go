@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/gorilla/websocket"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 const (

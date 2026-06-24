@@ -22,13 +22,13 @@ type Index struct {
 
 // Meta holds configuration for a model, similar to Django's Meta inner class.
 type Meta struct {
-	DbTable            string
-	Ordering           []string
-	UniqueTogether     [][]string
-	Indexes            []Index
-	VerboseName        string
-	VerboseNamePlural  string
-	Abstract           bool
+	DbTable           string
+	Ordering          []string
+	UniqueTogether    [][]string
+	Indexes           []Index
+	VerboseName       string
+	VerboseNamePlural string
+	Abstract          bool
 }
 
 // ModelInterface allows models to define custom metadata via a ModelMeta method.
