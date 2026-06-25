@@ -13,10 +13,10 @@ import (
 // CSPSettings defines the CSP directives.
 // In a full implementation, these might be read from godjango settings.
 var (
-	CSPDefaultSrc = []string{"'self'"}
-	CSPScriptSrc  = []string{"'self'"}
-	CSPStyleSrc   = []string{"'self'"}
-	CSPImgSrc     = []string{"'self'"}
+	CSPDefaultSrc     = []string{"'self'"}
+	CSPScriptSrc      = []string{"'self'"}
+	CSPStyleSrc       = []string{"'self'"}
+	CSPImgSrc         = []string{"'self'"}
 	CSPFrameAncestors = []string{"'none'"} // for clickjacking protection
 )
 

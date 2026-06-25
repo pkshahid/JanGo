@@ -131,9 +131,17 @@ func DefaultIfNoneFilter(val any, args string) (any, error) {
 func YesNoFilter(val any, args string) (any, error) {
 	parts := strings.Split(args, ",")
 	yes, no, maybe := "yes", "no", "maybe"
-	if len(parts) > 0 { yes = parts[0] }
-	if len(parts) > 1 { no = parts[1] }
-	if len(parts) > 2 { maybe = parts[2] } else { maybe = no }
+	if len(parts) > 0 {
+		yes = parts[0]
+	}
+	if len(parts) > 1 {
+		no = parts[1]
+	}
+	if len(parts) > 2 {
+		maybe = parts[2]
+	} else {
+		maybe = no
+	}
 
 	if val == nil {
 		return maybe, nil

@@ -20,10 +20,10 @@ type Panel interface {
 // BasePanel provides default implementations for Panel.
 type BasePanel struct{}
 
-func (b *BasePanel) Enable() bool { return true }
-func (b *BasePanel) ProcessRequest(req *godjangohttp.Request) {}
+func (b *BasePanel) Enable() bool                                                          { return true }
+func (b *BasePanel) ProcessRequest(req *godjangohttp.Request)                              {}
 func (b *BasePanel) ProcessResponse(req *godjangohttp.Request, resp godjangohttp.Response) {}
-func (b *BasePanel) RenderContent() string { return "" }
-func (b *BasePanel) HasContent() bool { return true }
-func (b *BasePanel) NavTitle() string { return "" }
-func (b *BasePanel) NavSubtitle() string { return "" }
+func (b *BasePanel) RenderContent() string                                                 { return "" }
+func (b *BasePanel) HasContent() bool                                                      { return true }
+func (b *BasePanel) NavTitle() string                                                      { return "" }
+func (b *BasePanel) NavSubtitle() string                                                   { return "" }

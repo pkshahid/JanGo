@@ -3,10 +3,10 @@ package loaders
 import (
 	"embed"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sync"
-	"io/fs"
 )
 
 // Loader defines the interface for all template loaders.

@@ -1,9 +1,9 @@
 package filters
 
 import (
+	godjango "github.com/pkshahid/JanGo/template"
 	"testing"
 	"time"
-	godjango "github.com/pkshahid/JanGo/template"
 )
 
 func TestDateTimeFilters(t *testing.T) {

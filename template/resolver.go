@@ -9,7 +9,7 @@ import (
 func resolveVariable(path string, ctx *Context) any {
 	// Handle strings literals directly
 	if (strings.HasPrefix(path, "\"") && strings.HasSuffix(path, "\"")) ||
-	   (strings.HasPrefix(path, "'") && strings.HasSuffix(path, "'")) {
+		(strings.HasPrefix(path, "'") && strings.HasSuffix(path, "'")) {
 		return path[1 : len(path)-1]
 	}
 

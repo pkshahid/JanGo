@@ -22,9 +22,9 @@ type TemplateInfo struct {
 	Context  string
 }
 
-func NewTemplatesPanel() *TemplatesPanel { return &TemplatesPanel{} }
-func (p *TemplatesPanel) Name() string { return "Templates" }
-func (p *TemplatesPanel) Title() string { return "Templates" }
+func NewTemplatesPanel() *TemplatesPanel   { return &TemplatesPanel{} }
+func (p *TemplatesPanel) Name() string     { return "Templates" }
+func (p *TemplatesPanel) Title() string    { return "Templates" }
 func (p *TemplatesPanel) NavTitle() string { return "Templates" }
 func (p *TemplatesPanel) NavSubtitle() string {
 	p.mu.Lock()
@@ -80,9 +80,9 @@ type CacheEvent struct {
 	Hit    bool
 }
 
-func NewCachePanel() *CachePanel { return &CachePanel{} }
-func (p *CachePanel) Name() string { return "Cache" }
-func (p *CachePanel) Title() string { return "Cache" }
+func NewCachePanel() *CachePanel       { return &CachePanel{} }
+func (p *CachePanel) Name() string     { return "Cache" }
+func (p *CachePanel) Title() string    { return "Cache" }
 func (p *CachePanel) NavTitle() string { return "Cache" }
 func (p *CachePanel) NavSubtitle() string {
 	p.mu.Lock()
@@ -97,7 +97,11 @@ func (p *CachePanel) RenderContent() string {
 	for _, e := range p.Events {
 		hitStr := ""
 		if e.Action == "GET" {
-			if e.Hit { hitStr = " [HIT]" } else { hitStr = " [MISS]" }
+			if e.Hit {
+				hitStr = " [HIT]"
+			} else {
+				hitStr = " [MISS]"
+			}
 		}
 		sb.WriteString(fmt.Sprintf("<li>%s %s%s</li>", e.Action, e.Key, hitStr))
 	}
@@ -111,9 +115,10 @@ type LoggingPanel struct {
 	mu   sync.Mutex
 	Logs []string
 }
-func NewLoggingPanel() *LoggingPanel { return &LoggingPanel{} }
-func (p *LoggingPanel) Name() string { return "Logging" }
-func (p *LoggingPanel) Title() string { return "Logging" }
+
+func NewLoggingPanel() *LoggingPanel     { return &LoggingPanel{} }
+func (p *LoggingPanel) Name() string     { return "Logging" }
+func (p *LoggingPanel) Title() string    { return "Logging" }
 func (p *LoggingPanel) NavTitle() string { return "Logging" }
 func (p *LoggingPanel) RenderContent() string {
 	p.mu.Lock()
@@ -133,9 +138,10 @@ type SignalsPanel struct {
 	mu      sync.Mutex
 	Signals []string
 }
-func NewSignalsPanel() *SignalsPanel { return &SignalsPanel{} }
-func (p *SignalsPanel) Name() string { return "Signals" }
-func (p *SignalsPanel) Title() string { return "Signals" }
+
+func NewSignalsPanel() *SignalsPanel     { return &SignalsPanel{} }
+func (p *SignalsPanel) Name() string     { return "Signals" }
+func (p *SignalsPanel) Title() string    { return "Signals" }
 func (p *SignalsPanel) NavTitle() string { return "Signals" }
 func (p *SignalsPanel) RenderContent() string {
 	p.mu.Lock()
@@ -153,9 +159,10 @@ func (p *SignalsPanel) RenderContent() string {
 type ProfilerPanel struct {
 	BasePanel
 }
-func NewProfilerPanel() *ProfilerPanel { return &ProfilerPanel{} }
-func (p *ProfilerPanel) Name() string { return "Profiler" }
-func (p *ProfilerPanel) Title() string { return "Profiler" }
+
+func NewProfilerPanel() *ProfilerPanel    { return &ProfilerPanel{} }
+func (p *ProfilerPanel) Name() string     { return "Profiler" }
+func (p *ProfilerPanel) Title() string    { return "Profiler" }
 func (p *ProfilerPanel) NavTitle() string { return "Profiler" }
 func (p *ProfilerPanel) RenderContent() string {
 	return "<p>Profiler not active. Run with ?prof=1 to collect cProfile-like data.</p>"

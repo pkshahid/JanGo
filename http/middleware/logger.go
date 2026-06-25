@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"log/slog"
-	"time"
+	"bytes"
 	"fmt"
 	"io"
-	"bytes"
+	"log/slog"
+	"time"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 )

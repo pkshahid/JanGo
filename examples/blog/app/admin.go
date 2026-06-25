@@ -10,9 +10,9 @@ type PostAdmin struct {
 
 func init() {
 	admin.DefaultAdminSite.Register(Post{}, &admin.ModelAdmin{
-		ListDisplay: []string{"Title", "IsPublished", "CategoryID"},
+		ListDisplay:  []string{"Title", "IsPublished", "CategoryID"},
 		SearchFields: []string{"Title", "Content"},
-		ListFilter: []string{"IsPublished"},
+		ListFilter:   []string{"IsPublished"},
 	})
 	admin.DefaultAdminSite.Register(Category{}, &admin.ModelAdmin{})
 	admin.DefaultAdminSite.Register(Tag{}, &admin.ModelAdmin{})

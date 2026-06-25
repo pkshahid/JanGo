@@ -74,13 +74,21 @@ func (h *Argon2idHasher) Algorithm() string { return "argon2id" }
 
 func (h *Argon2idHasher) Encode(password string, salt string) string {
 	time := h.Time
-	if time == 0 { time = 1 }
+	if time == 0 {
+		time = 1
+	}
 	memory := h.Memory
-	if memory == 0 { memory = 64 * 1024 } // 64MB
+	if memory == 0 {
+		memory = 64 * 1024
+	} // 64MB
 	threads := h.Threads
-	if threads == 0 { threads = 4 }
+	if threads == 0 {
+		threads = 4
+	}
 	keyLen := h.KeyLen
-	if keyLen == 0 { keyLen = 32 }
+	if keyLen == 0 {
+		keyLen = 32
+	}
 
 	hash := argon2.IDKey([]byte(password), []byte(salt), time, memory, threads, keyLen)
 	b64Hash := base64.RawStdEncoding.EncodeToString(hash)
@@ -103,7 +111,9 @@ func (h *Argon2idHasher) Verify(password string, encoded string) bool {
 	hashStr := parts[4]
 
 	hashBytes, err := base64.RawStdEncoding.DecodeString(hashStr)
-	if err != nil { return false }
+	if err != nil {
+		return false
+	}
 
 	keyLen := uint32(len(hashBytes))
 
@@ -138,8 +148,9 @@ func (h *BCryptHasher) Verify(password string, encoded string) bool {
 
 // PBKDF2Hasher (legacy support stub)
 type PBKDF2Hasher struct{}
-func (h *PBKDF2Hasher) Algorithm() string { return "pbkdf2" }
-func (h *PBKDF2Hasher) Encode(password, salt string) string { return "" }
+
+func (h *PBKDF2Hasher) Algorithm() string                    { return "pbkdf2" }
+func (h *PBKDF2Hasher) Encode(password, salt string) string  { return "" }
 func (h *PBKDF2Hasher) Verify(password, encoded string) bool { return false }
 
 func init() {

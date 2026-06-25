@@ -80,14 +80,14 @@ func MemoryStats(req *godjangohttp.Request) godjangohttp.Response {
 	runtime.ReadMemStats(&memStats)
 
 	data := map[string]any{
-		"Alloc":      memStats.Alloc,
-		"TotalAlloc": memStats.TotalAlloc,
-		"Sys":        memStats.Sys,
-		"NumGC":      memStats.NumGC,
-		"HeapAlloc":  memStats.HeapAlloc,
-		"HeapSys":    memStats.HeapSys,
-		"HeapIdle":   memStats.HeapIdle,
-		"HeapInuse":  memStats.HeapInuse,
+		"Alloc":       memStats.Alloc,
+		"TotalAlloc":  memStats.TotalAlloc,
+		"Sys":         memStats.Sys,
+		"NumGC":       memStats.NumGC,
+		"HeapAlloc":   memStats.HeapAlloc,
+		"HeapSys":     memStats.HeapSys,
+		"HeapIdle":    memStats.HeapIdle,
+		"HeapInuse":   memStats.HeapInuse,
 		"HeapObjects": memStats.HeapObjects,
 	}
 

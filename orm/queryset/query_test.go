@@ -1,9 +1,9 @@
 package queryset
 
 import (
+	"github.com/pkshahid/JanGo/orm"
 	"reflect"
 	"testing"
-	"github.com/pkshahid/JanGo/orm"
 )
 
 type TestArticle struct {

@@ -10,7 +10,7 @@ func TestFormSets(t *testing.T) {
 	// Basic FormFactory
 	factory := func() *Form {
 		f := NewContactForm()
-	return &f.Form
+		return &f.Form
 	}
 
 	formset := NewBaseFormSet(factory, "testprefix", 2, 0, 2)

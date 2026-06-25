@@ -2,16 +2,16 @@ package forms
 
 import (
 	"fmt"
+	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
+	"io"
+	"mime/multipart"
+	"net/http"
 	"regexp"
 	"strconv"
 	"strings"
-	"net/http"
-	"mime/multipart"
-	"io"
-	"image"
-	_ "image/jpeg"
-	_ "image/png"
-	_ "image/gif"
 	"time"
 )
 

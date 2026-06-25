@@ -10,8 +10,8 @@ import (
 
 // DatabaseFeatures describes what a database backend supports.
 type DatabaseFeatures struct {
-	SupportsReturning bool
-	SupportsJSON      bool
+	SupportsReturning  bool
+	SupportsJSON       bool
 	SupportsSavepoints bool
 }
 

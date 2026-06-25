@@ -36,12 +36,12 @@ func NewQuery(modelInfo *orm.ModelInfo) *Query {
 // clone creates a deep copy of the Query.
 func (q *Query) clone() *Query {
 	c := &Query{
-		ModelInfo:       q.ModelInfo,
-		Limit:           q.Limit,
-		Offset:          q.Offset,
-		SelectRelated:   q.SelectRelated,
-		Distinct:        q.Distinct,
-		Database:        q.Database,
+		ModelInfo:     q.ModelInfo,
+		Limit:         q.Limit,
+		Offset:        q.Offset,
+		SelectRelated: q.SelectRelated,
+		Distinct:      q.Distinct,
+		Database:      q.Database,
 	}
 
 	if q.Where != nil {

@@ -162,25 +162,7 @@ func addVary(h http.Header, newHeaders ...string) {
 	}
 }
 
-// generateCacheKey creates a unique key for the request URL, including Vary header state if needed.
-// Note: In Django, cache keys are usually generated *after* response to know Vary headers, or
-// through a more complex two-phase caching. For simplicity, we just hash URL here unless we implement
-// a header-based key retrieval.
-func generateCacheKey(req *godjangohttp.Request) string {
-	urlStr := req.URL.String()
-
-	// Check if this URL's Vary headers are known in cache.
-	// Actually, a simpler approximation is just hashing the URL + specific query args.
-	// Since we need to include Vary headers, let's just hash the URL and all current request headers.
-	// In Django, it uses `utils.cache.get_cache_key` which evaluates headers based on a cached list.
-	// For this implementation, we will append a generic list of Vary headers if we knew them,
-	// but to make it testable and functional, we'll hash the URL.
-
-	hash := md5.Sum([]byte(urlStr))
-	return "views.decorators.cache.cache_page." + hex.EncodeToString(hash[:])
-}
-
-// Update generateCacheKey to consider known vary headers
+// generateCacheKeyWithHeaders creates a unique key considering known vary headers.
 func generateCacheKeyWithHeaders(req *godjangohttp.Request, varyHeaders []string) string {
 	urlStr := req.URL.String()
 	for _, h := range varyHeaders {

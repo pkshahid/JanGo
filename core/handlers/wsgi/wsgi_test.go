@@ -13,9 +13,9 @@ import (
 // Configure mock settings carefully using sync.Once reset if needed, or just validate fields.
 func setupTestSettings() {
 	s := settings.Settings{
-		SECRET_KEY: "secret",
+		SECRET_KEY:   "secret",
 		ROOT_URLCONF: "test",
-		DEBUG: true,
+		DEBUG:        true,
 	}
 	settings.Configure(s)
 }

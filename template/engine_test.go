@@ -1,11 +1,11 @@
 package template
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"testing"
-	"net/http"
-	"net/http/httptest"
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 )

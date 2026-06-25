@@ -1,8 +1,8 @@
 package queryset
 
 import (
-	"testing"
 	"github.com/pkshahid/JanGo/orm"
+	"testing"
 )
 
 type DummyModel struct {

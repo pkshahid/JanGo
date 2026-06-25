@@ -3,21 +3,21 @@ package response
 import (
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"os"
 	"path/filepath"
+	"testing"
 
-	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/core/settings"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/template"
 )
 
 func TestResponses(t *testing.T) {
 	settings.Configure(settings.Settings{
-		DEBUG:      true,
-		STATIC_URL: "/static/",
-		MEDIA_URL:  "/media/",
-		SECRET_KEY: "secret",
+		DEBUG:        true,
+		STATIC_URL:   "/static/",
+		MEDIA_URL:    "/media/",
+		SECRET_KEY:   "secret",
 		ROOT_URLCONF: "test",
 	})
 
@@ -53,11 +53,15 @@ func TestResponses(t *testing.T) {
 	recorder := httptest.NewRecorder()
 
 	// Nothing rendered yet
-	if lazyResp.rendered { t.Errorf("Expected not rendered") }
+	if lazyResp.rendered {
+		t.Errorf("Expected not rendered")
+	}
 
 	lazyResp.Write(recorder)
 
-	if !lazyResp.rendered { t.Errorf("Expected rendered to be true") }
+	if !lazyResp.rendered {
+		t.Errorf("Expected rendered to be true")
+	}
 	if recorder.Body.String() != "Hello World! URL: /static/" {
 		t.Errorf("TemplateResponse body mismatch, got: %s", recorder.Body.String())
 	}

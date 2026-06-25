@@ -12,12 +12,12 @@ import (
 // FlatPage represents a simple content page stored in a database-like store.
 // Equivalent to Django's FlatPage model.
 type FlatPage struct {
-	ID                int
-	URL               string
-	Title             string
-	Content           string
-	EnableComments    bool
-	TemplateName      string
+	ID                   int
+	URL                  string
+	Title                string
+	Content              string
+	EnableComments       bool
+	TemplateName         string
 	RegistrationRequired bool
 }
 
@@ -31,8 +31,8 @@ type Store interface {
 
 // MemoryStore is an in-memory implementation of Store for testing/development.
 type MemoryStore struct {
-	mu    sync.RWMutex
-	pages map[string]*FlatPage
+	mu     sync.RWMutex
+	pages  map[string]*FlatPage
 	nextID int
 }
 

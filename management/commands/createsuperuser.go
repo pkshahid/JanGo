@@ -20,8 +20,8 @@ func init() {
 
 type CreateSuperuserCommand struct{}
 
-func (c *CreateSuperuserCommand) Name() string { return "createsuperuser" }
-func (c *CreateSuperuserCommand) Help() string { return "Used to create a superuser." }
+func (c *CreateSuperuserCommand) Name() string                { return "createsuperuser" }
+func (c *CreateSuperuserCommand) Help() string                { return "Used to create a superuser." }
 func (c *CreateSuperuserCommand) AddFlags(cmd *cobra.Command) {}
 
 func (c *CreateSuperuserCommand) Execute(ctx context.Context, args []string) error {

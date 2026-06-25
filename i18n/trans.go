@@ -50,10 +50,10 @@ func Npgettext(ctx context.Context, ctxt, singular, plural string, n int) string
 
 // LazyString represents a string that is translated at the moment of rendering.
 type LazyString struct {
-	Message string
-	Context string
-	Plural  string
-	N       int
+	Message  string
+	Context  string
+	Plural   string
+	N        int
 	IsPlural bool
 }
 

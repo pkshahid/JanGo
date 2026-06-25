@@ -13,14 +13,14 @@ type AdminAction func(admin *ModelAdmin, req *godjangohttp.Request, qs queryset.
 
 // InlineModelAdmin represents a model to be edited inline.
 type InlineModelAdmin struct {
-	Model     any
-	FkName    string
-	Template  string // "tabular" or "stacked"
-	MinNum    int
-	MaxNum    int
-	Extra     int
-	Fields    []string
-	Readonly  []string
+	Model    any
+	FkName   string
+	Template string // "tabular" or "stacked"
+	MinNum   int
+	MaxNum   int
+	Extra    int
+	Fields   []string
+	Readonly []string
 }
 
 // Fieldset represents a group of fields in a change form.
@@ -33,23 +33,23 @@ type Fieldset struct {
 
 // ModelAdmin provides configuration for how a model is presented in the admin interface.
 type ModelAdmin struct {
-	ModelInfo       *orm.ModelInfo
-	ListDisplay     []string
-	ListFilter      []string
-	SearchFields    []string
-	Ordering        []string
-	ReadonlyFields  []string
-	Fields          []string
-	Fieldsets       []Fieldset
-	InlineModels    []InlineModelAdmin
-	Actions         []AdminAction
-	ListPerPage     int
-	ListMaxShowAll  int
+	ModelInfo           *orm.ModelInfo
+	ListDisplay         []string
+	ListFilter          []string
+	SearchFields        []string
+	Ordering            []string
+	ReadonlyFields      []string
+	Fields              []string
+	Fieldsets           []Fieldset
+	InlineModels        []InlineModelAdmin
+	Actions             []AdminAction
+	ListPerPage         int
+	ListMaxShowAll      int
 	ShowFullResultCount bool
 
 	// Hooks
-	SaveModel       func(req *godjangohttp.Request, obj any, form any, change bool)
-	DeleteModel     func(req *godjangohttp.Request, obj any)
+	SaveModel   func(req *godjangohttp.Request, obj any, form any, change bool)
+	DeleteModel func(req *godjangohttp.Request, obj any)
 }
 
 // NewModelAdmin creates a new ModelAdmin with sane defaults.

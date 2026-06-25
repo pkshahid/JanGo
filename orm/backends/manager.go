@@ -164,8 +164,8 @@ func ClearRouters() {
 // DefaultRouter routes everything to "default".
 type DefaultRouter struct{}
 
-func (DefaultRouter) DBForRead(model *orm.ModelInfo) string  { return "default" }
-func (DefaultRouter) DBForWrite(model *orm.ModelInfo) string { return "default" }
+func (DefaultRouter) DBForRead(model *orm.ModelInfo) string             { return "default" }
+func (DefaultRouter) DBForWrite(model *orm.ModelInfo) string            { return "default" }
 func (DefaultRouter) AllowMigrate(db string, model *orm.ModelInfo) bool { return true }
 
 // AppRouter routes models based on their app label.

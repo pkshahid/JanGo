@@ -136,13 +136,12 @@ func (b *SMTPEmailBackend) SendMessages(messages []*EmailMessage) (int, error) {
 	return sent, nil
 }
 
-
 // ConsoleEmailBackend writes emails to standard output.
 type ConsoleEmailBackend struct {
 	mu sync.Mutex
 }
 
-func (b *ConsoleEmailBackend) Open() error { return nil }
+func (b *ConsoleEmailBackend) Open() error  { return nil }
 func (b *ConsoleEmailBackend) Close() error { return nil }
 
 func (b *ConsoleEmailBackend) SendMessages(messages []*EmailMessage) (int, error) {
@@ -161,7 +160,6 @@ func (b *ConsoleEmailBackend) SendMessages(messages []*EmailMessage) (int, error
 	}
 	return sent, nil
 }
-
 
 // FileEmailBackend writes emails to files.
 type FileEmailBackend struct {
@@ -196,13 +194,12 @@ func (b *FileEmailBackend) SendMessages(messages []*EmailMessage) (int, error) {
 	return sent, nil
 }
 
-
 // LocmemEmailBackend appends emails to the global email.OutBox slice for testing.
 type LocmemEmailBackend struct {
 	mu sync.Mutex
 }
 
-func (b *LocmemEmailBackend) Open() error { return nil }
+func (b *LocmemEmailBackend) Open() error  { return nil }
 func (b *LocmemEmailBackend) Close() error { return nil }
 
 func (b *LocmemEmailBackend) SendMessages(messages []*EmailMessage) (int, error) {
@@ -215,11 +212,10 @@ func (b *LocmemEmailBackend) SendMessages(messages []*EmailMessage) (int, error)
 	return len(messages), nil
 }
 
-
 // DummyEmailBackend does absolutely nothing.
 type DummyEmailBackend struct{}
 
-func (b *DummyEmailBackend) Open() error { return nil }
+func (b *DummyEmailBackend) Open() error  { return nil }
 func (b *DummyEmailBackend) Close() error { return nil }
 
 func (b *DummyEmailBackend) SendMessages(messages []*EmailMessage) (int, error) {

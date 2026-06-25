@@ -5,7 +5,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
 )
 
 type SQLPanel struct {
@@ -20,8 +19,8 @@ func NewSQLPanel() *SQLPanel {
 	return &SQLPanel{}
 }
 
-func (p *SQLPanel) Name() string { return "SQL" }
-func (p *SQLPanel) Title() string { return "SQL Queries" }
+func (p *SQLPanel) Name() string     { return "SQL" }
+func (p *SQLPanel) Title() string    { return "SQL Queries" }
 func (p *SQLPanel) NavTitle() string { return "SQL" }
 func (p *SQLPanel) NavSubtitle() string {
 	p.mu.Lock()

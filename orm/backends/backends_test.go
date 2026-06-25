@@ -28,14 +28,14 @@ func setupTestDB(t *testing.T) string {
 	dbPath := filepath.Join(tmpDir, "test.sqlite3")
 
 	settings.Configure(settings.Settings{
-		SECRET_KEY:  "test-secret-key",
+		SECRET_KEY:   "test-secret-key",
 		ROOT_URLCONF: "test.urls",
 		DATABASES: map[string]settings.DatabaseConfig{
 			"default": {
-				Engine:   "sqlite",
-				Name:     dbPath,
-				MAX_CONN: 5,
-				MAX_IDLE: 2,
+				Engine:            "sqlite",
+				Name:              dbPath,
+				MAX_CONN:          5,
+				MAX_IDLE:          2,
 				CONN_MAX_LIFETIME: 300,
 			},
 		},

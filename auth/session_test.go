@@ -18,14 +18,14 @@ func (m *mockSession) Get(key string) (any, bool) {
 	v, ok := m.data[key]
 	return v, ok
 }
-func (m *mockSession) Set(key string, val any)         { m.data[key] = val; m.modified = true }
-func (m *mockSession) Delete(key string)               { delete(m.data, key); m.modified = true }
-func (m *mockSession) Clear()                          { m.data = make(map[string]any); m.modified = true }
-func (m *mockSession) SessionKey() string              { return "test-session-key" }
-func (m *mockSession) IsModified() bool                { return m.modified }
-func (m *mockSession) Flush(_ context.Context) error   { m.Clear(); return nil }
+func (m *mockSession) Set(key string, val any)          { m.data[key] = val; m.modified = true }
+func (m *mockSession) Delete(key string)                { delete(m.data, key); m.modified = true }
+func (m *mockSession) Clear()                           { m.data = make(map[string]any); m.modified = true }
+func (m *mockSession) SessionKey() string               { return "test-session-key" }
+func (m *mockSession) IsModified() bool                 { return m.modified }
+func (m *mockSession) Flush(_ context.Context) error    { m.Clear(); return nil }
 func (m *mockSession) CycleKey(_ context.Context) error { return nil }
-func (m *mockSession) Save(_ context.Context) error    { return nil }
+func (m *mockSession) Save(_ context.Context) error     { return nil }
 
 func TestSessionAuth(t *testing.T) {
 	// 1. Setup Request and Session

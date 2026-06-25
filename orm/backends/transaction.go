@@ -7,6 +7,7 @@ import (
 )
 
 type contextKey string
+
 const txHooksKey = contextKey("tx_hooks")
 const txSavepointKey = contextKey("tx_savepoints")
 

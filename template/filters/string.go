@@ -241,7 +241,7 @@ func WordWrapFilter(val any, args string) (any, error) {
 
 	for _, word := range words {
 		if currentLen > 0 {
-			if currentLen + 1 + len(word) > width {
+			if currentLen+1+len(word) > width {
 				buf.WriteString("\n")
 				currentLen = 0
 			} else {

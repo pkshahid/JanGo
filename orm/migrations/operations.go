@@ -54,9 +54,9 @@ func (o CreateModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 
 	// Convert ModelState to ModelInfo
 	info := &orm.ModelInfo{
-		Name: mState.Name,
+		Name:   mState.Name,
 		Fields: mState.Fields,
-		Meta: mState.Meta,
+		Meta:   mState.Meta,
 	}
 	return schemaEditor.CreateTable(info)
 }
@@ -64,9 +64,9 @@ func (o CreateModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 func (o CreateModel) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Name)]
 	info := &orm.ModelInfo{
-		Name: mState.Name,
+		Name:   mState.Name,
 		Fields: mState.Fields,
-		Meta: mState.Meta,
+		Meta:   mState.Meta,
 	}
 	return schemaEditor.DeleteTable(info)
 }
@@ -82,9 +82,9 @@ func (o DeleteModel) StateForwards(appLabel string, state *ProjectState) {
 func (o DeleteModel) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Name)]
 	info := &orm.ModelInfo{
-		Name: mState.Name,
+		Name:   mState.Name,
 		Fields: mState.Fields,
-		Meta: mState.Meta,
+		Meta:   mState.Meta,
 	}
 	return schemaEditor.DeleteTable(info)
 }
@@ -92,9 +92,9 @@ func (o DeleteModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 func (o DeleteModel) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := toState.Models[strings.ToLower(appLabel+"."+o.Name)]
 	info := &orm.ModelInfo{
-		Name: mState.Name,
+		Name:   mState.Name,
 		Fields: mState.Fields,
-		Meta: mState.Meta,
+		Meta:   mState.Meta,
 	}
 	return schemaEditor.CreateTable(info)
 }

@@ -1,8 +1,8 @@
 package migrations
 
 import (
-	"testing"
 	"github.com/pkshahid/JanGo/orm"
+	"testing"
 )
 
 func TestAutodetector(t *testing.T) {
@@ -74,8 +74,12 @@ func TestAutodetector(t *testing.T) {
 		}
 	}
 
-	if !hasAlter { t.Errorf("Expected AlterField for Title") }
-	if !hasAdd { t.Errorf("Expected AddField for Body") }
+	if !hasAlter {
+		t.Errorf("Expected AlterField for Title")
+	}
+	if !hasAdd {
+		t.Errorf("Expected AddField for Body")
+	}
 
 	// Verify app2 changes
 	app2Ops := changes["app2"]

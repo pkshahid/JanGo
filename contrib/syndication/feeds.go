@@ -103,11 +103,11 @@ type atomLink struct {
 }
 
 type atomEntry struct {
-	Title   string   `xml:"title"`
-	Link    atomLink `xml:"link"`
-	ID      string   `xml:"id"`
-	Updated string   `xml:"updated"`
-	Summary string   `xml:"summary"`
+	Title   string      `xml:"title"`
+	Link    atomLink    `xml:"link"`
+	ID      string      `xml:"id"`
+	Updated string      `xml:"updated"`
+	Summary string      `xml:"summary"`
 	Author  *atomAuthor `xml:"author,omitempty"`
 }
 

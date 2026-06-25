@@ -13,8 +13,8 @@ import (
 
 // InspectDBConfig holds configuration for the inspectdb command.
 type InspectDBConfig struct {
-	Database   string
-	TableNames []string // empty = all tables
+	Database     string
+	TableNames   []string // empty = all tables
 	IncludeViews bool
 }
 

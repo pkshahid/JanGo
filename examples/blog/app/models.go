@@ -17,18 +17,18 @@ type Tag struct {
 
 type Post struct {
 	orm.Model
-	Title      string `gd:"CharField,max_length=200"`
-	Content    string `gd:"TextField"`
-	CategoryID int    `gd:"ForeignKey,to=Category"`
-	IsPublished bool  `gd:"BooleanField,default=false"`
+	Title       string `gd:"CharField,max_length=200"`
+	Content     string `gd:"TextField"`
+	CategoryID  int    `gd:"ForeignKey,to=Category"`
+	IsPublished bool   `gd:"BooleanField,default=false"`
 	// Tags []Tag `gd:"ManyToManyField"`
 }
 
 type Comment struct {
 	orm.Model
-	PostID  int    `gd:"ForeignKey,to=Post"`
-	Author  string `gd:"CharField,max_length=100"`
-	Body    string `gd:"TextField"`
+	PostID int    `gd:"ForeignKey,to=Post"`
+	Author string `gd:"CharField,max_length=100"`
+	Body   string `gd:"TextField"`
 }
 
 func init() {

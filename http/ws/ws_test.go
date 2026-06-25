@@ -4,26 +4,27 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
-	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/gorilla/websocket"
+	godjangohttp "github.com/pkshahid/JanGo/http"
 )
 
 type mockWSView struct {
-	connected    bool
-	disconnected bool
-	lastMessage  string
+	connected    atomic.Bool
+	disconnected atomic.Bool
+	lastMessage  atomic.Value
 }
 
 func (m *mockWSView) Connect(conn *WebSocketConn, req *godjangohttp.Request) error {
-	m.connected = true
+	m.connected.Store(true)
 	return nil
 }
 
 func (m *mockWSView) Receive(conn *WebSocketConn, messageType int, data []byte) error {
-	m.lastMessage = string(data)
+	m.lastMessage.Store(string(data))
 	if string(data) == "echo" {
 		conn.Send([]byte("echo_reply"))
 	}
@@ -31,7 +32,7 @@ func (m *mockWSView) Receive(conn *WebSocketConn, messageType int, data []byte) 
 }
 
 func (m *mockWSView) Disconnect(conn *WebSocketConn, code int, reason string) error {
-	m.disconnected = true
+	m.disconnected.Store(true)
 	return nil
 }
 
@@ -51,7 +52,8 @@ func TestWebSocketUpgrader(t *testing.T) {
 	}
 	defer conn.Close()
 
-	if !view.connected {
+	time.Sleep(50 * time.Millisecond)
+	if !view.connected.Load() {
 		t.Error("Expected Connect to be called")
 	}
 
@@ -70,8 +72,8 @@ func TestWebSocketUpgrader(t *testing.T) {
 	}
 
 	conn.Close()
-	time.Sleep(100 * time.Millisecond) // let disconnect process
-	if !view.disconnected {
+	time.Sleep(100 * time.Millisecond)
+	if !view.disconnected.Load() {
 		t.Error("Expected Disconnect to be called")
 	}
 }

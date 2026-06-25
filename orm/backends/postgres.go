@@ -83,12 +83,15 @@ func (b *PostgresBackend) SchemaEditor() SchemaEditor {
 
 // MockSchemaEditor is used to fulfill interfaces for incomplete backend drivers
 type MockSchemaEditor struct{}
-func (m *MockSchemaEditor) CreateTable(model *orm.ModelInfo) error { return nil }
-func (m *MockSchemaEditor) DeleteTable(model *orm.ModelInfo) error { return nil }
-func (m *MockSchemaEditor) AddColumn(model *orm.ModelInfo, field *orm.Field) error { return nil }
+
+func (m *MockSchemaEditor) CreateTable(model *orm.ModelInfo) error                    { return nil }
+func (m *MockSchemaEditor) DeleteTable(model *orm.ModelInfo) error                    { return nil }
+func (m *MockSchemaEditor) AddColumn(model *orm.ModelInfo, field *orm.Field) error    { return nil }
 func (m *MockSchemaEditor) RemoveColumn(model *orm.ModelInfo, fieldName string) error { return nil }
-func (m *MockSchemaEditor) AlterColumn(model *orm.ModelInfo, oldField, newField *orm.Field) error { return nil }
-func (m *MockSchemaEditor) CreateIndex(model *orm.ModelInfo, index orm.Index) error { return nil }
-func (m *MockSchemaEditor) DeleteIndex(model *orm.ModelInfo, indexName string) error { return nil }
-func (m *MockSchemaEditor) AddForeignKey(model *orm.ModelInfo, field *orm.Field) error { return nil }
+func (m *MockSchemaEditor) AlterColumn(model *orm.ModelInfo, oldField, newField *orm.Field) error {
+	return nil
+}
+func (m *MockSchemaEditor) CreateIndex(model *orm.ModelInfo, index orm.Index) error       { return nil }
+func (m *MockSchemaEditor) DeleteIndex(model *orm.ModelInfo, indexName string) error      { return nil }
+func (m *MockSchemaEditor) AddForeignKey(model *orm.ModelInfo, field *orm.Field) error    { return nil }
 func (m *MockSchemaEditor) RemoveForeignKey(model *orm.ModelInfo, fieldName string) error { return nil }

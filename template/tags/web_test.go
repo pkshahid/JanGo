@@ -2,8 +2,8 @@ package tags
 
 import (
 	"net/http/httptest"
-	"testing"
 	"strings"
+	"testing"
 
 	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"
@@ -11,18 +11,11 @@ import (
 	godjango "github.com/pkshahid/JanGo/template"
 )
 
-func setupTestSettings() {
-	s := settings.Settings{
-		STATIC_URL: "/static/",
-	}
-	settings.Configure(s)
-}
-
 func TestWebTags(t *testing.T) {
 	// Re-initialize settings safely for testing
 	settings.Configure(settings.Settings{
-		STATIC_URL: "/static/",
-		SECRET_KEY: "secret",
+		STATIC_URL:   "/static/",
+		SECRET_KEY:   "secret",
 		ROOT_URLCONF: "test",
 	})
 

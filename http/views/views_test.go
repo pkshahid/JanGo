@@ -3,8 +3,8 @@ package views
 import (
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"strings"
+	"testing"
 
 	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"
@@ -12,10 +12,10 @@ import (
 
 func setupTestSettings() {
 	s := settings.Settings{
-		SECRET_KEY: "secret",
+		SECRET_KEY:   "secret",
 		ROOT_URLCONF: "test",
-		DEBUG: true,
-		LOGIN_URL: "/login",
+		DEBUG:        true,
+		LOGIN_URL:    "/login",
 	}
 	settings.Configure(s)
 }
@@ -28,13 +28,13 @@ type mockUser struct {
 }
 
 func (u *mockUser) ID() uint64            { return 1 }
-func (u *mockUser) Username() string       { return u.username }
-func (u *mockUser) Email() string          { return "" }
-func (u *mockUser) IsAuthenticated() bool  { return u.authenticated }
-func (u *mockUser) IsAnonymous() bool      { return !u.authenticated }
-func (u *mockUser) IsActive() bool         { return true }
-func (u *mockUser) IsStaff() bool          { return false }
-func (u *mockUser) IsSuperuser() bool      { return false }
+func (u *mockUser) Username() string      { return u.username }
+func (u *mockUser) Email() string         { return "" }
+func (u *mockUser) IsAuthenticated() bool { return u.authenticated }
+func (u *mockUser) IsAnonymous() bool     { return !u.authenticated }
+func (u *mockUser) IsActive() bool        { return true }
+func (u *mockUser) IsStaff() bool         { return false }
+func (u *mockUser) IsSuperuser() bool     { return false }
 func (u *mockUser) HasPerm(perm string) bool {
 	for _, p := range u.perms {
 		if p == perm {
@@ -110,6 +110,7 @@ func TestDecorators(t *testing.T) {
 type MyTestView struct {
 	BaseView
 }
+
 func (v *MyTestView) Dispatch(req *godjangohttp.Request) godjangohttp.Response {
 	return v.BaseView.Dispatch(req, v)
 }

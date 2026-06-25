@@ -26,8 +26,8 @@ type Article struct {
 
 func (a *Article) ModelMeta() *Meta {
 	return &Meta{
-		DbTable:  "blog_article",
-		Ordering: []string{"-created"},
+		DbTable:        "blog_article",
+		Ordering:       []string{"-created"},
 		UniqueTogether: [][]string{{"Title", "Author"}},
 		Indexes: []Index{
 			{Name: "title_idx", Fields: []string{"Title"}, Unique: false},
@@ -162,31 +162,31 @@ func TestRegistry(t *testing.T) {
 func TestFieldTypes(t *testing.T) {
 	type TypesModel struct {
 		Model
-		F1 string  `gd:"CharField"`
-		F2 string  `gd:"TextField"`
-		F3 int     `gd:"IntegerField"`
-		F4 int16   `gd:"SmallIntegerField"`
-		F5 int64   `gd:"BigIntegerField"`
-		F6 float32 `gd:"FloatField"`
-		F7 float64 `gd:"DecimalField"`
-		F8 bool    `gd:"BooleanField"`
-		F9 *bool   `gd:"NullBooleanField"`
-		F10 time.Time `gd:"DateField"`
-		F11 time.Time `gd:"TimeField"`
-		F12 time.Time `gd:"DateTimeField"`
-		F13 time.Duration `gd:"DurationField"`
-		F14 string `gd:"EmailField"`
-		F15 string `gd:"URLField"`
-		F16 string `gd:"SlugField"`
-		F17 string `gd:"IPAddressField"`
-		F18 string `gd:"UUIDField"`
+		F1  string         `gd:"CharField"`
+		F2  string         `gd:"TextField"`
+		F3  int            `gd:"IntegerField"`
+		F4  int16          `gd:"SmallIntegerField"`
+		F5  int64          `gd:"BigIntegerField"`
+		F6  float32        `gd:"FloatField"`
+		F7  float64        `gd:"DecimalField"`
+		F8  bool           `gd:"BooleanField"`
+		F9  *bool          `gd:"NullBooleanField"`
+		F10 time.Time      `gd:"DateField"`
+		F11 time.Time      `gd:"TimeField"`
+		F12 time.Time      `gd:"DateTimeField"`
+		F13 time.Duration  `gd:"DurationField"`
+		F14 string         `gd:"EmailField"`
+		F15 string         `gd:"URLField"`
+		F16 string         `gd:"SlugField"`
+		F17 string         `gd:"IPAddressField"`
+		F18 string         `gd:"UUIDField"`
 		F19 map[string]any `gd:"JSONField"`
-		F20 []byte `gd:"BinaryField"`
-		F21 string `gd:"FileField"`
-		F22 string `gd:"ImageField"`
-		F23 *User  `gd:"ForeignKey"`
-		F24 *User  `gd:"OneToOneField"`
-		F25 []*User `gd:"ManyToManyField"`
+		F20 []byte         `gd:"BinaryField"`
+		F21 string         `gd:"FileField"`
+		F22 string         `gd:"ImageField"`
+		F23 *User          `gd:"ForeignKey"`
+		F24 *User          `gd:"OneToOneField"`
+		F25 []*User        `gd:"ManyToManyField"`
 	}
 
 	info, _ := parseModel(&TypesModel{})

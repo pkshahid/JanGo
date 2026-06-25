@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/pkshahid/JanGo/cache"
 	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/orm/backends"
-	"github.com/pkshahid/JanGo/cache"
 )
 
 // Check defines the interface for a health check.

@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 	"strings"
+	"testing"
 
 	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"
@@ -15,16 +15,16 @@ import (
 
 func setupTestSettings() {
 	s := settings.Settings{
-		SECRET_KEY: "secret",
-		ROOT_URLCONF: "test",
-		SECURE_SSL_REDIRECT: true,
-		SECURE_HSTS_SECONDS: 3600,
+		SECRET_KEY:                     "secret",
+		ROOT_URLCONF:                   "test",
+		SECURE_SSL_REDIRECT:            true,
+		SECURE_HSTS_SECONDS:            3600,
 		SECURE_HSTS_INCLUDE_SUBDOMAINS: true,
-		SECURE_HSTS_PRELOAD: true,
-		SECURE_CONTENT_TYPE_NOSNIFF: true,
-		X_FRAME_OPTIONS: "DENY",
-		SECURE_REFERRER_POLICY: "same-origin",
-		APPEND_SLASH: true,
+		SECURE_HSTS_PRELOAD:            true,
+		SECURE_CONTENT_TYPE_NOSNIFF:    true,
+		X_FRAME_OPTIONS:                "DENY",
+		SECURE_REFERRER_POLICY:         "same-origin",
+		APPEND_SLASH:                   true,
 	}
 	settings.Configure(s)
 }

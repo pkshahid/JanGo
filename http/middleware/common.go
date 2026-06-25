@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"strings"
 	"net/http"
+	"strings"
 
 	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"

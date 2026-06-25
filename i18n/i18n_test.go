@@ -38,7 +38,7 @@ func TestMiddlewareURLPrefix(t *testing.T) {
 	})
 
 	req := godjangohttp.NewRequest(&http.Request{
-		URL: &url.URL{Path: "/es/about/"},
+		URL:    &url.URL{Path: "/es/about/"},
 		Header: make(http.Header),
 	})
 
@@ -62,7 +62,7 @@ func TestMiddlewareAcceptLanguage(t *testing.T) {
 	})
 
 	req := godjangohttp.NewRequest(&http.Request{
-		URL: &url.URL{Path: "/about/"},
+		URL:    &url.URL{Path: "/about/"},
 		Header: http.Header{"Accept-Language": []string{"fr-CH, fr;q=0.9, en;q=0.8"}},
 	})
 

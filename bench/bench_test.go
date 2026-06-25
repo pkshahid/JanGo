@@ -4,12 +4,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/pkshahid/JanGo/http/middleware"
 	godjangohttp "github.com/pkshahid/JanGo/http"
+	"github.com/pkshahid/JanGo/http/middleware"
 	"github.com/pkshahid/JanGo/http/urls"
-	"github.com/pkshahid/JanGo/template"
 	"github.com/pkshahid/JanGo/orm"
 	"github.com/pkshahid/JanGo/orm/queryset"
+	"github.com/pkshahid/JanGo/template"
 )
 
 // BenchmarkRouter tests the throughput of the URL matching engine.

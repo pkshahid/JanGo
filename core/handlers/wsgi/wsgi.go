@@ -6,9 +6,9 @@ import (
 
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/http/middleware"
+	httpsignals "github.com/pkshahid/JanGo/http/signals"
 	"github.com/pkshahid/JanGo/http/urls"
 	"github.com/pkshahid/JanGo/http/views"
-	httpsignals "github.com/pkshahid/JanGo/http/signals"
 )
 
 // WSGIHandler implements http.Handler and acts as the entry point.

@@ -17,12 +17,12 @@ type bucket struct {
 
 // RateLimitMiddleware implements a token bucket rate limiter.
 type RateLimitMiddleware struct {
-	mu           sync.Mutex
-	ipBuckets    map[string]*bucket
-	userBuckets  map[string]*bucket
-	rate         int           // tokens added per period
-	capacity     int           // max tokens
-	period       time.Duration // refill period
+	mu          sync.Mutex
+	ipBuckets   map[string]*bucket
+	userBuckets map[string]*bucket
+	rate        int           // tokens added per period
+	capacity    int           // max tokens
+	period      time.Duration // refill period
 }
 
 // NewRateLimitMiddleware creates a new rate limiter.

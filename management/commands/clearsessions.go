@@ -16,8 +16,8 @@ func init() {
 
 type ClearSessionsCommand struct{}
 
-func (c *ClearSessionsCommand) Name() string { return "clearsessions" }
-func (c *ClearSessionsCommand) Help() string { return "Cleans out expired sessions." }
+func (c *ClearSessionsCommand) Name() string                { return "clearsessions" }
+func (c *ClearSessionsCommand) Help() string                { return "Cleans out expired sessions." }
 func (c *ClearSessionsCommand) AddFlags(cmd *cobra.Command) {}
 
 func (c *ClearSessionsCommand) Execute(ctx context.Context, args []string) error {

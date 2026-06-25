@@ -149,11 +149,15 @@ func (n *ForNode) Render(ctx *godjango.Context) (string, error) {
 	// Convert to slice
 	var sliceVal []any
 	if s, ok := val.([]string); ok {
-		for _, v := range s { sliceVal = append(sliceVal, v) }
+		for _, v := range s {
+			sliceVal = append(sliceVal, v)
+		}
 	} else if s, ok := val.([]any); ok {
 		sliceVal = s
 	} else if s, ok := val.([]int); ok {
-		for _, v := range s { sliceVal = append(sliceVal, v) }
+		for _, v := range s {
+			sliceVal = append(sliceVal, v)
+		}
 	}
 
 	if len(sliceVal) == 0 && n.EmptyNodes != nil {

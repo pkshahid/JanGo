@@ -11,6 +11,7 @@ import (
 )
 
 type csrfContextKey string
+
 const csrfExemptKey = csrfContextKey("csrf_exempt")
 
 // CsrfExempt marks a handler as exempt from CSRF validation.

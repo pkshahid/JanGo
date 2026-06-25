@@ -21,7 +21,7 @@ type Permission struct {
 
 func (m *Permission) ModelMeta() *orm.Meta {
 	return &orm.Meta{
-		DbTable: "auth_permission",
+		DbTable:        "auth_permission",
 		UniqueTogether: [][]string{{"Codename", "AppLabel"}},
 	}
 }
@@ -42,16 +42,16 @@ func (m *Group) ModelMeta() *orm.Meta {
 // AbstractUser provides the core fields and methods for a User model.
 type AbstractUser struct {
 	orm.Model
-	UsernameStr string    `gd:"CharField,max_length=150,unique=true"`
-	EmailStr    string    `gd:"EmailField,max_length=254,blank=true"`
-	Password    string    `gd:"CharField,max_length=128"`
-	FirstName   string    `gd:"CharField,max_length=150,blank=true"`
-	LastName    string    `gd:"CharField,max_length=150,blank=true"`
-	IsActiveVal bool      `gd:"BooleanField,default=true"`
-	IsStaffVal  bool      `gd:"BooleanField,default=false"`
-	IsSuperuserVal bool   `gd:"BooleanField,default=false"`
-	DateJoined  time.Time `gd:"DateTimeField,auto_now_add=true"`
-	LastLogin   time.Time `gd:"DateTimeField,null=true,blank=true"`
+	UsernameStr    string    `gd:"CharField,max_length=150,unique=true"`
+	EmailStr       string    `gd:"EmailField,max_length=254,blank=true"`
+	Password       string    `gd:"CharField,max_length=128"`
+	FirstName      string    `gd:"CharField,max_length=150,blank=true"`
+	LastName       string    `gd:"CharField,max_length=150,blank=true"`
+	IsActiveVal    bool      `gd:"BooleanField,default=true"`
+	IsStaffVal     bool      `gd:"BooleanField,default=false"`
+	IsSuperuserVal bool      `gd:"BooleanField,default=false"`
+	DateJoined     time.Time `gd:"DateTimeField,auto_now_add=true"`
+	LastLogin      time.Time `gd:"DateTimeField,null=true,blank=true"`
 
 	Groups          []*Group      `gd:"ManyToManyField,to=auth.Group,related_name=user_set"`
 	UserPermissions []*Permission `gd:"ManyToManyField,to=auth.Permission,related_name=user_set"`

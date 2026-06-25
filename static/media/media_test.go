@@ -2,11 +2,11 @@ package media_test
 
 import (
 	"bytes"
+	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/static/media"
 	"io/ioutil"
 	"os"
 	"testing"
-	"github.com/pkshahid/JanGo/core/settings"
-	"github.com/pkshahid/JanGo/static/media"
 )
 
 func setupSettings() {
