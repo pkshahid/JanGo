@@ -29,6 +29,7 @@ type WebSocketView interface {
 type WebSocketConn struct {
 	conn   *websocket.Conn
 	send   chan []byte
+	done   chan struct{}
 	mu     sync.Mutex
 	closed bool
 }
@@ -38,6 +39,7 @@ func NewWebSocketConn(c *websocket.Conn) *WebSocketConn {
 	return &WebSocketConn{
 		conn: c,
 		send: make(chan []byte, 256),
+		done: make(chan struct{}),
 	}
 }
 
@@ -61,7 +63,7 @@ func (c *WebSocketConn) SendJSON(v any) error {
 	return c.Send(b)
 }
 
-// Close gracefully closes the connection.
+// Close gracefully closes the connection by signaling writePump to exit.
 func (c *WebSocketConn) Close(code int, reason string) error {
 	c.mu.Lock()
 	if c.closed {
@@ -69,13 +71,8 @@ func (c *WebSocketConn) Close(code int, reason string) error {
 		return nil
 	}
 	c.closed = true
+	close(c.done)
 	c.mu.Unlock()
-
-	msg := websocket.FormatCloseMessage(code, reason)
-	c.conn.WriteMessage(websocket.CloseMessage, msg)
-
-	// Close send channel to unblock writePump
-	close(c.send)
 	return nil
 }
 
@@ -89,6 +86,10 @@ func (c *WebSocketConn) writePump() {
 
 	for {
 		select {
+		case <-c.done:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			c.conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+			return
 		case message, ok := <-c.send:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
