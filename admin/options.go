@@ -47,6 +47,13 @@ type ModelAdmin struct {
 	ListMaxShowAll      int
 	ShowFullResultCount bool
 
+	// ViewOnSite controls whether the "View on site" link appears in the
+	// admin change form. When nil, the link is shown automatically if the
+	// model implements orm.GetAbsoluteURLer. When set to a bool, it
+	// overrides the auto-detection. When set to a func(any) string, the
+	// function is called with the object to produce the URL.
+	ViewOnSite any
+
 	// Hooks
 	SaveModel   func(req *godjangohttp.Request, obj any, form any, change bool)
 	DeleteModel func(req *godjangohttp.Request, obj any)
@@ -88,4 +95,28 @@ func deleteSelectedAction(admin *ModelAdmin, req *godjangohttp.Request, qs query
 	// A real implementation queries and deletes the selected IDs.
 	// We'll mock the action execution via form POST handling.
 	return nil
+}
+
+// ViewOnSiteURL returns the "view on site" URL for the given object, or
+// empty string if the link should not be shown. The resolution follows
+// Django's semantics:
+//   - If ViewOnSite is a func(any) string, it is called with obj.
+//   - If ViewOnSite is a bool, it enables/disables auto-detection via
+//     orm.GetAbsoluteURLer.
+//   - If ViewOnSite is nil, auto-detection via orm.GetAbsoluteURLer is used.
+func (ma *ModelAdmin) ViewOnSiteURL(obj any) string {
+	switch v := ma.ViewOnSite.(type) {
+	case func(any) string:
+		return v(obj)
+	case bool:
+		if !v {
+			return ""
+		}
+	}
+	// nil or bool true → auto-detect
+	url, ok := orm.GetAbsoluteURL(obj)
+	if !ok {
+		return ""
+	}
+	return url
 }

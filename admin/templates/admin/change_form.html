@@ -14,6 +14,9 @@
 		<input type="submit" value="Save and add another" name="_addanother">
 		<input type="submit" value="Save and continue editing" name="_continue">
 		{{if .change}}
+			{{if .view_on_site_url}}
+				<a href="{{.view_on_site_url}}" class="viewsitelink" target="_blank">View on site</a>
+			{{end}}
 			<a href="../delete/" class="deletelink">Delete</a>
 		{{end}}
 	</div>

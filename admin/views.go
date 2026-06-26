@@ -153,11 +153,12 @@ func (s *AdminSite) changeView(req *godjangohttp.Request) godjangohttp.Response 
 	}
 
 	ctx := map[string]any{
-		"title":       fmt.Sprintf("Change %s", admin.ModelInfo.Name),
-		"model_admin": admin,
-		"form_html":   mf.Render(),
-		"errors":      mf.NonFieldErrors(),
-		"change":      true,
+		"title":            fmt.Sprintf("Change %s", admin.ModelInfo.Name),
+		"model_admin":      admin,
+		"form_html":        mf.Render(),
+		"errors":           mf.NonFieldErrors(),
+		"change":           true,
+		"view_on_site_url": admin.ViewOnSiteURL(instance),
 	}
 
 	return render(req, "change_form.html", ctx)

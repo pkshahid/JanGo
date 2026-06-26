@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/pkshahid/JanGo/http/urls"
 	"github.com/pkshahid/JanGo/orm"
 )
 
@@ -22,6 +23,12 @@ type Post struct {
 	CategoryID  int    `gd:"ForeignKey,to=Category"`
 	IsPublished bool   `gd:"BooleanField,default=false"`
 	// Tags []Tag `gd:"ManyToManyField"`
+}
+
+// GetAbsoluteURL returns the canonical URL for this post, using the
+// "post_detail" URL pattern registered in urls.go.
+func (p *Post) GetAbsoluteURL() string {
+	return urls.Reverse("post_detail", map[string]any{"pk": p.Model.ID})
 }
 
 type Comment struct {
