@@ -31,3 +31,13 @@
   color: var(--accent-blue);
   font-weight: 600;
 }
+
+.code-block pre[class*="language-"],
+.code-block code[class*="language-"] {
+  background: transparent;
+}
+
+.code-block pre[class*="language-"] {
+  margin: 0;
+  padding: 1.5rem;
+}
