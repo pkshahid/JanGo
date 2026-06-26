@@ -89,7 +89,7 @@ func (q *Query) ToDatesSQL(kind DateKind, field string, order OrderDirection) (s
 	var whereClauses []string
 
 	if q.Where != nil {
-		clause, p := q.Where.toSQL(q.ModelInfo)
+		clause, p := q.Where.toSQL(q.ModelInfo, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "("+clause+")")
 			params = append(params, p...)
@@ -97,7 +97,7 @@ func (q *Query) ToDatesSQL(kind DateKind, field string, order OrderDirection) (s
 	}
 
 	if q.Exclude != nil {
-		clause, p := q.Exclude.toSQL(q.ModelInfo)
+		clause, p := q.Exclude.toSQL(q.ModelInfo, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "NOT ("+clause+")")
 			params = append(params, p...)
@@ -134,7 +134,7 @@ func (q *Query) ToDatetimesSQL(kind DateTimeKind, field string, order OrderDirec
 	var whereClauses []string
 
 	if q.Where != nil {
-		clause, p := q.Where.toSQL(q.ModelInfo)
+		clause, p := q.Where.toSQL(q.ModelInfo, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "("+clause+")")
 			params = append(params, p...)
@@ -142,7 +142,7 @@ func (q *Query) ToDatetimesSQL(kind DateTimeKind, field string, order OrderDirec
 	}
 
 	if q.Exclude != nil {
-		clause, p := q.Exclude.toSQL(q.ModelInfo)
+		clause, p := q.Exclude.toSQL(q.ModelInfo, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "NOT ("+clause+")")
 			params = append(params, p...)

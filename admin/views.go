@@ -33,6 +33,18 @@ func (s *AdminSite) changelistView(req *godjangohttp.Request) godjangohttp.Respo
 		return godjangohttp.HttpResponseNotFound("Model not found")
 	}
 
+	// Resolve filters: convert ListFilter entries into ListFilterer instances
+	filters := ResolveFilters(admin)
+	filterSpecs := make([]FilterSpec, 0, len(filters))
+	for _, f := range filters {
+		choices := f.Choices(req)
+		filterSpecs = append(filterSpecs, FilterSpec{
+			Title:    f.Title(),
+			Choices:  choices,
+			HasActive: hasActiveChoice(choices),
+		})
+	}
+
 	// 1. Query Data
 	// In Go, since we use generics, instantiating a QuerySet generically at runtime via reflection
 	// is complex. We will mock the fetch using `RawQuerySet` for execution abstraction,
@@ -41,12 +53,14 @@ func (s *AdminSite) changelistView(req *godjangohttp.Request) godjangohttp.Respo
 	// Since we mock DB, we'll return a mock count and empty table.
 
 	ctx := map[string]any{
-		"title":       fmt.Sprintf("Select %s to change", admin.ModelInfo.Name),
-		"model_admin": admin,
-		"columns":     admin.ListDisplay,
-		"results":     []map[string]any{}, // Mock empty rows
-		"count":       0,
-		"actions":     len(admin.Actions) > 0,
+		"title":        fmt.Sprintf("Select %s to change", admin.ModelInfo.Name),
+		"model_admin":  admin,
+		"columns":      admin.ListDisplay,
+		"results":      []map[string]any{}, // Mock empty rows
+		"count":        0,
+		"actions":      len(admin.Actions) > 0,
+		"has_filters":  len(filterSpecs) > 0,
+		"filter_specs": filterSpecs,
 	}
 
 	// 2. Handle Actions
@@ -175,8 +189,8 @@ func (s *AdminSite) deleteView(req *godjangohttp.Request) godjangohttp.Response 
 	}
 
 	if req.Method == http.MethodPost && req.POST.Get("post") == "yes" {
-		// Fetch and delete
-		// admin.DeleteModel(req, instance)
+		instance := reflect.New(admin.ModelInfo.Type).Interface()
+		admin.DeleteModel(req, instance)
 		return godjangohttp.NewRedirectResponse("../../", false)
 	}
 

@@ -71,6 +71,7 @@ type Settings struct {
 	AUTH_USER_MODEL         string
 	LOGIN_URL               string
 	LOGIN_REDIRECT_URL      string
+	AUTH_PASSWORD_VALIDATORS []string
 	TIME_ZONE               string `env:"TIME_ZONE"`
 	USE_TZ                  bool   `env:"USE_TZ"`
 	LANGUAGE_CODE           string `env:"LANGUAGE_CODE"`
@@ -96,6 +97,11 @@ type Settings struct {
 	SESSION_COOKIE_HTTPONLY        bool   `env:"SESSION_COOKIE_HTTPONLY"`
 	SESSION_COOKIE_SAMESITE        string `env:"SESSION_COOKIE_SAMESITE"`
 	SESSION_FILE_PATH              string `env:"SESSION_FILE_PATH"`
+
+	// Cache middleware settings
+	CACHE_MIDDLEWARE_ALIAS        string `env:"CACHE_MIDDLEWARE_ALIAS"`
+	CACHE_MIDDLEWARE_SECONDS      int    `env:"CACHE_MIDDLEWARE_SECONDS"`
+	CACHE_MIDDLEWARE_KEY_PREFIX   string `env:"CACHE_MIDDLEWARE_KEY_PREFIX"`
 }
 
 var (

@@ -401,7 +401,7 @@ func NewIIf(cond *QNode, trueVal, falseVal any) *IIf {
 
 // ResolveSQL renders the IIF expression to SQL.
 func (i *IIf) ResolveSQL(info *orm.ModelInfo) (string, []any) {
-	condSQL, condParams := i.cond.toSQL(info)
+	condSQL, condParams := i.cond.toSQL(info, nil)
 	trueSQL, trueParams := resolveArg(i.trueVal, info)
 	falseSQL, falseParams := resolveArg(i.falseVal, info)
 	sql := fmt.Sprintf("IIF(%s, %s, %s)", condSQL, trueSQL, falseSQL)

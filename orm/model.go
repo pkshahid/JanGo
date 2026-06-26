@@ -20,6 +20,14 @@ type Index struct {
 	Unique bool
 }
 
+// SpatialIndex represents a spatial index on a GIS geometry field.
+// On PostGIS this creates a GiST index; on SQLite with SpatiaLite it
+// creates an R-Tree index.
+type SpatialIndex struct {
+	Name   string   // Index name
+	Fields []string // Geometry field(s) to index
+}
+
 // Meta holds configuration for a model, similar to Django's Meta inner class.
 type Meta struct {
 	DbTable           string
@@ -27,6 +35,7 @@ type Meta struct {
 	UniqueTogether    [][]string
 	Constraints       []Constraint
 	Indexes           []Index
+	SpatialIndexes    []SpatialIndex
 	VerboseName       string
 	VerboseNamePlural string
 	Abstract          bool

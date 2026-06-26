@@ -41,7 +41,7 @@ func (w *When) resolveThen(info *orm.ModelInfo) (string, []any) {
 // ResolveSQL renders this When clause as a SQL fragment for use within a
 // CASE expression. It does NOT include the CASE keyword itself.
 func (w *When) ResolveSQL(info *orm.ModelInfo) (string, []any) {
-	condSQL, condParams := w.Condition.toSQL(info)
+	condSQL, condParams := w.Condition.toSQL(info, nil)
 	thenSQL, thenParams := w.resolveThen(info)
 
 	sql := fmt.Sprintf("WHEN %s THEN %s", condSQL, thenSQL)

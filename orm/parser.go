@@ -211,6 +211,12 @@ func parseFieldTag(sf reflect.StructField, tag string) (*Field, error) {
 			f.PrimaryKey = val == "true"
 		case "auto_created":
 			f.Options.AutoCreated = val == "true"
+		case "srid":
+			f.Options.SRID, _ = strconv.Atoi(val)
+		case "size":
+			f.Options.Size, _ = strconv.Atoi(val)
+		case "base_field":
+			f.Options.BaseField = val
 		}
 	}
 

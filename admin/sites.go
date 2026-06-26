@@ -53,6 +53,37 @@ func (s *AdminSite) Register(model any, adminConfig *ModelAdmin) error {
 		if err != nil {
 			return err
 		}
+	} else {
+		// Ensure ModelInfo is set even on custom ModelAdmin instances
+		if adminConfig.ModelInfo == nil {
+			adminConfig.ModelInfo = info
+		}
+		// Ensure default actions are present
+		if len(adminConfig.Actions) == 0 {
+			adminConfig.Actions = append(adminConfig.Actions, deleteSelectedAction)
+		}
+		// Ensure default save/delete hooks are set
+		if adminConfig.SaveModel == nil {
+			ma, err := NewModelAdmin(model)
+			if err != nil {
+				return err
+			}
+			adminConfig.SaveModel = ma.SaveModel
+		}
+		if adminConfig.DeleteModel == nil {
+			ma, err := NewModelAdmin(model)
+			if err != nil {
+				return err
+			}
+			adminConfig.DeleteModel = ma.DeleteModel
+		}
+		// Set sane defaults for pagination
+		if adminConfig.ListPerPage == 0 {
+			adminConfig.ListPerPage = 100
+		}
+		if adminConfig.ListMaxShowAll == 0 {
+			adminConfig.ListMaxShowAll = 200
+		}
 	}
 
 	s._registry[key] = adminConfig

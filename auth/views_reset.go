@@ -59,15 +59,26 @@ func (v *PasswordResetConfirmView) Dispatch(req *godjangohttp.Request) godjangoh
 }
 
 func (v *PasswordResetConfirmView) Post(req *godjangohttp.Request) godjangohttp.Response {
-	newPassword1 := req.POST.Get("new_password1")
-	newPassword2 := req.POST.Get("new_password2")
+	form := NewSetPasswordForm(nil)
+	postData := make(map[string]any)
+	for k, v := range req.POST {
+		if len(v) > 0 {
+			postData[k] = v[0]
+		}
+	}
+	form.Bind(postData, nil)
 
-	if newPassword1 != newPassword2 {
-		ctx := map[string]any{"form_errors": "The two password fields didn't match."}
+	if !form.IsValid() {
+		ctx := map[string]any{
+			"form":        form,
+			"form_errors": FormErrorsToString(&form.Form),
+		}
 		return godjangohttp.Render(req, v.TemplateName, ctx)
 	}
 
 	// Update password logic via ORM here.
+	// A full implementation would resolve the user from uidb64/token,
+	// then set: user.(*AbstractUser).Password = hashers.MakePassword(newPassword1)
 
 	return godjangohttp.NewRedirectResponse("/login/", false)
 }

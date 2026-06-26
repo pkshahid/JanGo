@@ -474,7 +474,7 @@ func (qs QuerySet[T]) Delete() (int64, error) {
 	var params []any
 
 	if qs.query.Where != nil {
-		clause, p := qs.query.Where.toSQL(info)
+		clause, p := qs.query.Where.toSQL(info, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "("+clause+")")
 			params = append(params, p...)
@@ -482,7 +482,7 @@ func (qs QuerySet[T]) Delete() (int64, error) {
 	}
 
 	if qs.query.Exclude != nil {
-		clause, p := qs.query.Exclude.toSQL(info)
+		clause, p := qs.query.Exclude.toSQL(info, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "NOT ("+clause+")")
 			params = append(params, p...)

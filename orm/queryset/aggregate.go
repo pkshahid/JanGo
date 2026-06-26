@@ -44,7 +44,7 @@ func (qs QuerySet[T]) Aggregate(exprs ...AggExpr) (map[string]any, error) {
 	var params []any
 
 	if qs.query.Where != nil {
-		clause, p := qs.query.Where.toSQL(qs.query.ModelInfo)
+		clause, p := qs.query.Where.toSQL(qs.query.ModelInfo, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "("+clause+")")
 			params = append(params, p...)
@@ -52,7 +52,7 @@ func (qs QuerySet[T]) Aggregate(exprs ...AggExpr) (map[string]any, error) {
 	}
 
 	if qs.query.Exclude != nil {
-		clause, p := qs.query.Exclude.toSQL(qs.query.ModelInfo)
+		clause, p := qs.query.Exclude.toSQL(qs.query.ModelInfo, nil)
 		if clause != "" {
 			whereClauses = append(whereClauses, "NOT ("+clause+")")
 			params = append(params, p...)

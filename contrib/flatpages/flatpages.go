@@ -1,5 +1,6 @@
 // Package flatpages implements Django's flatpages framework.
-// It provides simple database-stored pages served from configurable URLs.
+// It provides simple in-memory stored pages served from configurable URLs.
+// Persistence is MemoryStore only — no ORM-backed database storage is used.
 package flatpages
 
 import (
@@ -9,7 +10,7 @@ import (
 	"sync"
 )
 
-// FlatPage represents a simple content page stored in a database-like store.
+// FlatPage represents a simple content page stored in memory.
 // Equivalent to Django's FlatPage model.
 type FlatPage struct {
 	ID                   int
@@ -29,7 +30,8 @@ type Store interface {
 	Delete(url string) error
 }
 
-// MemoryStore is an in-memory implementation of Store for testing/development.
+// MemoryStore is the in-memory implementation of Store.
+// This is the only supported backend — no ORM-backed store is provided.
 type MemoryStore struct {
 	mu     sync.RWMutex
 	pages  map[string]*FlatPage
@@ -88,6 +90,48 @@ func (s *MemoryStore) Delete(url string) error {
 	url = normalizeURL(url)
 	delete(s.pages, url)
 	return nil
+}
+
+// Clear removes all flatpages from the store (for testing/reset).
+func (s *MemoryStore) Clear() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.pages = make(map[string]*FlatPage)
+	s.nextID = 1
+}
+
+// --- Global default store ---
+
+var defaultStore = NewMemoryStore()
+
+// DefaultStore returns the package-level default MemoryStore instance.
+func DefaultStore() *MemoryStore {
+	return defaultStore
+}
+
+// Get retrieves a flatpage by URL from the default store.
+func Get(url string) (*FlatPage, error) {
+	return defaultStore.Get(url)
+}
+
+// GetAll returns all flatpages from the default store.
+func GetAll() ([]*FlatPage, error) {
+	return defaultStore.GetAll()
+}
+
+// Save saves a flatpage to the default store.
+func Save(page *FlatPage) error {
+	return defaultStore.Save(page)
+}
+
+// Delete removes a flatpage from the default store.
+func Delete(url string) error {
+	return defaultStore.Delete(url)
+}
+
+// Clear removes all flatpages from the default store (for testing/reset).
+func Clear() {
+	defaultStore.Clear()
 }
 
 // ErrPageNotFound is returned when a flatpage is not found.

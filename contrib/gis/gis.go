@@ -35,6 +35,17 @@ func (p *Point) GeoJSON() string {
 	return fmt.Sprintf(`{"type":"Point","coordinates":[%f,%f]}`, p.X, p.Y)
 }
 
+// WKT returns the Well-Known-Text representation (same as String but without
+// trailing whitespace). Implements orm.GeometryValue.
+func (p *Point) WKT() string {
+	return p.String()
+}
+
+// GetSRID returns the spatial reference system ID. Implements orm.GeometryValue.
+func (p *Point) GetSRID() int {
+	return p.SRID
+}
+
 // LineString represents a series of connected points.
 type LineString struct {
 	Points []*Point
@@ -65,6 +76,16 @@ func (ls *LineString) String() string {
 		s += fmt.Sprintf("%f %f", p.X, p.Y)
 	}
 	return s + ")"
+}
+
+// WKT returns the Well-Known-Text representation. Implements orm.GeometryValue.
+func (ls *LineString) WKT() string {
+	return ls.String()
+}
+
+// GetSRID returns the spatial reference system ID. Implements orm.GeometryValue.
+func (ls *LineString) GetSRID() int {
+	return ls.SRID
 }
 
 // Polygon represents a closed area.
@@ -107,6 +128,16 @@ func (p *Polygon) String() string {
 		s += fmt.Sprintf("%f %f", pt.X, pt.Y)
 	}
 	return s + "))"
+}
+
+// WKT returns the Well-Known-Text representation. Implements orm.GeometryValue.
+func (p *Polygon) WKT() string {
+	return p.String()
+}
+
+// GetSRID returns the spatial reference system ID. Implements orm.GeometryValue.
+func (p *Polygon) GetSRID() int {
+	return p.SRID
 }
 
 // MultiPoint represents a collection of points.
@@ -201,6 +232,44 @@ const (
 	LookupBBContains SpatialLookup = "bbcontains"
 	LookupBBOverlaps SpatialLookup = "bboverlaps"
 )
+
+// DistanceQuery pairs a geometry with a distance in meters, used by the
+// distance_lte / distance_lt / distance_gt / distance_gte spatial lookups.
+// It implements orm.DistanceGeometryValue so the queryset layer can extract
+// the WKT, SRID, and distance for SQL parameter binding.
+type DistanceQuery struct {
+	Geometry GeometryValue
+	Distance float64 // meters
+}
+
+// NewDistanceQuery creates a DistanceQuery from any GeometryValue (Point,
+// LineString, Polygon) and a distance in meters.
+func NewDistanceQuery(geom GeometryValue, distanceMeters float64) *DistanceQuery {
+	return &DistanceQuery{Geometry: geom, Distance: distanceMeters}
+}
+
+// WKT returns the WKT of the underlying geometry.
+func (dq *DistanceQuery) WKT() string {
+	return dq.Geometry.WKT()
+}
+
+// GetSRID returns the SRID of the underlying geometry.
+func (dq *DistanceQuery) GetSRID() int {
+	return dq.Geometry.GetSRID()
+}
+
+// DistanceMeters returns the distance threshold in meters.
+func (dq *DistanceQuery) DistanceMeters() float64 {
+	return dq.Distance
+}
+
+// GeometryValue is the interface implemented by all GIS geometry types that
+// can be used as values in ORM spatial lookups. It mirrors orm.GeometryValue
+// to avoid a circular import.
+type GeometryValue interface {
+	WKT() string
+	GetSRID() int
+}
 
 // Helper functions
 

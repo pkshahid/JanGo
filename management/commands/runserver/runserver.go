@@ -81,6 +81,8 @@ func (c *Command) Execute(ctx context.Context, args []string) error {
 	// Create middleware chain (auto-include Logger in runserver)
 	// For a real app, this would iterate over s.MIDDLEWARE strings to build the chain.
 	middlewares := []middleware.MiddlewareFunc{
+		middleware.UpdateCacheMiddleware,
+		middleware.FetchFromCacheMiddleware,
 		middleware.RequestLoggingMiddleware,
 		middleware.SecurityMiddleware,
 		middleware.CommonMiddleware,

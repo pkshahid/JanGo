@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/pkshahid/JanGo/core/settings"
+	"github.com/pkshahid/JanGo/orm"
 )
 
 func init() {
@@ -66,4 +67,26 @@ func (b *MySQLBackend) Features() DatabaseFeatures {
 
 func (b *MySQLBackend) SchemaEditor() SchemaEditor {
 	return &MockSchemaEditor{}
+}
+
+// MockSchemaEditor is used to fulfill the SchemaEditor interface for backend
+// drivers that do not yet have a full implementation.
+type MockSchemaEditor struct{}
+
+func (m *MockSchemaEditor) CreateTable(model *orm.ModelInfo) error                    { return nil }
+func (m *MockSchemaEditor) DeleteTable(model *orm.ModelInfo) error                    { return nil }
+func (m *MockSchemaEditor) AddColumn(model *orm.ModelInfo, field *orm.Field) error    { return nil }
+func (m *MockSchemaEditor) RemoveColumn(model *orm.ModelInfo, fieldName string) error { return nil }
+func (m *MockSchemaEditor) AlterColumn(model *orm.ModelInfo, oldField, newField *orm.Field) error {
+	return nil
+}
+func (m *MockSchemaEditor) CreateIndex(model *orm.ModelInfo, index orm.Index) error       { return nil }
+func (m *MockSchemaEditor) DeleteIndex(model *orm.ModelInfo, indexName string) error      { return nil }
+func (m *MockSchemaEditor) AddForeignKey(model *orm.ModelInfo, field *orm.Field) error    { return nil }
+func (m *MockSchemaEditor) RemoveForeignKey(model *orm.ModelInfo, fieldName string) error { return nil }
+func (m *MockSchemaEditor) AddConstraint(model *orm.ModelInfo, constraint orm.Constraint) error {
+	return nil
+}
+func (m *MockSchemaEditor) RemoveConstraint(model *orm.ModelInfo, constraintName string) error {
+	return nil
 }

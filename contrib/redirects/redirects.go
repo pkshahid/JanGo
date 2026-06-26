@@ -1,5 +1,6 @@
 // Package redirects implements Django's redirects framework.
-// It provides database-stored URL redirects with middleware support.
+// It provides in-memory URL redirects with middleware support.
+// Persistence is MemoryStore only — no ORM-backed database storage is used.
 package redirects
 
 import (
@@ -8,7 +9,7 @@ import (
 	"sync"
 )
 
-// Redirect represents a stored URL redirect rule.
+// Redirect represents a URL redirect rule stored in memory.
 // Equivalent to Django's Redirect model.
 type Redirect struct {
 	ID         int
@@ -25,7 +26,8 @@ type Store interface {
 	Remove(oldPath string) error
 }
 
-// MemoryStore is an in-memory implementation of the redirect store.
+// MemoryStore is the in-memory implementation of the redirect store.
+// This is the only supported backend — no ORM-backed store is provided.
 type MemoryStore struct {
 	mu        sync.RWMutex
 	redirects map[string]*Redirect
@@ -91,6 +93,48 @@ func (s *MemoryStore) Remove(oldPath string) error {
 	oldPath = normalizePath(oldPath)
 	delete(s.redirects, oldPath)
 	return nil
+}
+
+// Clear removes all redirects from the store (for testing/reset).
+func (s *MemoryStore) Clear() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.redirects = make(map[string]*Redirect)
+	s.nextID = 1
+}
+
+// --- Global default store ---
+
+var defaultStore = NewMemoryStore()
+
+// DefaultStore returns the package-level default MemoryStore instance.
+func DefaultStore() *MemoryStore {
+	return defaultStore
+}
+
+// Get retrieves a redirect by old path from the default store.
+func Get(path string) (*Redirect, error) {
+	return defaultStore.Get(path)
+}
+
+// GetAll returns all redirects from the default store.
+func GetAll() ([]*Redirect, error) {
+	return defaultStore.GetAll()
+}
+
+// Add creates a new redirect in the default store.
+func Add(oldPath, newPath string, permanent bool) (*Redirect, error) {
+	return defaultStore.Add(oldPath, newPath, permanent)
+}
+
+// Remove deletes a redirect from the default store.
+func Remove(oldPath string) error {
+	return defaultStore.Remove(oldPath)
+}
+
+// Clear removes all redirects from the default store (for testing/reset).
+func Clear() {
+	defaultStore.Clear()
 }
 
 // ErrNotFound is returned when a redirect is not found.

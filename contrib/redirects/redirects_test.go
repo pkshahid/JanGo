@@ -140,6 +140,73 @@ func TestFallbackMiddleware(t *testing.T) {
 	}
 }
 
+func TestDefaultStore(t *testing.T) {
+	Clear()
+	defer Clear()
+
+	// Add via package-level function
+	r, err := Add("/old-global", "/new-global", true)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if r.ID == 0 {
+		t.Error("expected non-zero ID")
+	}
+	if r.StatusCode != http.StatusMovedPermanently {
+		t.Errorf("expected 301, got %d", r.StatusCode)
+	}
+
+	// Get via package-level function
+	found, err := Get("/old-global")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if found.NewPath != "/new-global" {
+		t.Errorf("expected '/new-global', got %q", found.NewPath)
+	}
+
+	// GetAll via package-level function
+	all, err := GetAll()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(all) != 1 {
+		t.Errorf("expected 1 redirect, got %d", len(all))
+	}
+
+	// Remove via package-level function
+	err = Remove("/old-global")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	_, err = Get("/old-global")
+	if err == nil {
+		t.Error("redirect should be removed")
+	}
+
+	// Clear
+	Add("/temp-clear", "/dest", false)
+	Clear()
+	all, err = GetAll()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(all) != 0 {
+		t.Errorf("expected 0 redirects after Clear, got %d", len(all))
+	}
+}
+
+func TestDefaultStoreSameInstance(t *testing.T) {
+	Clear()
+	defer Clear()
+
+	s1 := DefaultStore()
+	s2 := DefaultStore()
+	if s1 != s2 {
+		t.Error("DefaultStore should return the same instance")
+	}
+}
+
 func TestHandler(t *testing.T) {
 	store := NewMemoryStore()
 	store.Add("/redirect-me", "/target", true)

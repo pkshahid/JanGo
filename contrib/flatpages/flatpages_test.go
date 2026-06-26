@@ -125,6 +125,75 @@ func TestMiddlewareHandler(t *testing.T) {
 	}
 }
 
+func TestDefaultStore(t *testing.T) {
+	Clear()
+	defer Clear()
+
+	// Save via package-level function
+	page := &FlatPage{
+		URL:     "/global/",
+		Title:   "Global",
+		Content: "<p>Global page</p>",
+	}
+	err := Save(page)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if page.ID == 0 {
+		t.Error("expected non-zero ID")
+	}
+
+	// Get via package-level function
+	found, err := Get("/global/")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if found.Title != "Global" {
+		t.Errorf("expected 'Global', got %q", found.Title)
+	}
+
+	// GetAll via package-level function
+	all, err := GetAll()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(all) != 1 {
+		t.Errorf("expected 1 page, got %d", len(all))
+	}
+
+	// Delete via package-level function
+	err = Delete("/global/")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	_, err = Get("/global/")
+	if err == nil {
+		t.Error("page should be deleted")
+	}
+
+	// Clear
+	Save(&FlatPage{URL: "/temp-clear/", Title: "Temp"})
+	Clear()
+	all, err = GetAll()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(all) != 0 {
+		t.Errorf("expected 0 pages after Clear, got %d", len(all))
+	}
+}
+
+func TestDefaultStoreSameInstance(t *testing.T) {
+	Clear()
+	defer Clear()
+
+	s1 := DefaultStore()
+	s2 := DefaultStore()
+	if s1 != s2 {
+		t.Error("DefaultStore should return the same instance")
+	}
+}
+
 func TestMiddlewareWrap(t *testing.T) {
 	store := NewMemoryStore()
 	store.Save(&FlatPage{

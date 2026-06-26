@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"fmt"
-
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	"github.com/pkshahid/JanGo/http/views"
 )
@@ -41,12 +39,26 @@ func (v *LoginView) Get(req *godjangohttp.Request) godjangohttp.Response {
 }
 
 func (v *LoginView) Post(req *godjangohttp.Request) godjangohttp.Response {
-	username := req.POST.Get("username")
-	password := req.POST.Get("password")
+	form := NewAuthenticationForm()
+	postData := make(map[string]any)
+	for k, v := range req.POST {
+		if len(v) > 0 {
+			postData[k] = v[0]
+		}
+	}
+	form.Bind(postData, nil)
 
-	user, err := Authenticate(username, password)
-	if err == nil && user != nil {
-		err = Login(req, user)
+	if !form.IsValid() {
+		ctx := map[string]any{
+			"form":        form,
+			"form_errors": FormErrorsToString(&form.Form),
+		}
+		return godjangohttp.Render(req, v.TemplateName, ctx)
+	}
+
+	user := form.GetUser()
+	if user != nil {
+		err := Login(req, user)
 		if err == nil {
 			next := req.POST.Get("next")
 			if next == "" {
@@ -61,7 +73,8 @@ func (v *LoginView) Post(req *godjangohttp.Request) godjangohttp.Response {
 
 	// Login failed
 	ctx := map[string]any{
-		"form_errors": fmt.Sprintf("Please enter a correct username and password. Note that both fields may be case-sensitive."),
+		"form":        form,
+		"form_errors": "Please enter a correct username and password. Note that both fields may be case-sensitive.",
 	}
 	return godjangohttp.Render(req, v.TemplateName, ctx)
 }
@@ -103,28 +116,27 @@ func (v *PasswordChangeView) Dispatch(req *godjangohttp.Request) godjangohttp.Re
 }
 
 func (v *PasswordChangeView) Post(req *godjangohttp.Request) godjangohttp.Response {
-	oldPassword := req.POST.Get("old_password")
-	newPassword1 := req.POST.Get("new_password1")
-	newPassword2 := req.POST.Get("new_password2")
+	form := NewPasswordChangeForm(req.User)
+	postData := make(map[string]any)
+	for k, v := range req.POST {
+		if len(v) > 0 {
+			postData[k] = v[0]
+		}
+	}
+	form.Bind(postData, nil)
 
-	// 1. Verify old password
-	user, err := Authenticate(req.User.Username(), oldPassword)
-	if err != nil || user == nil {
-		ctx := map[string]any{"form_errors": "Your old password was entered incorrectly."}
+	if !form.IsValid() {
+		ctx := map[string]any{
+			"form":        form,
+			"form_errors": FormErrorsToString(&form.Form),
+		}
 		return godjangohttp.Render(req, v.TemplateName, ctx)
 	}
 
-	// 2. Verify new passwords match
-	if newPassword1 != newPassword2 {
-		ctx := map[string]any{"form_errors": "The two password fields didn't match."}
-		return godjangohttp.Render(req, v.TemplateName, ctx)
-	}
-
-	// 3. Update password in the database
-	// A full implementation requires updating the model instance via the ORM.
-	// We'd use `hashers.MakePassword(newPassword1)`
-	// e.g.: user.(*AbstractUser).Password = hashers.MakePassword(newPassword1)
-	//       orm.NewQuerySet[AbstractUser]().Filter(...).Update(...)
+	// Password is valid — update it in the database.
+	// A full implementation requires updating the model instance via the ORM:
+	//   user.(*AbstractUser).Password = hashers.MakePassword(newPassword1)
+	//   orm.NewQuerySet[AbstractUser]().Filter(...).Update(...)
 
 	return godjangohttp.NewRedirectResponse("/password_change/done/", false)
 }

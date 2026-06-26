@@ -143,6 +143,13 @@ func (s *SQLiteSchemaEditor) CreateTable(model *orm.ModelInfo) error {
 			}
 		}
 	}
+
+	// Create spatial indexes (R-Tree via SpatiaLite)
+	for _, si := range model.Meta.SpatialIndexes {
+		if err := s.CreateSpatialIndex(model, si); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -164,6 +171,15 @@ func (s *SQLiteSchemaEditor) typeMapping(t orm.FieldType, opts orm.FieldOptions)
 		return "DATETIME"
 	case orm.JSONField:
 		return "JSON" // Supported by SQLite JSON1 extension natively in modernc
+	// ── GIS geometry types (requires SpatiaLite extension) ──
+	case orm.PointField:
+		return "POINT"
+	case orm.LineStringField:
+		return "LINESTRING"
+	case orm.PolygonField:
+		return "POLYGON"
+	case orm.MultiPointField:
+		return "MULTIPOINT"
 	}
 	return "TEXT" // Fallback
 }
@@ -210,6 +226,20 @@ func (s *SQLiteSchemaEditor) CreateIndex(model *orm.ModelInfo, index orm.Index) 
 func (s *SQLiteSchemaEditor) DeleteIndex(model *orm.ModelInfo, indexName string) error {
 	query := fmt.Sprintf("DROP INDEX IF EXISTS %s;", indexName)
 	_, err := s.backend.Execute(context.Background(), query)
+	return err
+}
+
+// CreateSpatialIndex creates an R-Tree spatial index on a geometry column
+// using SpatiaLite's CreateSpatialIndex function.
+func (s *SQLiteSchemaEditor) CreateSpatialIndex(model *orm.ModelInfo, index orm.SpatialIndex) error {
+	name := index.Name
+	if name == "" {
+		name = fmt.Sprintf("sidx_%s_%s", model.Meta.DbTable, strings.Join(index.Fields, "_"))
+	}
+	field := index.Fields[0]
+	query := fmt.Sprintf("SELECT CreateSpatialIndex('%s', '%s');", model.Meta.DbTable, field)
+	_, err := s.backend.Execute(context.Background(), query)
+	_ = name // name reserved for potential future use (SpatiaLite auto-names)
 	return err
 }
 

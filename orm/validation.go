@@ -316,6 +316,64 @@ func validateField(field *Field, fv reflect.Value) *ValidationError {
 				Code:    "invalid_type",
 			}
 		}
+
+	case CICharField, CITextField, CIEmailField:
+		if val.Kind() != reflect.String {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: fmt.Sprintf("expected string value, got %s", val.Kind()),
+				Code:    "invalid_type",
+			}
+		}
+		s := val.String()
+		if s == "" && !field.Options.Blank {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: "this field cannot be blank",
+				Code:    "blank",
+			}
+		}
+		if field.Options.MaxLength > 0 && utf8.RuneCountInString(s) > field.Options.MaxLength {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: fmt.Sprintf("ensure this value has at most %d characters (it has %d)", field.Options.MaxLength, utf8.RuneCountInString(s)),
+				Code:    "max_length",
+			}
+		}
+
+	case ArrayField:
+		if val.Kind() != reflect.Slice && val.Kind() != reflect.Array {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: fmt.Sprintf("expected slice or array value, got %s", val.Kind()),
+				Code:    "invalid_type",
+			}
+		}
+		if field.Options.Size > 0 && val.Len() > field.Options.Size {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: fmt.Sprintf("array has %d elements, maximum is %d", val.Len(), field.Options.Size),
+				Code:    "array_size",
+			}
+		}
+
+	case HStoreField:
+		if val.Kind() != reflect.Map {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: fmt.Sprintf("expected map value, got %s", val.Kind()),
+				Code:    "invalid_type",
+			}
+		}
+
+	case IntegerRangeField, BigIntegerRangeField, DecimalRangeField, DateTimeRangeField, DateRangeField:
+		if val.Kind() != reflect.Struct && val.Kind() != reflect.Ptr && val.Kind() != reflect.String {
+			return &ValidationError{
+				Field:   field.Name,
+				Message: fmt.Sprintf("expected range struct, pointer, or string value, got %s", val.Kind()),
+				Code:    "invalid_type",
+			}
+		}
 	}
 
 	return nil

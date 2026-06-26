@@ -6,6 +6,24 @@
 <form method="post" action="">
 	<input type="hidden" name="csrfmiddlewaretoken" value="{{.request.META.CSRF_TOKEN}}">
 
+	{{if .has_filters}}
+	<div id="changelist-filter">
+		<h2>Filter</h2>
+		{{range .filter_specs}}
+		<details{{if .HasActive}} open{{end}}>
+			<summary>{{.Title}}</summary>
+			<ul>
+				{{range .Choices}}
+				<li{{if .Selected}} class="selected"{{end}}>
+					<a href="?{{.Query}}">{{.Display}}</a>
+				</li>
+				{{end}}
+			</ul>
+		</details>
+		{{end}}
+	</div>
+	{{end}}
+
 	{{if .actions}}
 	<select name="action">
 		<option value="">---------</option>

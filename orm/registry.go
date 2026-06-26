@@ -45,6 +45,16 @@ func GetModelInfo(m any) (*ModelInfo, error) {
 	return nil, fmt.Errorf("orm: model %s is not registered", t.Name())
 }
 
+// GetModelInfoByType returns the parsed ModelInfo for a registered model
+// identified by its reflect.Type. This is used internally by the queryset
+// layer to resolve ForeignKey targets without an instance.
+func GetModelInfoByType(t reflect.Type) (*ModelInfo, error) {
+	if info, ok := globalRegistry.Load(t); ok {
+		return info.(*ModelInfo), nil
+	}
+	return nil, fmt.Errorf("orm: model %s is not registered", t.Name())
+}
+
 // ClearRegistry clears the global model registry. Mostly used for testing.
 func ClearRegistry() {
 	globalRegistry.Range(func(key any, value any) bool {

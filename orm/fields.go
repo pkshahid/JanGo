@@ -34,7 +34,36 @@ const (
 	OneToOneField     FieldType = "OneToOneField"
 	ManyToManyField   FieldType = "ManyToManyField"
 	BigAutoField      FieldType = "BigAutoField"
+	PointField        FieldType = "PointField"
+	LineStringField   FieldType = "LineStringField"
+	PolygonField      FieldType = "PolygonField"
+	MultiPointField   FieldType = "MultiPointField"
+	// PostgreSQL-specific fields (contrib.postgres)
+	ArrayField           FieldType = "ArrayField"
+	HStoreField          FieldType = "HStoreField"
+	IntegerRangeField    FieldType = "IntegerRangeField"
+	BigIntegerRangeField FieldType = "BigIntegerRangeField"
+	DecimalRangeField    FieldType = "DecimalRangeField"
+	DateTimeRangeField   FieldType = "DateTimeRangeField"
+	DateRangeField       FieldType = "DateRangeField"
+	CICharField          FieldType = "CICharField"
+	CITextField          FieldType = "CITextField"
+	CIEmailField         FieldType = "CIEmailField"
 )
+
+// GeometryValue is implemented by GIS geometry types so the queryset layer
+// can extract a WKT string and SRID for SQL parameter binding.
+type GeometryValue interface {
+	WKT() string
+	GetSRID() int
+}
+
+// DistanceGeometryValue is a GeometryValue that also carries a distance
+// in meters, used by the distance_lte / distance_lt / distance_gt lookups.
+type DistanceGeometryValue interface {
+	GeometryValue
+	DistanceMeters() float64
+}
 
 // Field holds parsed information about a struct field.
 type Field struct {
@@ -65,4 +94,7 @@ type FieldOptions struct {
 	RelatedName   string
 	DbColumn      string
 	Through       string // ManyToManyField through model
+	SRID          int    // Spatial Reference System ID for GIS geometry fields
+	Size          int    // ArrayField: fixed-size array (0 = unlimited)
+	BaseField     string // ArrayField: underlying field type, e.g. "IntegerField"
 }
