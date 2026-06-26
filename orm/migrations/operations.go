@@ -52,6 +52,11 @@ func (o CreateModel) StateForwards(appLabel string, state *ProjectState) {
 func (o CreateModel) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := toState.Models[strings.ToLower(appLabel+"."+o.Name)]
 
+	// Proxy models don't create their own database table.
+	if mState.Meta != nil && mState.Meta.Proxy {
+		return nil
+	}
+
 	// Convert ModelState to ModelInfo
 	info := &orm.ModelInfo{
 		Name:   mState.Name,
@@ -63,6 +68,9 @@ func (o CreateModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 
 func (o CreateModel) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Name)]
+	if mState.Meta != nil && mState.Meta.Proxy {
+		return nil
+	}
 	info := &orm.ModelInfo{
 		Name:   mState.Name,
 		Fields: mState.Fields,
@@ -81,6 +89,9 @@ func (o DeleteModel) StateForwards(appLabel string, state *ProjectState) {
 
 func (o DeleteModel) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Name)]
+	if mState.Meta != nil && mState.Meta.Proxy {
+		return nil
+	}
 	info := &orm.ModelInfo{
 		Name:   mState.Name,
 		Fields: mState.Fields,
@@ -91,6 +102,9 @@ func (o DeleteModel) DatabaseForwards(appLabel string, schemaEditor backends.Sch
 
 func (o DeleteModel) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
 	mState := toState.Models[strings.ToLower(appLabel+"."+o.Name)]
+	if mState.Meta != nil && mState.Meta.Proxy {
+		return nil
+	}
 	info := &orm.ModelInfo{
 		Name:   mState.Name,
 		Fields: mState.Fields,

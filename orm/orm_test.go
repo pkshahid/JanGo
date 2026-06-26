@@ -42,6 +42,41 @@ type InvalidModel struct {
 	PK uint64 `gd:"BigAutoField,primary_key=true"` // Multiple PKs
 }
 
+// ProxyUser is a proxy of User — shares the same table, no own table.
+type ProxyUser struct {
+	User
+}
+
+func (p *ProxyUser) ModelMeta() *Meta {
+	return &Meta{
+		Proxy: true,
+	}
+}
+
+// ProxyWithAbstract is invalid — cannot be both proxy and abstract.
+type ProxyWithAbstract struct {
+	User
+}
+
+func (p *ProxyWithAbstract) ModelMeta() *Meta {
+	return &Meta{
+		Proxy:    true,
+		Abstract: true,
+	}
+}
+
+// ProxyWithoutParent has no embedded parent model.
+type ProxyWithoutParent struct {
+	Model
+	Name string `gd:"CharField,max_length=100"`
+}
+
+func (p *ProxyWithoutParent) ModelMeta() *Meta {
+	return &Meta{
+		Proxy: true,
+	}
+}
+
 func TestParser(t *testing.T) {
 	ClearRegistry()
 
@@ -211,5 +246,72 @@ func TestFieldTypes(t *testing.T) {
 		if info.FieldByName[name].GoType == nil {
 			t.Errorf("GoType nil for %s", name)
 		}
+	}
+}
+
+func TestProxyModel(t *testing.T) {
+	ClearRegistry()
+
+	// Register parent first
+	if err := Register(&User{}); err != nil {
+		t.Fatalf("Failed to register User: %v", err)
+	}
+
+	// Parse proxy model
+	info, err := parseModel(&ProxyUser{})
+	if err != nil {
+		t.Fatalf("Failed to parse ProxyUser: %v", err)
+	}
+
+	if !info.Meta.Proxy {
+		t.Errorf("Expected Proxy=true")
+	}
+
+	// Proxy should use parent's table
+	if info.Meta.DbTable != "user" {
+		t.Errorf("Expected DbTable 'user' (parent's table), got '%s'", info.Meta.DbTable)
+	}
+
+	// Proxy should inherit parent's fields
+	if _, ok := info.FieldByName["Username"]; !ok {
+		t.Errorf("Proxy should inherit parent field 'Username'")
+	}
+	if _, ok := info.FieldByName["IsActive"]; !ok {
+		t.Errorf("Proxy should inherit parent field 'IsActive'")
+	}
+}
+
+func TestProxyModelErrors(t *testing.T) {
+	ClearRegistry()
+
+	// Proxy + Abstract is invalid
+	_, err := parseModel(&ProxyWithAbstract{})
+	if err == nil {
+		t.Errorf("Expected error for proxy+abstract model")
+	}
+
+	// Proxy without parent model is invalid
+	_, err = parseModel(&ProxyWithoutParent{})
+	if err == nil {
+		t.Errorf("Expected error for proxy model without parent")
+	}
+}
+
+func TestProxyModelRegistration(t *testing.T) {
+	ClearRegistry()
+
+	// Register parent and proxy
+	if err := Register(&User{}, &ProxyUser{}); err != nil {
+		t.Fatalf("Failed to register User and ProxyUser: %v", err)
+	}
+
+	// Proxy model should be in registry
+	info, err := GetModelInfo(&ProxyUser{})
+	if err != nil {
+		t.Fatalf("ProxyUser not found in registry: %v", err)
+	}
+
+	if info.Meta.DbTable != "user" {
+		t.Errorf("Expected proxy DbTable 'user', got '%s'", info.Meta.DbTable)
 	}
 }

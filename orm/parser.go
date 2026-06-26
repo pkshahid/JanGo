@@ -43,8 +43,22 @@ func parseModel(m any) (*ModelInfo, error) {
 		info.Meta = mi.ModelMeta()
 	}
 
-	// Set default table name if not provided (e.g. app_modelname)
-	if info.Meta.DbTable == "" {
+	// Handle proxy models: use the parent model's table, no own table is created.
+	if info.Meta.Proxy {
+		if info.Meta.Abstract {
+			return nil, fmt.Errorf("orm: model %s cannot be both proxy and abstract", info.Name)
+		}
+		parentType := findParentModelType(t)
+		if parentType == nil {
+			return nil, fmt.Errorf("orm: proxy model %s must embed a concrete parent model", info.Name)
+		}
+		parentTable, err := resolveModelDbTable(parentType)
+		if err != nil {
+			return nil, fmt.Errorf("orm: proxy model %s: %w", info.Name, err)
+		}
+		info.Meta.DbTable = parentTable
+	} else if info.Meta.DbTable == "" {
+		// Set default table name if not provided (e.g. app_modelname)
 		info.Meta.DbTable = strings.ToLower(info.Name)
 	}
 
@@ -217,4 +231,43 @@ func toSnakeCase(s string) string {
 		}
 	}
 	return buf.String()
+}
+
+// findParentModelType returns the reflect.Type of the first embedded struct
+// that is not the base Model. Used to identify the parent of a proxy model.
+func findParentModelType(t reflect.Type) reflect.Type {
+	modelType := reflect.TypeOf(Model{})
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if !field.Anonymous {
+			continue
+		}
+		fieldType := field.Type
+		if fieldType.Kind() == reflect.Ptr {
+			fieldType = fieldType.Elem()
+		}
+		if fieldType.Kind() != reflect.Struct {
+			continue
+		}
+		if fieldType == modelType {
+			continue
+		}
+		return fieldType
+	}
+	return nil
+}
+
+// resolveModelDbTable resolves the DbTable for a given model type by checking
+// the registry first, then falling back to parsing the model on-the-fly.
+func resolveModelDbTable(t reflect.Type) (string, error) {
+	if info, ok := globalRegistry.Load(t); ok {
+		return info.(*ModelInfo).Meta.DbTable, nil
+	}
+	// Parent not registered yet — parse it on-the-fly to determine its table.
+	instance := reflect.New(t).Interface()
+	parentInfo, err := parseModel(instance)
+	if err != nil {
+		return "", fmt.Errorf("failed to resolve table for parent model %s: %w", t.Name(), err)
+	}
+	return parentInfo.Meta.DbTable, nil
 }

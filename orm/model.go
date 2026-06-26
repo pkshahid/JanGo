@@ -29,6 +29,7 @@ type Meta struct {
 	VerboseName       string
 	VerboseNamePlural string
 	Abstract          bool
+	Proxy             bool
 }
 
 // ModelInterface allows models to define custom metadata via a ModelMeta method.
