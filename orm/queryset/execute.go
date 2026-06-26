@@ -171,8 +171,12 @@ func (qs QuerySet[T]) Create(obj *T) error {
 }
 
 // Update updates the records matched by the query with the given fields.
+// Values that implement Expression (e.g. F) are resolved to SQL column references.
 func (qs QuerySet[T]) Update(fields map[string]any) (int64, error) {
-	// UPDATE table SET col=val WHERE (query conditions)
+	sql, params := qs.query.ToUpdateSQL(fields)
+	_ = sql
+	_ = params
+	// db.Exec(sql, params...)
 	return 0, nil
 }
 

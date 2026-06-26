@@ -172,6 +172,16 @@ func (q *QNode) toSQL(info *orm.ModelInfo) (string, []any) {
 	return sql, params
 }
 
+// resolveVal renders a lookup value to its SQL placeholder and bind params.
+// If the value implements Expression (e.g. F), it is resolved to a SQL fragment
+// referencing database columns instead of a bind parameter.
+func resolveVal(val any, info *orm.ModelInfo) (string, []any) {
+	if expr, ok := val.(Expression); ok {
+		return expr.ResolveSQL(info)
+	}
+	return "?", []any{val}
+}
+
 // parseLookup converts a Django-style lookup (e.g., "title__icontains") into a SQL fragment.
 func parseLookup(key string, val any, info *orm.ModelInfo) (string, []any) {
 	parts := strings.Split(key, "__")
@@ -194,7 +204,8 @@ func parseLookup(key string, val any, info *orm.ModelInfo) (string, []any) {
 	// Simplistic lookup mapping
 	switch lookup {
 	case "exact":
-		return fmt.Sprintf("%s = ?", colName), []any{val}
+		ph, p := resolveVal(val, info)
+		return fmt.Sprintf("%s = %s", colName, ph), p
 	case "iexact":
 		return fmt.Sprintf("LOWER(%s) = LOWER(?)", colName), []any{val}
 	case "contains":
@@ -210,13 +221,17 @@ func parseLookup(key string, val any, info *orm.ModelInfo) (string, []any) {
 	case "iendswith":
 		return fmt.Sprintf("LOWER(%s) LIKE LOWER(?)", colName), []any{fmt.Sprintf("%%%v", val)}
 	case "gt":
-		return fmt.Sprintf("%s > ?", colName), []any{val}
+		ph, p := resolveVal(val, info)
+		return fmt.Sprintf("%s > %s", colName, ph), p
 	case "gte":
-		return fmt.Sprintf("%s >= ?", colName), []any{val}
+		ph, p := resolveVal(val, info)
+		return fmt.Sprintf("%s >= %s", colName, ph), p
 	case "lt":
-		return fmt.Sprintf("%s < ?", colName), []any{val}
+		ph, p := resolveVal(val, info)
+		return fmt.Sprintf("%s < %s", colName, ph), p
 	case "lte":
-		return fmt.Sprintf("%s <= ?", colName), []any{val}
+		ph, p := resolveVal(val, info)
+		return fmt.Sprintf("%s <= %s", colName, ph), p
 	case "in":
 		// Handle slice/array
 		// A real implementation expands `?` based on length
@@ -228,11 +243,63 @@ func parseLookup(key string, val any, info *orm.ModelInfo) (string, []any) {
 		return fmt.Sprintf("%s IS NOT NULL", colName), nil
 	default:
 		// Fallback to exact if unknown
-		return fmt.Sprintf("%s = ?", colName), []any{val}
+		ph, p := resolveVal(val, info)
+		return fmt.Sprintf("%s = %s", colName, ph), p
 	}
 }
 
 // AggExpr represents an aggregate expression.
 type AggExpr interface {
 	ToSQL() string
+}
+
+// ToUpdateSQL generates an UPDATE statement for the given field-value pairs.
+// Values that implement Expression (e.g. F) are resolved to SQL column references.
+func (q *Query) ToUpdateSQL(fields map[string]any) (string, []any) {
+	tableName := q.ModelInfo.Meta.DbTable
+
+	var setClauses []string
+	var params []any
+
+	for name, val := range fields {
+		colName := name
+		if f, ok := q.ModelInfo.FieldByName[name]; ok {
+			colName = f.Column
+		}
+
+		if expr, ok := val.(Expression); ok {
+			exprSQL, exprParams := expr.ResolveSQL(q.ModelInfo)
+			setClauses = append(setClauses, fmt.Sprintf("%s = %s", colName, exprSQL))
+			params = append(params, exprParams...)
+		} else {
+			setClauses = append(setClauses, fmt.Sprintf("%s = ?", colName))
+			params = append(params, val)
+		}
+	}
+
+	sql := fmt.Sprintf("UPDATE %s SET %s", tableName, strings.Join(setClauses, ", "))
+
+	var whereClauses []string
+
+	if q.Where != nil {
+		clause, p := q.Where.toSQL(q.ModelInfo)
+		if clause != "" {
+			whereClauses = append(whereClauses, "("+clause+")")
+			params = append(params, p...)
+		}
+	}
+
+	if q.Exclude != nil {
+		clause, p := q.Exclude.toSQL(q.ModelInfo)
+		if clause != "" {
+			whereClauses = append(whereClauses, "NOT ("+clause+")")
+			params = append(params, p...)
+		}
+	}
+
+	if len(whereClauses) > 0 {
+		sql += " WHERE " + strings.Join(whereClauses, " AND ")
+	}
+
+	return sql, params
 }
