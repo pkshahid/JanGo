@@ -1,0 +1,43 @@
+.code-block-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--navy-600);
+}
+
+.code-block-wrapper .code-block {
+  border: none;
+  border-radius: 0;
+}
+
+.code-block-header {
+  background: var(--navy-700);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--navy-600);
+}
+
+.code-block-title {
+  font-size: 0.8rem;
+  color: var(--gray-300);
+  font-weight: 500;
+}
+
+.code-block-lang {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.code-block pre[class*="language-"],
+.code-block code[class*="language-"] {
+  background: transparent;
+}
+
+.code-block pre[class*="language-"] {
+  margin: 0;
+  padding: 1.5rem;
+}
