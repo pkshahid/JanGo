@@ -25,6 +25,7 @@ type Meta struct {
 	DbTable           string
 	Ordering          []string
 	UniqueTogether    [][]string
+	Constraints       []Constraint
 	Indexes           []Index
 	VerboseName       string
 	VerboseNamePlural string

@@ -237,3 +237,63 @@ func (o RunPython) DatabaseBackwards(appLabel string, schemaEditor backends.Sche
 	}
 	return fmt.Errorf("no reverse function defined for RunPython")
 }
+
+// AddConstraint adds a constraint to an existing model's table.
+type AddConstraint struct {
+	Model      string
+	Constraint orm.Constraint
+}
+
+func (o AddConstraint) StateForwards(appLabel string, state *ProjectState) {
+	mState := state.Models[strings.ToLower(appLabel+"."+o.Model)]
+	if mState != nil && mState.Meta != nil {
+		mState.Meta.Constraints = append(mState.Meta.Constraints, o.Constraint)
+	}
+}
+
+func (o AddConstraint) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Model)]
+	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
+	return schemaEditor.AddConstraint(info, o.Constraint)
+}
+
+func (o AddConstraint) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Model)]
+	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
+	return schemaEditor.RemoveConstraint(info, o.Constraint.ConstraintName())
+}
+
+// RemoveConstraint removes a constraint from an existing model's table.
+type RemoveConstraint struct {
+	Model          string
+	ConstraintName string
+}
+
+func (o RemoveConstraint) StateForwards(appLabel string, state *ProjectState) {
+	mState := state.Models[strings.ToLower(appLabel+"."+o.Model)]
+	if mState != nil && mState.Meta != nil {
+		for i, c := range mState.Meta.Constraints {
+			if c.ConstraintName() == o.ConstraintName {
+				mState.Meta.Constraints = append(mState.Meta.Constraints[:i], mState.Meta.Constraints[i+1:]...)
+				return
+			}
+		}
+	}
+}
+
+func (o RemoveConstraint) DatabaseForwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
+	mState := fromState.Models[strings.ToLower(appLabel+"."+o.Model)]
+	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
+	return schemaEditor.RemoveConstraint(info, o.ConstraintName)
+}
+
+func (o RemoveConstraint) DatabaseBackwards(appLabel string, schemaEditor backends.SchemaEditor, fromState, toState *ProjectState) error {
+	mState := toState.Models[strings.ToLower(appLabel+"."+o.Model)]
+	info := &orm.ModelInfo{Name: mState.Name, Fields: mState.Fields, Meta: mState.Meta}
+	for _, c := range mState.Meta.Constraints {
+		if c.ConstraintName() == o.ConstraintName {
+			return schemaEditor.AddConstraint(info, c)
+		}
+	}
+	return fmt.Errorf("constraint %s not found in toState for reverse migration", o.ConstraintName)
+}

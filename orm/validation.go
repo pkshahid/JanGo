@@ -63,10 +63,11 @@ type Cleaner interface {
 
 // cleanConfig holds options for FullClean.
 type cleanConfig struct {
-	exclude          map[string]bool
-	validateUnique   bool
-	validateFields   bool
-	validateClean    bool
+	exclude            map[string]bool
+	validateUnique     bool
+	validateFields     bool
+	validateClean      bool
+	validateConstraints bool
 }
 
 // CleanOption configures the behavior of FullClean.
@@ -104,7 +105,15 @@ func SkipClean() CleanOption {
 	}
 }
 
-// FullClean validates a model instance by running three phases, mirroring
+// SkipConstraintValidation disables CheckConstraint and UniqueConstraint
+// validation declared in Meta.Constraints.
+func SkipConstraintValidation() CleanOption {
+	return func(c *cleanConfig) {
+		c.validateConstraints = false
+	}
+}
+
+// FullClean validates a model instance by running four phases, mirroring
 // Django's Model.full_clean():
 //
 //  1. Field-level validation (clean_fields) — checks each non-excluded field
@@ -113,15 +122,18 @@ func SkipClean() CleanOption {
 //     method if it implements the Cleaner interface.
 //  3. Unique constraint validation (validate_unique) — checks unique_together
 //     constraints declared in the model's Meta.
+//  4. Constraint validation (validate_constraints) — checks CheckConstraint
+//     and UniqueConstraint declared in Meta.Constraints.
 //
 // All errors are collected and returned together as ValidationErrors.
 // Returns nil if the model passes all validation.
 func FullClean(obj any, opts ...CleanOption) error {
 	cfg := &cleanConfig{
-		exclude:        make(map[string]bool),
-		validateUnique: true,
-		validateFields: true,
-		validateClean:  true,
+		exclude:             make(map[string]bool),
+		validateUnique:      true,
+		validateFields:      true,
+		validateClean:       true,
+		validateConstraints: true,
 	}
 	for _, opt := range opts {
 		opt(cfg)
@@ -154,6 +166,13 @@ func FullClean(obj any, opts ...CleanOption) error {
 	if cfg.validateUnique {
 		if uniqueErrs := validateUniqueTogether(obj, info, cfg.exclude); len(uniqueErrs) > 0 {
 			errs = append(errs, uniqueErrs...)
+		}
+	}
+
+	// Phase 4: Constraint validation (CheckConstraint, UniqueConstraint)
+	if cfg.validateConstraints {
+		if constraintErrs := validateConstraints(obj, info, cfg.exclude); len(constraintErrs) > 0 {
+			errs = append(errs, constraintErrs...)
 		}
 	}
 

@@ -26,6 +26,8 @@ type SchemaEditor interface {
 	DeleteIndex(model *orm.ModelInfo, indexName string) error
 	AddForeignKey(model *orm.ModelInfo, field *orm.Field) error
 	RemoveForeignKey(model *orm.ModelInfo, fieldName string) error
+	AddConstraint(model *orm.ModelInfo, constraint orm.Constraint) error
+	RemoveConstraint(model *orm.ModelInfo, constraintName string) error
 }
 
 // DBExecutor interface allows executing queries against a *sql.DB or *sql.Tx

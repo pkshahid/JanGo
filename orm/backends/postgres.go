@@ -95,3 +95,9 @@ func (m *MockSchemaEditor) CreateIndex(model *orm.ModelInfo, index orm.Index) er
 func (m *MockSchemaEditor) DeleteIndex(model *orm.ModelInfo, indexName string) error      { return nil }
 func (m *MockSchemaEditor) AddForeignKey(model *orm.ModelInfo, field *orm.Field) error    { return nil }
 func (m *MockSchemaEditor) RemoveForeignKey(model *orm.ModelInfo, fieldName string) error { return nil }
+func (m *MockSchemaEditor) AddConstraint(model *orm.ModelInfo, constraint orm.Constraint) error {
+	return nil
+}
+func (m *MockSchemaEditor) RemoveConstraint(model *orm.ModelInfo, constraintName string) error {
+	return nil
+}

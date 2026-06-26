@@ -105,6 +105,18 @@ func (s *SQLiteSchemaEditor) CreateTable(model *orm.ModelInfo) error {
 		cols = append(cols, fmt.Sprintf("%s %s", f.Column, sqlType))
 	}
 
+	// Add inline constraints (CHECK and non-conditional UNIQUE)
+	for _, c := range model.Meta.Constraints {
+		switch ct := c.(type) {
+		case orm.CheckConstraint:
+			cols = append(cols, fmt.Sprintf("CONSTRAINT %s CHECK (%s)", ct.Name, ct.Check))
+		case orm.UniqueConstraint:
+			if ct.Condition == "" {
+				cols = append(cols, fmt.Sprintf("CONSTRAINT %s UNIQUE (%s)", ct.Name, strings.Join(ct.Fields, ", ")))
+			}
+		}
+	}
+
 	// Create table
 	query := fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (%s);", model.Meta.DbTable, strings.Join(cols, ", "))
 	_, err := s.backend.Execute(context.Background(), query)
@@ -116,6 +128,15 @@ func (s *SQLiteSchemaEditor) CreateTable(model *orm.ModelInfo) error {
 	for _, idx := range model.Meta.Indexes {
 		if err := s.CreateIndex(model, idx); err != nil {
 			return err
+		}
+	}
+
+	// Create partial unique indexes for conditional UniqueConstraints
+	for _, c := range model.Meta.Constraints {
+		if uc, ok := c.(orm.UniqueConstraint); ok && uc.Condition != "" {
+			if err := s.AddConstraint(model, uc); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -194,4 +215,40 @@ func (s *SQLiteSchemaEditor) AddForeignKey(model *orm.ModelInfo, field *orm.Fiel
 
 func (s *SQLiteSchemaEditor) RemoveForeignKey(model *orm.ModelInfo, fieldName string) error {
 	return fmt.Errorf("RemoveForeignKey unsupported in SQLite via ALTER TABLE")
+}
+
+func (s *SQLiteSchemaEditor) AddConstraint(model *orm.ModelInfo, constraint orm.Constraint) error {
+	switch ct := constraint.(type) {
+	case orm.CheckConstraint:
+		query := fmt.Sprintf("ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)",
+			model.Meta.DbTable, ct.Name, ct.Check)
+		_, err := s.backend.Execute(context.Background(), query)
+		return err
+	case orm.UniqueConstraint:
+		if ct.Condition != "" {
+			query := fmt.Sprintf("CREATE UNIQUE INDEX IF NOT EXISTS %s ON %s (%s) WHERE %s",
+				ct.Name, model.Meta.DbTable, strings.Join(ct.Fields, ", "), ct.Condition)
+			_, err := s.backend.Execute(context.Background(), query)
+			return err
+		}
+		query := fmt.Sprintf("ALTER TABLE %s ADD CONSTRAINT %s UNIQUE (%s)",
+			model.Meta.DbTable, ct.Name, strings.Join(ct.Fields, ", "))
+		_, err := s.backend.Execute(context.Background(), query)
+		return err
+	default:
+		return fmt.Errorf("unsupported constraint type: %T", constraint)
+	}
+}
+
+func (s *SQLiteSchemaEditor) RemoveConstraint(model *orm.ModelInfo, constraintName string) error {
+	// Try dropping as a table constraint first; if that fails, try dropping as an index.
+	query := fmt.Sprintf("ALTER TABLE %s DROP CONSTRAINT %s", model.Meta.DbTable, constraintName)
+	_, err := s.backend.Execute(context.Background(), query)
+	if err == nil {
+		return nil
+	}
+	// Fallback: try dropping as an index (for partial unique constraints)
+	indexQuery := fmt.Sprintf("DROP INDEX IF EXISTS %s;", constraintName)
+	_, err = s.backend.Execute(context.Background(), indexQuery)
+	return err
 }

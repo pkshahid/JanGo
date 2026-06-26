@@ -113,6 +113,26 @@ func (s *OracleSchemaEditor) CreateTable(model *orm.ModelInfo) error {
 		cols = append(cols, fmt.Sprintf("%s %s", f.Column, sqlType))
 	}
 
+	// Add inline constraints (CHECK and non-conditional UNIQUE)
+	for _, c := range model.Meta.Constraints {
+		switch ct := c.(type) {
+		case orm.CheckConstraint:
+			name := ct.Name
+			if len(name) > 30 {
+				name = name[:30]
+			}
+			cols = append(cols, fmt.Sprintf("CONSTRAINT %s CHECK (%s)", name, ct.Check))
+		case orm.UniqueConstraint:
+			if ct.Condition == "" {
+				name := ct.Name
+				if len(name) > 30 {
+					name = name[:30]
+				}
+				cols = append(cols, fmt.Sprintf("CONSTRAINT %s UNIQUE (%s)", name, strings.Join(ct.Fields, ", ")))
+			}
+		}
+	}
+
 	query := fmt.Sprintf("CREATE TABLE %s (%s)", model.Meta.DbTable, strings.Join(cols, ", "))
 	_, err := s.backend.Execute(context.Background(), query)
 	if err != nil {
@@ -122,6 +142,15 @@ func (s *OracleSchemaEditor) CreateTable(model *orm.ModelInfo) error {
 	for _, idx := range model.Meta.Indexes {
 		if err := s.CreateIndex(model, idx); err != nil {
 			return err
+		}
+	}
+
+	// Create partial unique indexes for conditional UniqueConstraints
+	for _, c := range model.Meta.Constraints {
+		if uc, ok := c.(orm.UniqueConstraint); ok && uc.Condition != "" {
+			if err := s.AddConstraint(model, uc); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -248,5 +277,52 @@ func (s *OracleSchemaEditor) RemoveForeignKey(model *orm.ModelInfo, fieldName st
 	}
 	query := fmt.Sprintf("ALTER TABLE %s DROP CONSTRAINT %s", model.Meta.DbTable, fkName)
 	_, err := s.backend.Execute(context.Background(), query)
+	return err
+}
+
+func (s *OracleSchemaEditor) AddConstraint(model *orm.ModelInfo, constraint orm.Constraint) error {
+	switch ct := constraint.(type) {
+	case orm.CheckConstraint:
+		name := ct.Name
+		if len(name) > 30 {
+			name = name[:30]
+		}
+		query := fmt.Sprintf("ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)",
+			model.Meta.DbTable, name, ct.Check)
+		_, err := s.backend.Execute(context.Background(), query)
+		return err
+	case orm.UniqueConstraint:
+		name := ct.Name
+		if len(name) > 30 {
+			name = name[:30]
+		}
+		if ct.Condition != "" {
+			query := fmt.Sprintf("CREATE UNIQUE INDEX %s ON %s (%s) WHERE %s",
+				name, model.Meta.DbTable, strings.Join(ct.Fields, ", "), ct.Condition)
+			_, err := s.backend.Execute(context.Background(), query)
+			return err
+		}
+		query := fmt.Sprintf("ALTER TABLE %s ADD CONSTRAINT %s UNIQUE (%s)",
+			model.Meta.DbTable, name, strings.Join(ct.Fields, ", "))
+		_, err := s.backend.Execute(context.Background(), query)
+		return err
+	default:
+		return fmt.Errorf("unsupported constraint type: %T", constraint)
+	}
+}
+
+func (s *OracleSchemaEditor) RemoveConstraint(model *orm.ModelInfo, constraintName string) error {
+	name := constraintName
+	if len(name) > 30 {
+		name = name[:30]
+	}
+	query := fmt.Sprintf("ALTER TABLE %s DROP CONSTRAINT %s", model.Meta.DbTable, name)
+	_, err := s.backend.Execute(context.Background(), query)
+	if err == nil {
+		return nil
+	}
+	// Fallback: try dropping as an index (for partial unique constraints)
+	indexQuery := fmt.Sprintf("DROP INDEX %s", name)
+	_, err = s.backend.Execute(context.Background(), indexQuery)
 	return err
 }
