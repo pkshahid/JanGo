@@ -197,8 +197,10 @@ func parseLookup(key string, val any, info *orm.ModelInfo) (string, []any) {
 
 	// Map field name to column name
 	colName := field // Default to field name
-	if f, ok := info.FieldByName[field]; ok {
-		colName = f.Column
+	if info != nil {
+		if f, ok := info.FieldByName[field]; ok {
+			colName = f.Column
+		}
 	}
 
 	// Simplistic lookup mapping
