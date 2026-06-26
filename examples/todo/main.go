@@ -34,9 +34,9 @@ type Todo struct {
 
 // In-memory store for todos (in a real app, this would use the ORM).
 var (
-	todos     []Todo
-	todoMu    sync.Mutex
-	nextID    uint64 = 1
+	todos  []Todo
+	todoMu sync.Mutex
+	nextID uint64 = 1
 )
 
 func init() {
