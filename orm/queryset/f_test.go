@@ -177,7 +177,7 @@ func TestFUpdateMultipleFields(t *testing.T) {
 		"Likes": FRef("Views").Add(5),
 	})
 
-	if sql != "UPDATE ftestmodel SET views = likes, likes = (views + ?)" {
+	if sql != "UPDATE ftestmodel SET likes = (views + ?), views = likes" {
 		t.Errorf("Unexpected SQL: %q", sql)
 	}
 	if len(params) != 1 || params[0] != 5 {

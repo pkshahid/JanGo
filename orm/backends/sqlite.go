@@ -91,6 +91,10 @@ type SQLiteSchemaEditor struct {
 func (s *SQLiteSchemaEditor) CreateTable(model *orm.ModelInfo) error {
 	var cols []string
 	for _, f := range model.Fields {
+		// ManyToMany fields are resolved through junction tables, not columns.
+		if f.Type == orm.ManyToManyField {
+			continue
+		}
 		sqlType := s.typeMapping(f.Type, f.Options)
 		if f.PrimaryKey {
 			sqlType += " PRIMARY KEY AUTOINCREMENT"

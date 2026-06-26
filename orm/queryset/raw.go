@@ -1,9 +1,11 @@
 package queryset
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/pkshahid/JanGo/orm"
+	"github.com/pkshahid/JanGo/orm/backends"
 )
 
 // RawQuerySet represents a raw SQL query.
@@ -30,13 +32,49 @@ func (rqs RawQuerySet[T]) Using(db string) RawQuerySet[T] {
 	return rqs
 }
 
+// getBackend resolves the database backend for this raw query.
+func (rqs RawQuerySet[T]) getBackend() (backends.Backend, error) {
+	dbAlias := rqs.Database
+	if dbAlias == "" {
+		dbAlias = "default"
+	}
+	return backends.GetBackend(dbAlias)
+}
+
 // All executes the raw query and returns a slice of models.
 func (rqs RawQuerySet[T]) All() ([]T, error) {
-	// In a real framework, this executes the SQL via database driver.
-	// db.Query(rqs.SQL, rqs.Params...)
+	backend, err := rqs.getBackend()
+	if err != nil {
+		return nil, err
+	}
 
-	// We'll just return an empty slice since we have no DB connection.
-	return []T{}, nil
+	ctx := context.Background()
+	rows, err := backend.Query(ctx, rqs.SQL, rqs.Params...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	columns, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+
+	results := []T{}
+	for rows.Next() {
+		var obj T
+		scanDest := buildScanDest(&obj, rqs.ModelInfo, columns)
+		if err := rows.Scan(scanDest...); err != nil {
+			return nil, err
+		}
+		results = append(results, obj)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }
 
 // Get executes the raw query and expects exactly one result.

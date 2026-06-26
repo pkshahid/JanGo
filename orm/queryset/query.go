@@ -393,10 +393,18 @@ type AggExpr interface {
 func (q *Query) ToUpdateSQL(fields map[string]any) (string, []any) {
 	tableName := q.ModelInfo.Meta.DbTable
 
+	// Sort field names for deterministic SQL output (Go maps iterate in random order).
+	names := make([]string, 0, len(fields))
+	for name := range fields {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+
 	var setClauses []string
 	var params []any
 
-	for name, val := range fields {
+	for _, name := range names {
+		val := fields[name]
 		colName := name
 		if f, ok := q.ModelInfo.FieldByName[name]; ok {
 			colName = f.Column

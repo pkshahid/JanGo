@@ -161,6 +161,22 @@ func ClearRouters() {
 	routers = nil
 }
 
+// RegisterBackendInstance directly registers a pre-connected backend under
+// the given alias. This bypasses settings-based Init() and is intended for
+// testing or programmatic setup.
+func RegisterBackendInstance(alias string, backend Backend) {
+	managersMu.Lock()
+	defer managersMu.Unlock()
+	backends[alias] = backend
+}
+
+// ClearBackends removes all registered backend instances (for testing).
+func ClearBackends() {
+	managersMu.Lock()
+	defer managersMu.Unlock()
+	backends = make(map[string]Backend)
+}
+
 // DefaultRouter routes everything to "default".
 type DefaultRouter struct{}
 

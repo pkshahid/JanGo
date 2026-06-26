@@ -42,6 +42,7 @@ func setupManagerTest(t *testing.T) {
 	if err := orm.Register(&ManagerTestModel{}); err != nil {
 		t.Fatalf("failed to register model: %v", err)
 	}
+	setupTestDB(t, &ManagerTestModel{})
 }
 
 func TestNewManager(t *testing.T) {
@@ -166,8 +167,8 @@ func TestManagerDelegationAll(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if results == nil {
-		t.Error("expected non-nil results slice")
+	if len(results) != 0 {
+		t.Errorf("expected 0 results on empty table, got %d", len(results))
 	}
 }
 
@@ -179,7 +180,9 @@ func TestManagerDelegationCount(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	_ = count // mock returns 0
+	if count != 0 {
+		t.Errorf("expected 0 count on empty table, got %d", count)
+	}
 }
 
 func TestManagerDelegationExists(t *testing.T) {
@@ -191,7 +194,7 @@ func TestManagerDelegationExists(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	if exists {
-		t.Error("expected false from mock")
+		t.Error("expected false on empty table")
 	}
 }
 
