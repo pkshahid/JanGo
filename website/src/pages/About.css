@@ -1,0 +1,160 @@
+.about-mission {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.mission-text h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.mission-text p {
+  color: var(--gray-400);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.mission-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comparison-card {
+  background: var(--navy-800);
+  border: 1px solid var(--navy-600);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.comparison-card.highlight {
+  border-color: var(--accent-blue);
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, var(--navy-800) 100%);
+}
+
+.comparison-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+
+.comparison-card.highlight h4 {
+  color: var(--accent-blue);
+}
+
+.comparison-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comparison-card ul li {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+  padding-left: 16px;
+  position: relative;
+}
+
+.comparison-card ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--navy-400);
+}
+
+.comparison-card.highlight ul li::before {
+  color: var(--accent-cyan);
+}
+
+/* Principles */
+.principle-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.principle-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.principle-card p {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+  line-height: 1.7;
+}
+
+.principle-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(96, 165, 250, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-blue);
+}
+
+/* Architecture */
+.architecture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--navy-600);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.arch-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--navy-700);
+  transition: background 0.2s ease;
+}
+
+.arch-item:last-child {
+  border-bottom: none;
+}
+
+.arch-item:hover {
+  background: var(--navy-800);
+}
+
+.arch-pkg {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  min-width: 120px;
+  background: rgba(34, 211, 238, 0.08);
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+.arch-desc {
+  font-size: 0.9rem;
+  color: var(--gray-400);
+}
+
+@media (max-width: 1024px) {
+  .about-mission {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.section-header-center {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-header-center .section-subtitle {
+  margin: 0 auto;
+}
