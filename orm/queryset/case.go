@@ -68,11 +68,11 @@ func (w *When) ToSQL() string {
 //	qs = qs.Filter(Lookup{"Category": c})   // use in filter
 //	qs = qs.Update(map[string]any{"Label": c}) // use in update
 type Case struct {
-	cases   []*When
-	def     any
-	hasDef  bool
-	output  string // optional output field type hint (e.g., "TEXT", "INTEGER")
-	hasOut  bool
+	cases  []*When
+	def    any
+	hasDef bool
+	output string // optional output field type hint (e.g., "TEXT", "INTEGER")
+	hasOut bool
 }
 
 // NewCase creates a Case expression from one or more When clauses.
