@@ -8,11 +8,11 @@ import (
 
 type FuncTestModel struct {
 	orm.Model
-	Title   string `gd:"CharField"`
-	Views   int    `gd:"IntegerField"`
-	Likes   int    `gd:"IntegerField"`
+	Title   string  `gd:"CharField"`
+	Views   int     `gd:"IntegerField"`
+	Likes   int     `gd:"IntegerField"`
 	Price   float64 `gd:"FloatField"`
-	Content string `gd:"TextField"`
+	Content string  `gd:"TextField"`
 }
 
 func (m *FuncTestModel) ModelMeta() *orm.Meta {
