@@ -7,6 +7,16 @@ import (
 	"github.com/pkshahid/JanGo/orm"
 )
 
+// SetOperation represents a SQL set operation type.
+type SetOperation string
+
+const (
+	SetOpNone         SetOperation = ""
+	SetOpUnion        SetOperation = "UNION"
+	SetOpIntersection SetOperation = "INTERSECT"
+	SetOpDifference   SetOperation = "EXCEPT"
+)
+
 // Query holds the AST for a SQL query.
 type Query struct {
 	ModelInfo       *orm.ModelInfo
@@ -22,6 +32,9 @@ type Query struct {
 	DeferFields     []string
 	Distinct        bool
 	Database        string
+	SetOp           SetOperation
+	SetQueries      []*Query
+	SetAll          bool
 }
 
 // NewQuery creates a new query object.
@@ -55,15 +68,38 @@ func (q *Query) clone() *Query {
 	c.Annotations = append([]AggExpr(nil), q.Annotations...)
 	c.OnlyFields = append([]string(nil), q.OnlyFields...)
 	c.DeferFields = append([]string(nil), q.DeferFields...)
+	c.SetOp = q.SetOp
+	c.SetAll = q.SetAll
+	for _, sq := range q.SetQueries {
+		c.SetQueries = append(c.SetQueries, sq.clone())
+	}
 
 	return c
 }
 
 // ToSQL generates the SQL string and parameters for the query.
 func (q *Query) ToSQL() (string, []any) {
-	// A full implementation would inspect Only/Defer fields to build the SELECT clause.
-	// For this prototype, we'll SELECT * or the explicitly defined fields.
+	if q.SetOp != SetOpNone {
+		return q.toSetOpSQL()
+	}
 
+	sql, params := q.toCoreSelectSQL()
+	sql += q.toOrderBySQL()
+
+	if q.Limit > -1 {
+		sql += fmt.Sprintf(" LIMIT %d", q.Limit)
+	}
+
+	if q.Offset > 0 {
+		sql += fmt.Sprintf(" OFFSET %d", q.Offset)
+	}
+
+	return sql, params
+}
+
+// toCoreSelectSQL generates the SELECT...FROM...WHERE portion of the query
+// without ORDER BY, LIMIT, or OFFSET. Used by both ToSQL and set operation queries.
+func (q *Query) toCoreSelectSQL() (string, []any) {
 	tableName := q.ModelInfo.Meta.DbTable
 	selectFields := "*"
 	if len(q.OnlyFields) > 0 {
@@ -95,29 +131,64 @@ func (q *Query) ToSQL() (string, []any) {
 		sql += " WHERE " + strings.Join(whereClauses, " AND ")
 	}
 
-	if len(q.OrderBy) > 0 {
-		var orderStrs []string
-		for _, order := range q.OrderBy {
-			desc := false
-			field := order
-			if strings.HasPrefix(order, "-") {
-				desc = true
-				field = order[1:]
-			}
+	return sql, params
+}
 
-			colName := field
-			if f, ok := q.ModelInfo.FieldByName[field]; ok {
-				colName = f.Column
-			}
-
-			if desc {
-				orderStrs = append(orderStrs, colName+" DESC")
-			} else {
-				orderStrs = append(orderStrs, colName+" ASC")
-			}
-		}
-		sql += " ORDER BY " + strings.Join(orderStrs, ", ")
+// toOrderBySQL generates the ORDER BY clause string (including leading space) or empty string.
+func (q *Query) toOrderBySQL() string {
+	if len(q.OrderBy) == 0 {
+		return ""
 	}
+	var orderStrs []string
+	for _, order := range q.OrderBy {
+		desc := false
+		field := order
+		if strings.HasPrefix(order, "-") {
+			desc = true
+			field = order[1:]
+		}
+
+		colName := field
+		if f, ok := q.ModelInfo.FieldByName[field]; ok {
+			colName = f.Column
+		}
+
+		if desc {
+			orderStrs = append(orderStrs, colName+" DESC")
+		} else {
+			orderStrs = append(orderStrs, colName+" ASC")
+		}
+	}
+	return " ORDER BY " + strings.Join(orderStrs, ", ")
+}
+
+// toSetOpSQL generates SQL for set operation queries (UNION, INTERSECT, EXCEPT).
+// Each sub-query is wrapped in parentheses. ORDER BY, LIMIT, and OFFSET
+// from the outer query are applied to the combined result.
+func (q *Query) toSetOpSQL() (string, []any) {
+	var parts []string
+	var params []any
+
+	// First operand: this query's core SELECT (without ORDER BY/LIMIT)
+	coreSQL, coreParams := q.toCoreSelectSQL()
+	parts = append(parts, "("+coreSQL+")")
+	params = append(params, coreParams...)
+
+	op := string(q.SetOp)
+	if q.SetAll && q.SetOp == SetOpUnion {
+		op = "UNION ALL"
+	}
+
+	for _, sub := range q.SetQueries {
+		subSQL, subParams := sub.toCoreSelectSQL()
+		parts = append(parts, "("+subSQL+")")
+		params = append(params, subParams...)
+	}
+
+	sql := strings.Join(parts, " "+op+" ")
+
+	// Apply ORDER BY, LIMIT, OFFSET to the combined result
+	sql += q.toOrderBySQL()
 
 	if q.Limit > -1 {
 		sql += fmt.Sprintf(" LIMIT %d", q.Limit)
