@@ -2,6 +2,7 @@ package queryset
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/pkshahid/JanGo/orm"
@@ -16,6 +17,20 @@ const (
 	SetOpIntersection SetOperation = "INTERSECT"
 	SetOpDifference   SetOperation = "EXCEPT"
 )
+
+// ExtraData holds raw SQL fragments injected via QuerySet.Extra().
+// This is an escape hatch for cases the ORM cannot express natively.
+//
+// Deprecated: prefer Annotate, F expressions, or Func-based expressions
+// whenever possible. Extra is retained for parity with Django and for
+// one-off raw fragments that don't warrant a full expression node.
+type ExtraData struct {
+	Select  map[string]string // alias -> raw SQL expression appended to SELECT
+	Where   []string          // raw SQL fragments AND-ed into the WHERE clause
+	Params  []any             // bind parameters for Where fragments
+	Tables  []string          // extra table names appended to the FROM clause
+	OrderBy []string          // raw ORDER BY fragments appended after ORM-generated ones
+}
 
 // Query holds the AST for a SQL query.
 type Query struct {
@@ -35,6 +50,7 @@ type Query struct {
 	SetOp           SetOperation
 	SetQueries      []*Query
 	SetAll          bool
+	Extra           *ExtraData
 }
 
 // NewQuery creates a new query object.
@@ -74,6 +90,21 @@ func (q *Query) clone() *Query {
 		c.SetQueries = append(c.SetQueries, sq.clone())
 	}
 
+	if q.Extra != nil {
+		c.Extra = &ExtraData{
+			Where:   append([]string(nil), q.Extra.Where...),
+			Params:  append([]any(nil), q.Extra.Params...),
+			Tables:  append([]string(nil), q.Extra.Tables...),
+			OrderBy: append([]string(nil), q.Extra.OrderBy...),
+		}
+		if q.Extra.Select != nil {
+			c.Extra.Select = make(map[string]string, len(q.Extra.Select))
+			for k, v := range q.Extra.Select {
+				c.Extra.Select[k] = v
+			}
+		}
+	}
+
 	return c
 }
 
@@ -106,7 +137,27 @@ func (q *Query) toCoreSelectSQL() (string, []any) {
 		selectFields = strings.Join(q.OnlyFields, ", ")
 	}
 
-	sql := fmt.Sprintf("SELECT %s FROM %s", selectFields, tableName)
+	// Append extra select expressions (alias -> raw SQL).
+	if q.Extra != nil && len(q.Extra.Select) > 0 {
+		var aliases []string
+		for alias := range q.Extra.Select {
+			aliases = append(aliases, alias)
+		}
+		// Sort by alias for deterministic output (map iteration is randomised in Go).
+		sort.Strings(aliases)
+		var extraSelects []string
+		for _, alias := range aliases {
+			extraSelects = append(extraSelects, fmt.Sprintf("(%s) AS %s", q.Extra.Select[alias], alias))
+		}
+		selectFields = selectFields + ", " + strings.Join(extraSelects, ", ")
+	}
+
+	fromClause := tableName
+	if q.Extra != nil && len(q.Extra.Tables) > 0 {
+		fromClause = fromClause + ", " + strings.Join(q.Extra.Tables, ", ")
+	}
+
+	sql := fmt.Sprintf("SELECT %s FROM %s", selectFields, fromClause)
 	params := []any{}
 
 	var whereClauses []string
@@ -127,6 +178,11 @@ func (q *Query) toCoreSelectSQL() (string, []any) {
 		}
 	}
 
+	if q.Extra != nil && len(q.Extra.Where) > 0 {
+		whereClauses = append(whereClauses, q.Extra.Where...)
+		params = append(params, q.Extra.Params...)
+	}
+
 	if len(whereClauses) > 0 {
 		sql += " WHERE " + strings.Join(whereClauses, " AND ")
 	}
@@ -136,9 +192,6 @@ func (q *Query) toCoreSelectSQL() (string, []any) {
 
 // toOrderBySQL generates the ORDER BY clause string (including leading space) or empty string.
 func (q *Query) toOrderBySQL() string {
-	if len(q.OrderBy) == 0 {
-		return ""
-	}
 	var orderStrs []string
 	for _, order := range q.OrderBy {
 		desc := false
@@ -158,6 +211,15 @@ func (q *Query) toOrderBySQL() string {
 		} else {
 			orderStrs = append(orderStrs, colName+" ASC")
 		}
+	}
+
+	// Append raw extra order-by fragments.
+	if q.Extra != nil {
+		orderStrs = append(orderStrs, q.Extra.OrderBy...)
+	}
+
+	if len(orderStrs) == 0 {
+		return ""
 	}
 	return " ORDER BY " + strings.Join(orderStrs, ", ")
 }

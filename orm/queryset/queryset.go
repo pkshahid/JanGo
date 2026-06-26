@@ -128,6 +128,38 @@ func (qs QuerySet[T]) Annotate(exprs ...AggExpr) QuerySet[T] {
 	return c
 }
 
+// Extra injects raw SQL fragments into the query as an escape hatch.
+// This mirrors Django's QuerySet.extra() and is deprecated in favor of
+// Annotate, F expressions, or Func-based expressions whenever possible.
+//
+//   - select: map of alias → raw SQL expression, appended to the SELECT list.
+//   - where:  raw SQL condition strings, AND-ed into the WHERE clause.
+//   - params: bind parameters for the where fragments (must match in order).
+//   - tables: extra table names appended to the FROM clause.
+//   - orderBy: raw ORDER BY fragments appended after ORM-generated ones.
+//
+// The resulting QuerySet is immutable.
+func (qs QuerySet[T]) Extra(opts ExtraData) QuerySet[T] {
+	c := qs.clone()
+	if c.query.Extra == nil {
+		c.query.Extra = &ExtraData{}
+	}
+	e := c.query.Extra
+	if opts.Select != nil {
+		if e.Select == nil {
+			e.Select = make(map[string]string)
+		}
+		for alias, expr := range opts.Select {
+			e.Select[alias] = expr
+		}
+	}
+	e.Where = append(e.Where, opts.Where...)
+	e.Params = append(e.Params, opts.Params...)
+	e.Tables = append(e.Tables, opts.Tables...)
+	e.OrderBy = append(e.OrderBy, opts.OrderBy...)
+	return c
+}
+
 // clone creates a deep copy of the QuerySet, ensuring immutability of the chain.
 func (qs QuerySet[T]) clone() QuerySet[T] {
 	return QuerySet[T]{
