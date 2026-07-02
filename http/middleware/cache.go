@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"bytes"
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"io"
 	"net/http"
@@ -46,14 +46,14 @@ func generateMiddlewareCacheKey(req *godjangohttp.Request, keyPrefix string, var
 	for _, h := range varyHeaders {
 		urlStr += "|" + h + "=" + req.Header.Get(h)
 	}
-	hash := md5.Sum([]byte(urlStr))
+	hash := sha256.Sum256([]byte(urlStr))
 	return cachePagePrefix + keyPrefix + "." + hex.EncodeToString(hash[:])
 }
 
 // generateMiddlewareHeaderKey builds the key under which the Vary header list
 // for a given URL is stored.
 func generateMiddlewareHeaderKey(req *godjangohttp.Request, keyPrefix string) string {
-	hash := md5.Sum([]byte(req.URL.String()))
+	hash := sha256.Sum256([]byte(req.URL.String()))
 	return cacheHeaderPrefix + keyPrefix + "." + hex.EncodeToString(hash[:])
 }
 

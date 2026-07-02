@@ -3,7 +3,7 @@ package middleware
 import (
 	"bytes"
 	"compress/gzip"
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"github.com/pkshahid/JanGo/core/settings"
@@ -78,7 +78,7 @@ func (m *WhiteNoiseMiddleware) preloadFiles() {
 				return
 			}
 
-			hash := md5.Sum(content)
+			hash := sha256.Sum256(content)
 			etag := `"` + hex.EncodeToString(hash[:]) + `"`
 
 			ext := filepath.Ext(p)
@@ -143,7 +143,7 @@ func (m *WhiteNoiseMiddleware) Process(next func(*godjangohttp.Request) godjango
 			if info, err := os.Stat(fullPath); err == nil && !info.IsDir() {
 				content, err := ioutil.ReadFile(fullPath)
 				if err == nil {
-					hash := md5.Sum(content)
+					hash := sha256.Sum256(content)
 					etag := `"` + hex.EncodeToString(hash[:]) + `"`
 					ext := filepath.Ext(fullPath)
 					contentType := mime.TypeByExtension(ext)

@@ -2,7 +2,7 @@ package cache
 
 import (
 	"bytes"
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"io/ioutil"
 	"net/http"
@@ -35,7 +35,7 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 			c := Get(cacheAlias)
 
 			// Phase 1: Retrieve Vary headers from cache
-			headerKey := "views.decorators.cache.cache_header." + func() string { hash := md5.Sum([]byte(req.URL.String())); return hex.EncodeToString(hash[:]) }()
+			headerKey := "views.decorators.cache.cache_header." + func() string { hash := sha256.Sum256([]byte(req.URL.String())); return hex.EncodeToString(hash[:]) }()
 			varyHeaders := []string{}
 
 			if hVal, err := c.Get(req.Context, headerKey); err == nil {
@@ -168,7 +168,7 @@ func generateCacheKeyWithHeaders(req *godjangohttp.Request, varyHeaders []string
 	for _, h := range varyHeaders {
 		urlStr += "|" + h + "=" + req.Header.Get(h)
 	}
-	hash := md5.Sum([]byte(urlStr))
+	hash := sha256.Sum256([]byte(urlStr))
 	return "views.decorators.cache.cache_page." + hex.EncodeToString(hash[:])
 }
 
