@@ -17,23 +17,6 @@ type filterTestModel struct {
 	IsPublished bool   `gd:"BooleanField,default=false"`
 }
 
-// --- Test AppConfig that implements AdminRegistrar ---
-
-type testAppConfig struct {
-	registeredModels []any
-}
-
-func (a *testAppConfig) Name() string  { return "testapp" }
-func (a *testAppConfig) Label() string { return "testapp" }
-func (a *testAppConfig) Path() string  { return "." }
-func (a *testAppConfig) Models() []any { return nil }
-func (a *testAppConfig) Ready()        {}
-func (a *testAppConfig) RegisterAdmin(site *AdminSite) {
-	for _, m := range a.registeredModels {
-		site.Register(m, nil)
-	}
-}
-
 // --- Autodiscover tests ---
 
 func TestAutodiscover_RegistersModelsFromApp(t *testing.T) {
