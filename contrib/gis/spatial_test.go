@@ -11,8 +11,8 @@ import (
 // TestPlace is a model with a PointField for testing spatial query SQL generation.
 type TestPlace struct {
 	orm.Model
-	Name     string  `gd:"CharField"`
-	Location *Point  `gd:"PointField,srid=4326"`
+	Name     string   `gd:"CharField"`
+	Location *Point   `gd:"PointField,srid=4326"`
 	Region   *Polygon `gd:"PolygonField,srid=4326"`
 }
 
