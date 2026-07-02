@@ -25,7 +25,7 @@ type Constraint interface {
 // instance. If it returns false, a ValidationError is raised.
 type CheckConstraint struct {
 	Name      string
-	Check     string         // SQL expression for DB-level CHECK, e.g. "price > 0"
+	Check     string             // SQL expression for DB-level CHECK, e.g. "price > 0"
 	Validator func(obj any) bool // Returns true if valid; false triggers a ValidationError
 }
 
@@ -64,7 +64,7 @@ func (c CheckConstraint) Validate(obj any, info *ModelInfo, exclude map[string]b
 type UniqueConstraint struct {
 	Name               string
 	Fields             []string
-	Condition          string         // SQL WHERE clause for partial unique index, e.g. "active = 1"
+	Condition          string             // SQL WHERE clause for partial unique index, e.g. "active = 1"
 	ConditionValidator func(obj any) bool // If set, constraint is only enforced when this returns true
 }
 
