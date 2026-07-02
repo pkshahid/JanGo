@@ -63,10 +63,10 @@ type Cleaner interface {
 
 // cleanConfig holds options for FullClean.
 type cleanConfig struct {
-	exclude            map[string]bool
-	validateUnique     bool
-	validateFields     bool
-	validateClean      bool
+	exclude             map[string]bool
+	validateUnique      bool
+	validateFields      bool
+	validateClean       bool
 	validateConstraints bool
 }
 
