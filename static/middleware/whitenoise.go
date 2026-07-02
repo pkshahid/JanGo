@@ -9,7 +9,7 @@ import (
 	"github.com/pkshahid/JanGo/core/settings"
 	godjangohttp "github.com/pkshahid/JanGo/http"
 	"io"
-	"io/ioutil"
+
 	"mime"
 	"net/http"
 	"os"
@@ -73,7 +73,7 @@ func (m *WhiteNoiseMiddleware) preloadFiles() {
 			defer wg.Done()
 			defer func() { <-semaphore }()
 
-			content, err := ioutil.ReadFile(p)
+			content, err := os.ReadFile(p)
 			if err != nil {
 				return
 			}
@@ -141,7 +141,7 @@ func (m *WhiteNoiseMiddleware) Process(next func(*godjangohttp.Request) godjango
 			}
 
 			if info, err := os.Stat(fullPath); err == nil && !info.IsDir() {
-				content, err := ioutil.ReadFile(fullPath)
+				content, err := os.ReadFile(fullPath)
 				if err == nil {
 					hash := md5.Sum(content)
 					etag := `"` + hex.EncodeToString(hash[:]) + `"`

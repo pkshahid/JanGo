@@ -6,7 +6,7 @@ import (
 	"github.com/pkshahid/JanGo/static/middleware"
 	"github.com/pkshahid/JanGo/template"
 	godjangotags "github.com/pkshahid/JanGo/template/tags"
-	"io/ioutil"
+
 	"os"
 	"strings"
 	"testing"
@@ -24,7 +24,7 @@ func setupSettings() {
 	settings.Configure(s)
 
 	os.MkdirAll("test_static_dirs", 0755)
-	ioutil.WriteFile("test_static_dirs/style.css", []byte("body { color: red; }"), 0644)
+	os.WriteFile("test_static_dirs/style.css", []byte("body { color: red; }"), 0644)
 }
 
 func cleanupSettings() {
@@ -97,7 +97,7 @@ func TestCollectStaticCommand(t *testing.T) {
 	}
 
 	// Check if hashed file was created
-	files, _ := ioutil.ReadDir("test_static_root")
+	files, _ := os.ReadDir("test_static_root")
 	foundHashed := false
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), "style.") && strings.HasSuffix(f.Name(), ".css") && f.Name() != "style.css" {
