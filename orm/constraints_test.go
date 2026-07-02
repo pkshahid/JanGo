@@ -43,8 +43,8 @@ func (p *ConstraintProduct) ModelMeta() *Meta {
 				},
 			},
 			UniqueConstraint{
-				Name:   "unique_active_name",
-				Fields: []string{"Name", "Category"},
+				Name:      "unique_active_name",
+				Fields:    []string{"Name", "Category"},
 				Condition: "active = 1",
 				ConditionValidator: func(obj any) bool {
 					p, ok := obj.(*ConstraintProduct)
@@ -93,8 +93,8 @@ func (m *UniqueConstraintModel) ModelMeta() *Meta {
 		DbTable: "unique_constraint_model",
 		Constraints: []Constraint{
 			UniqueConstraint{
-				Name:   "unique_name_when_active",
-				Fields: []string{"Name"},
+				Name:      "unique_name_when_active",
+				Fields:    []string{"Name"},
 				Condition: "active = 1",
 				ConditionValidator: func(obj any) bool {
 					m, ok := obj.(*UniqueConstraintModel)
@@ -165,8 +165,8 @@ func TestCheckConstraint_MultipleViolations(t *testing.T) {
 
 	product := &ConstraintProduct{
 		Name:     "Widget",
-		Price:    -1.0,   // violates price_non_negative
-		Quantity: -5,     // violates quantity_non_negative
+		Price:    -1.0, // violates price_non_negative
+		Quantity: -5,   // violates quantity_non_negative
 		Active:   true,
 	}
 
