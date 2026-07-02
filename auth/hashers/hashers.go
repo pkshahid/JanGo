@@ -29,7 +29,9 @@ var (
 // MakePassword hashes a plain text password using the default hasher.
 func MakePassword(password string) string {
 	salt := make([]byte, 16)
-	rand.Read(salt)
+	if _, err := rand.Read(salt); err != nil {
+		panic(err)
+	}
 	saltStr := base64.RawStdEncoding.EncodeToString(salt)
 	return DefaultHasher.Encode(password, saltStr)
 }
@@ -105,7 +107,9 @@ func (h *Argon2idHasher) Verify(password string, encoded string) bool {
 	// parse params: m=65536,t=1,p=4
 	var memory, time uint32
 	var threads uint8
-	fmt.Sscanf(parts[2], "m=%d,t=%d,p=%d", &memory, &time, &threads)
+	if _, err := fmt.Sscanf(parts[2], "m=%d,t=%d,p=%d", &memory, &time, &threads); err != nil {
+		return false
+	}
 
 	salt := parts[3]
 	hashStr := parts[4]

@@ -116,7 +116,7 @@ func (m *ManifestStaticFilesStorage) loadManifest() {
 	if err == nil {
 		m.manifestLock.Lock()
 		defer m.manifestLock.Unlock()
-		json.Unmarshal(data, &m.Manifest)
+		_ = json.Unmarshal(data, &m.Manifest)
 	}
 }
 

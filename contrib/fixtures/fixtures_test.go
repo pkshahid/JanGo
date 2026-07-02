@@ -45,7 +45,9 @@ func TestLoadFile(t *testing.T) {
 
 	data, _ := json.MarshalIndent(items, "", "  ")
 	fixturePath := filepath.Join(tmpDir, "posts.json")
-	os.WriteFile(fixturePath, data, 0644)
+	if err := os.WriteFile(fixturePath, data, 0644); err != nil {
+		t.Fatalf("Failed to write fixture: %v", err)
+	}
 
 	loader := NewLoader([]string{tmpDir})
 	fixture, err := loader.LoadFile(fixturePath)
@@ -69,7 +71,9 @@ func TestLoadByName(t *testing.T) {
 		{Model: "auth.user", PK: 1, Fields: map[string]any{"username": "admin"}},
 	}
 	data, _ := json.MarshalIndent(items, "", "  ")
-	os.WriteFile(filepath.Join(tmpDir, "users.json"), data, 0644)
+	if err := os.WriteFile(filepath.Join(tmpDir, "users.json"), data, 0644); err != nil {
+		t.Fatalf("Failed to write fixture: %v", err)
+	}
 
 	loader := NewLoader([]string{tmpDir})
 
@@ -138,7 +142,9 @@ func TestDump(t *testing.T) {
 	}
 
 	var parsed []FixtureItem
-	json.Unmarshal(data, &parsed)
+	if err := json.Unmarshal(data, &parsed); err != nil {
+		t.Fatalf("Failed to unmarshal output: %v", err)
+	}
 	if len(parsed) != 1 || parsed[0].Model != "blog.post" {
 		t.Error("JSON dump did not round-trip correctly")
 	}
@@ -169,7 +175,9 @@ func TestDumpToFile(t *testing.T) {
 
 	data, _ := os.ReadFile(path)
 	var parsed []FixtureItem
-	json.Unmarshal(data, &parsed)
+	if err := json.Unmarshal(data, &parsed); err != nil {
+		t.Fatalf("Failed to unmarshal output: %v", err)
+	}
 	if len(parsed) != 1 {
 		t.Error("Expected 1 item in dumped file")
 	}
