@@ -11,8 +11,8 @@ import (
 // TestPlace is a model with a PointField for testing spatial query SQL generation.
 type TestPlace struct {
 	orm.Model
-	Name     string  `gd:"CharField"`
-	Location *Point  `gd:"PointField,srid=4326"`
+	Name     string   `gd:"CharField"`
+	Location *Point   `gd:"PointField,srid=4326"`
 	Region   *Polygon `gd:"PolygonField,srid=4326"`
 }
 
@@ -238,6 +238,24 @@ func TestSpatialBBContainsSQL(t *testing.T) {
 
 	if !strings.Contains(sql, "@") {
 		t.Errorf("expected @ operator for bbcontains, got: %s", sql)
+	}
+}
+
+func TestSpatialFilter(t *testing.T) {
+	pt := NewPoint(1, 2, WGS84)
+
+	lookup := SpatialFilter("location", "intersects", pt)
+	if val, ok := lookup["location__intersects"]; !ok {
+		t.Error("SpatialFilter should produce location__intersects key")
+	} else if val != pt {
+		t.Errorf("SpatialFilter expected value %v, got %v", pt, val)
+	}
+
+	lookup = SpatialFilter("region", "contains", pt)
+	if val, ok := lookup["region__contains"]; !ok {
+		t.Error("SpatialFilter should produce region__contains key")
+	} else if val != pt {
+		t.Errorf("SpatialFilter expected value %v, got %v", pt, val)
 	}
 }
 
