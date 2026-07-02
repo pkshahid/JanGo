@@ -3,7 +3,7 @@ package cache_test
 import (
 	"context"
 	godjangohttp "github.com/pkshahid/JanGo/http"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
@@ -142,7 +142,7 @@ func TestCacheDecorators(t *testing.T) {
 	}
 
 	hr, _ := resp1.(*godjangohttp.HttpResponse)
-	body, _ := ioutil.ReadAll(hr.Body)
+	body, _ := io.ReadAll(hr.Body)
 	if string(body) != "cached content" {
 		t.Errorf("Expected cached content, got %s", string(body))
 	}
@@ -154,7 +154,7 @@ func TestCacheDecorators(t *testing.T) {
 	}
 
 	hr2, _ := resp2.(*godjangohttp.HttpResponse)
-	body2, _ := ioutil.ReadAll(hr2.Body)
+	body2, _ := io.ReadAll(hr2.Body)
 	if string(body2) != "cached content" {
 		t.Errorf("Expected cached content from cache, got %s", string(body2))
 	}

@@ -44,11 +44,11 @@ type joinInfo struct {
 // joinManager tracks JOINs for a single query, ensuring each relationship
 // path is joined only once and producing consistent table aliases.
 type joinManager struct {
-	joins     []*joinInfo
+	joins      []*joinInfo
 	pathToJoin map[string]*joinInfo
-	counter   int
-	baseAlias string
-	baseTable string
+	counter    int
+	baseAlias  string
+	baseTable  string
 }
 
 // newJoinManager creates a joinManager rooted at the given table.
