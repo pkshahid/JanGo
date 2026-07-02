@@ -17,9 +17,9 @@ type JoinUser struct {
 
 type JoinProfile struct {
 	orm.Model
-	User   *JoinUser   `gd:"ForeignKey,to=auth.JoinUser,on_delete=CASCADE,db_column=user_id"`
-	Bio    string      `gd:"TextField"`
-	Avatar string      `gd:"CharField,max_length=200"`
+	User   *JoinUser `gd:"ForeignKey,to=auth.JoinUser,on_delete=CASCADE,db_column=user_id"`
+	Bio    string    `gd:"TextField"`
+	Avatar string    `gd:"CharField,max_length=200"`
 }
 
 type JoinArticle struct {
