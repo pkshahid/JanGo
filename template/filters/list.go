@@ -1,8 +1,9 @@
 package filters
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"reflect"
 	"sort"
 	"strings"
@@ -116,7 +117,11 @@ func LastFilter(val any, args string) (any, error) {
 func RandomFilter(val any, args string) (any, error) {
 	slice := getSlice(val)
 	if len(slice) > 0 {
-		idx := rand.Intn(len(slice))
+		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(slice))))
+		if err != nil {
+			return nil, fmt.Errorf("random filter error: %w", err)
+		}
+		idx := n.Int64()
 		return slice[idx], nil
 	}
 	return "", nil
