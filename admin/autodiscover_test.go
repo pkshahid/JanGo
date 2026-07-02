@@ -19,20 +19,6 @@ type filterTestModel struct {
 
 // --- Test AppConfig that implements AdminRegistrar ---
 
-type testAppConfig struct {
-	registeredModels []any
-}
-
-func (a *testAppConfig) Name() string  { return "testapp" }
-func (a *testAppConfig) Label() string { return "testapp" }
-func (a *testAppConfig) Path() string  { return "." }
-func (a *testAppConfig) Models() []any { return nil }
-func (a *testAppConfig) Ready()        {}
-func (a *testAppConfig) RegisterAdmin(site *AdminSite) {
-	for _, m := range a.registeredModels {
-		site.Register(m, nil)
-	}
-}
 
 // --- Autodiscover tests ---
 
@@ -305,9 +291,9 @@ func TestChangelistView_WithFilters(t *testing.T) {
 	req.User = &mockUser{authenticated: true, staff: true}
 	req.ResolverMatch = &urls.ResolverMatch{
 		Kwargs: map[string]any{
-			"app_label":  "test",
-			"model_name": "filtertestmodel",
-			"object_id":  "",
+			"app_label":   "test",
+			"model_name":  "filtertestmodel",
+			"object_id":   "",
 		},
 	}
 
