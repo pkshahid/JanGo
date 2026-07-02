@@ -241,6 +241,24 @@ func TestSpatialBBContainsSQL(t *testing.T) {
 	}
 }
 
+func TestSpatialFilter(t *testing.T) {
+	pt := NewPoint(1, 2, WGS84)
+
+	lookup := SpatialFilter("location", "intersects", pt)
+	if val, ok := lookup["location__intersects"]; !ok {
+		t.Error("SpatialFilter should produce location__intersects key")
+	} else if val != pt {
+		t.Errorf("SpatialFilter expected value %v, got %v", pt, val)
+	}
+
+	lookup = SpatialFilter("region", "contains", pt)
+	if val, ok := lookup["region__contains"]; !ok {
+		t.Error("SpatialFilter should produce region__contains key")
+	} else if val != pt {
+		t.Errorf("SpatialFilter expected value %v, got %v", pt, val)
+	}
+}
+
 func TestSpatialHelperFunctions(t *testing.T) {
 	pt := NewPoint(1, 2, WGS84)
 
