@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
@@ -81,10 +81,10 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 			var currentVary string
 			if hr, ok := resp.(*godjangohttp.HttpResponse); ok {
 				currentVary = hr.Headers.Get("Vary")
-				bodyBytes, err := io.ReadAll(hr.Body)
+				bodyBytes, err := ioutil.ReadAll(hr.Body)
 				hr.Body.Close()
 				if err == nil {
-					hr.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+					hr.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 					cacheData := map[string]any{
 						"status":  hr.StatusCode,
 						"content": string(bodyBytes),
@@ -100,10 +100,10 @@ func CachePage(timeout time.Duration, alias ...string) func(views.ViewFunc) view
 				}
 			} else if jr, ok := resp.(*godjangohttp.JsonResponse); ok {
 				currentVary = jr.Headers.Get("Vary")
-				bodyBytes, err := io.ReadAll(jr.Body)
+				bodyBytes, err := ioutil.ReadAll(jr.Body)
 				jr.Body.Close()
 				if err == nil {
-					jr.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+					jr.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 					cacheData := map[string]any{
 						"status":  jr.StatusCode,
 						"content": string(bodyBytes),

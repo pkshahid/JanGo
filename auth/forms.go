@@ -249,7 +249,7 @@ func NewUserCreationForm(existing map[string]bool) *UserCreationForm {
 	order := []string{"username", "password1", "password2"}
 
 	f := &UserCreationForm{
-		Form:              *forms.NewForm(fields, order),
+		Form:             *forms.NewForm(fields, order),
 		ExistingUsernames: existing,
 	}
 	f.CleanFunc = func() error {

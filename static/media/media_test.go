@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"github.com/pkshahid/JanGo/core/settings"
 	"github.com/pkshahid/JanGo/static/media"
-	"io"
+	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -52,7 +52,7 @@ func TestFileSystemStorage(t *testing.T) {
 	}
 	defer file.Close()
 
-	data, _ := io.ReadAll(file)
+	data, _ := ioutil.ReadAll(file)
 	if string(data) != "test content" {
 		t.Errorf("Expected 'test content', got %q", string(data))
 	}

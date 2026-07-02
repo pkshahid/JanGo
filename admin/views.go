@@ -39,8 +39,8 @@ func (s *AdminSite) changelistView(req *godjangohttp.Request) godjangohttp.Respo
 	for _, f := range filters {
 		choices := f.Choices(req)
 		filterSpecs = append(filterSpecs, FilterSpec{
-			Title:     f.Title(),
-			Choices:   choices,
+			Title:    f.Title(),
+			Choices:  choices,
 			HasActive: hasActiveChoice(choices),
 		})
 	}

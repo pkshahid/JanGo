@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/pkshahid/JanGo/core/settings"
 	"io"
-
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -112,7 +112,7 @@ func NewManifestStaticFilesStorage() *ManifestStaticFilesStorage {
 
 func (m *ManifestStaticFilesStorage) loadManifest() {
 	manifestPath := filepath.Join(m.Location, "staticfiles.json")
-	data, err := os.ReadFile(manifestPath)
+	data, err := ioutil.ReadFile(manifestPath)
 	if err == nil {
 		m.manifestLock.Lock()
 		defer m.manifestLock.Unlock()
@@ -128,7 +128,7 @@ func (m *ManifestStaticFilesStorage) saveManifest() error {
 		return err
 	}
 	manifestPath := filepath.Join(m.Location, "staticfiles.json")
-	return os.WriteFile(manifestPath, data, 0644)
+	return ioutil.WriteFile(manifestPath, data, 0644)
 }
 
 func (m *ManifestStaticFilesStorage) URL(name string) string {
