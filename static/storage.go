@@ -1,7 +1,7 @@
 package static
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -116,7 +116,7 @@ func (m *ManifestStaticFilesStorage) loadManifest() {
 	if err == nil {
 		m.manifestLock.Lock()
 		defer m.manifestLock.Unlock()
-		json.Unmarshal(data, &m.Manifest)
+		_ = json.Unmarshal(data, &m.Manifest)
 	}
 }
 
@@ -142,7 +142,7 @@ func (m *ManifestStaticFilesStorage) URL(name string) string {
 	return m.FileSystemStorage.URL(name)
 }
 
-// HashFile calculates MD5 hash of file content.
+// HashFile calculates SHA256 hash of file content.
 func HashFile(path string) (string, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -150,7 +150,7 @@ func HashFile(path string) (string, error) {
 	}
 	defer file.Close()
 
-	hash := md5.New()
+	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
 		return "", err
 	}

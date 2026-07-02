@@ -210,15 +210,15 @@ func (m *Middleware) renderPage(w http.ResponseWriter, page *FlatPage) {
 		err := m.Template.ExecuteTemplate(w, tmplName, data)
 		if err != nil {
 			// Fallback to simple rendering
-			w.Write([]byte(page.Content))
+			_, _ = w.Write([]byte(page.Content))
 		}
 		return
 	}
 
 	// Simple rendering without template
-	w.Write([]byte("<html><head><title>" + page.Title + "</title></head><body>"))
-	w.Write([]byte(page.Content))
-	w.Write([]byte("</body></html>"))
+	_, _ = w.Write([]byte("<html><head><title>" + page.Title + "</title></head><body>"))
+	_, _ = w.Write([]byte(page.Content))
+	_, _ = w.Write([]byte("</body></html>"))
 }
 
 type responseRecorder struct {

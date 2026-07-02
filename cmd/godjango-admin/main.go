@@ -128,10 +128,14 @@ func renderTemplate(tmplPath, outPath string, data interface{}) error {
 	if err != nil {
 		return fmt.Errorf("failed to create file %s: %w", outPath, err)
 	}
-	defer f.Close()
 
 	if err := tmpl.Execute(f, data); err != nil {
+		_ = f.Close()
 		return fmt.Errorf("failed to execute template %s: %w", tmplPath, err)
+	}
+
+	if err := f.Close(); err != nil {
+		return fmt.Errorf("failed to close file %s: %w", outPath, err)
 	}
 
 	return nil

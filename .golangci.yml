@@ -1,5 +1,3 @@
-version: "2"
-
 # NOTE: errcheck, ineffassign, and staticcheck are disabled for now
 # due to many pre-existing violations. Enable them incrementally as
 # the codebase is cleaned up.

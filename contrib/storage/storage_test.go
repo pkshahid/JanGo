@@ -38,7 +38,7 @@ func TestFileSystemStorage(t *testing.T) {
 		t.Fatalf("Open failed: %v", err)
 	}
 	data, _ := io.ReadAll(reader)
-	reader.Close()
+	_ = reader.Close()
 	if string(data) != "Hello, World!" {
 		t.Errorf("Expected 'Hello, World!', got %q", string(data))
 	}
@@ -147,7 +147,7 @@ func TestMemoryStorage(t *testing.T) {
 		t.Fatalf("Open failed: %v", err)
 	}
 	data, _ := io.ReadAll(reader)
-	reader.Close()
+	_ = reader.Close()
 	if string(data) != "memory content" {
 		t.Errorf("Expected 'memory content', got %q", string(data))
 	}
@@ -168,9 +168,15 @@ func TestMemoryStorage(t *testing.T) {
 	}
 
 	// Test ListDir with nested files
-	ms.Save("docs/readme.md", strings.NewReader("readme"))
-	ms.Save("docs/guide.md", strings.NewReader("guide"))
-	ms.Save("images/logo.png", strings.NewReader("logo"))
+	if _, err := ms.Save("docs/readme.md", strings.NewReader("readme")); err != nil {
+		t.Fatalf("Save failed: %v", err)
+	}
+	if _, err := ms.Save("docs/guide.md", strings.NewReader("guide")); err != nil {
+		t.Fatalf("Save failed: %v", err)
+	}
+	if _, err := ms.Save("images/logo.png", strings.NewReader("logo")); err != nil {
+		t.Fatalf("Save failed: %v", err)
+	}
 
 	dirs, files, _ := ms.ListDir("")
 	if len(files) != 1 { // file.txt
@@ -181,7 +187,9 @@ func TestMemoryStorage(t *testing.T) {
 	}
 
 	// Test Delete
-	ms.Delete("file.txt")
+	if err := ms.Delete("file.txt"); err != nil {
+		t.Fatalf("Delete failed: %v", err)
+	}
 	exists, _ = ms.Exists("file.txt")
 	if exists {
 		t.Error("Expected file to not exist after delete")
