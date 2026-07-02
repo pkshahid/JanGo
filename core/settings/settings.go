@@ -58,27 +58,27 @@ type Settings struct {
 	DEFAULT_FILE_STORAGE string `env:"DEFAULT_FILE_STORAGE"`
 
 	// S3 Settings
-	AWS_STORAGE_BUCKET_NAME string `env:"AWS_STORAGE_BUCKET_NAME"`
-	AWS_S3_REGION_NAME      string `env:"AWS_S3_REGION_NAME"`
-	AWS_ACCESS_KEY_ID       string `env:"AWS_ACCESS_KEY_ID"`
-	AWS_SECRET_ACCESS_KEY   string `env:"AWS_SECRET_ACCESS_KEY"`
-	AWS_S3_ENDPOINT_URL     string `env:"AWS_S3_ENDPOINT_URL"`
-	STATICFILES_DIRS        []string
-	STATICFILES_STORAGE     string
-	STATICFILES_FINDERS     []string
-	CACHES                  map[string]CacheConfig
-	SESSION_ENGINE          string
-	AUTH_USER_MODEL         string
-	LOGIN_URL               string
-	LOGIN_REDIRECT_URL      string
+	AWS_STORAGE_BUCKET_NAME  string `env:"AWS_STORAGE_BUCKET_NAME"`
+	AWS_S3_REGION_NAME       string `env:"AWS_S3_REGION_NAME"`
+	AWS_ACCESS_KEY_ID        string `env:"AWS_ACCESS_KEY_ID"`
+	AWS_SECRET_ACCESS_KEY    string `env:"AWS_SECRET_ACCESS_KEY"`
+	AWS_S3_ENDPOINT_URL      string `env:"AWS_S3_ENDPOINT_URL"`
+	STATICFILES_DIRS         []string
+	STATICFILES_STORAGE      string
+	STATICFILES_FINDERS      []string
+	CACHES                   map[string]CacheConfig
+	SESSION_ENGINE           string
+	AUTH_USER_MODEL          string
+	LOGIN_URL                string
+	LOGIN_REDIRECT_URL       string
 	AUTH_PASSWORD_VALIDATORS []string
-	TIME_ZONE               string `env:"TIME_ZONE"`
-	USE_TZ                  bool   `env:"USE_TZ"`
-	LANGUAGE_CODE           string `env:"LANGUAGE_CODE"`
-	EMAIL_BACKEND           string
-	EMAIL_HOST              string `env:"EMAIL_HOST"`
-	EMAIL_PORT              int    `env:"EMAIL_PORT"`
-	LOGGING                 map[string]any
+	TIME_ZONE                string `env:"TIME_ZONE"`
+	USE_TZ                   bool   `env:"USE_TZ"`
+	LANGUAGE_CODE            string `env:"LANGUAGE_CODE"`
+	EMAIL_BACKEND            string
+	EMAIL_HOST               string `env:"EMAIL_HOST"`
+	EMAIL_PORT               int    `env:"EMAIL_PORT"`
+	LOGGING                  map[string]any
 
 	// Middleware specific settings
 	SECURE_SSL_REDIRECT            bool   `env:"SECURE_SSL_REDIRECT"`
@@ -99,9 +99,9 @@ type Settings struct {
 	SESSION_FILE_PATH              string `env:"SESSION_FILE_PATH"`
 
 	// Cache middleware settings
-	CACHE_MIDDLEWARE_ALIAS        string `env:"CACHE_MIDDLEWARE_ALIAS"`
-	CACHE_MIDDLEWARE_SECONDS      int    `env:"CACHE_MIDDLEWARE_SECONDS"`
-	CACHE_MIDDLEWARE_KEY_PREFIX   string `env:"CACHE_MIDDLEWARE_KEY_PREFIX"`
+	CACHE_MIDDLEWARE_ALIAS      string `env:"CACHE_MIDDLEWARE_ALIAS"`
+	CACHE_MIDDLEWARE_SECONDS    int    `env:"CACHE_MIDDLEWARE_SECONDS"`
+	CACHE_MIDDLEWARE_KEY_PREFIX string `env:"CACHE_MIDDLEWARE_KEY_PREFIX"`
 }
 
 var (
